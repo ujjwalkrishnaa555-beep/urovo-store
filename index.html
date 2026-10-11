@@ -2578,6 +2578,79 @@ function showAddProductForm(){
     </div>
   `;
 }
+async function addProduct(){
+
+  if(!requireAdmin()) return;
+
+  const name = $("adminName").value.trim();
+  const category = $("adminCategory").value.trim();
+  const price = Number($("adminPrice").value);
+  const oldPrice = Number($("adminOldPrice").value || 0);
+  const tag = $("adminTag").value.trim() || "NEW";
+  const description = $("adminDescription").value.trim();
+  const file = $("adminImage").files[0];
+
+  if(!name || !category || !price || !description){
+    toast("Please fill all required fields");
+    return;
+  }
+
+  let imageUrl = "";
+
+  if(file){
+
+    const safeName = file.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      "-"
+    );
+
+    const filePath =
+      `${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`;
+
+    const {error:uploadError} =
+      await supabaseClient
+        .storage
+        .from("product-images")
+        .upload(filePath,file,{
+          upsert:false
+        });
+
+    if(uploadError){
+      toast(uploadError.message);
+      return;
+    }
+
+    const {data:urlData} =
+      supabaseClient
+        .storage
+        .from("product-images")
+        .getPublicUrl(filePath);
+
+    imageUrl = urlData.publicUrl;
+  }
+
+  const {error} = await supabaseClient
+    .from("products")
+    .insert([{
+      name:name,
+      category:category,
+      price:price,
+      old_price:oldPrice,
+      image_url:imageUrl,
+      icon:"📦",
+      tag:tag,
+      description:description
+    }]);
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  toast("Product added successfully");
+
+  renderAdminProducts();
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
