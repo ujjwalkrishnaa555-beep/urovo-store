@@ -2845,6 +2845,145 @@ async function deleteProduct(id){
 
   renderAdminProducts();
 }
+async function renderAdminOrders(){
+
+  if(!requireAdmin()) return;
+
+  $("adminContent").innerHTML = `
+    <div style="margin-top:20px">
+      <div id="adminOrderList">
+        <p style="color:var(--muted)">Loading orders...</p>
+      </div>
+    </div>
+  `;
+
+  const {data,error} = await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("adminOrderList").innerHTML =
+      `<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;
+    return;
+  }
+
+  if(!data || !data.length){
+    $("adminOrderList").innerHTML = `
+      <div class="order-card">
+        <p style="color:var(--muted)">
+          No orders yet.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  $("adminOrderList").innerHTML = data.map(order => {
+
+    let items = order.items || [];
+
+    if(typeof items === "string"){
+      try{
+        items = JSON.parse(items);
+      }catch{
+        items = [];
+      }
+    }
+
+    const itemText = items.map(item => `
+      <div style="margin:5px 0">
+        ${escapeHtml(item.name || "Product")}
+        × ${Number(item.qty || item.quantity || 1)}
+      </div>
+    `).join("");
+
+    const date = order.created_at
+      ? new Date(order.created_at).toLocaleString()
+      : "Unknown";
+
+    return `
+      <div class="order-card" style="margin-bottom:15px">
+
+        <h3 style="margin-top:0">
+          Order #${escapeHtml(order.id)}
+        </h3>
+
+        <p style="color:var(--muted)">
+          📅 ${escapeHtml(date)}
+        </p>
+
+        <hr style="border-color:#222">
+
+        <p>
+          <strong>Customer:</strong>
+          ${escapeHtml(order.customer_name || "Unknown")}
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          ${escapeHtml(order.user_email || "Guest")}
+        </p>
+
+        <p>
+          <strong>Phone:</strong>
+          ${escapeHtml(order.phone || "Not provided")}
+        </p>
+
+        <p>
+          <strong>Address:</strong><br>
+          ${escapeHtml(order.address || "Not provided")}
+        </p>
+
+        <div style="margin-top:12px">
+          <strong>Products:</strong>
+          ${itemText || "No product details"}
+        </div>
+
+        <p style="margin-top:12px">
+          <strong>Total:</strong>
+          ₹${Number(order.total || 0)}
+        </p>
+
+        <p>
+          <strong>Payment:</strong>
+          ${escapeHtml(order.payment_method || "Unknown")}
+        </p>
+
+        <label style="display:block;margin-top:12px">
+          <strong>Order Status</strong>
+        </label>
+
+        <select
+          class="input"
+          style="margin-top:6px"
+          onchange="updateOrderStatus('${order.id}',this.value)"
+        >
+          ${
+            [
+              "Order Placed",
+              "Order Confirmed",
+              "Processing",
+              "Shipped",
+              "Out for Delivery",
+              "Delivered",
+              "Cancelled"
+            ].map(status => `
+              <option
+                value="${status}"
+                ${order.status === status ? "selected" : ""}
+              >
+                ${status}
+              </option>
+            `).join("")
+          }
+        </select>
+
+      </div>
+    `;
+
+  }).join("");
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
