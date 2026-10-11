@@ -1812,13 +1812,23 @@ function renderAccount(){
     📦 My Orders
    </button>
 
-   <button
+    <button
     class="secondary"
     style="width:100%;margin-top:10px"
     onclick="closeAccount();openWishlist()"
    >
     ❤️ Wishlist
    </button>
+
+   ${isAdmin() ? `
+   <button
+    class="btn"
+    onclick="openAdmin()"
+    style="width:100%;margin-top:10px"
+   >
+    👑 Admin Dashboard
+   </button>
+   ` : ""}
 
    <button
     class="secondary"
