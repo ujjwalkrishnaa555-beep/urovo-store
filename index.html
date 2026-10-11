@@ -2745,6 +2745,84 @@ async function editProduct(id){
     </div>
   `;
 }
+async function saveEditedProduct(id){
+
+  if(!requireAdmin()) return;
+
+  const name = $("editName").value.trim();
+  const category = $("editCategory").value.trim();
+  const price = Number($("editPrice").value);
+  const oldPrice = Number($("editOldPrice").value || 0);
+  const tag = $("editTag").value.trim() || "NEW";
+  const description = $("editDescription").value.trim();
+  const file = $("editImage").files[0];
+
+  if(!name || !category || !price || !description){
+    toast("Please fill all required fields");
+    return;
+  }
+
+  let imageUrl = null;
+
+  if(file){
+
+    const safeName = file.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      "-"
+    );
+
+    const filePath =
+      `${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`;
+
+    const {error:uploadError} =
+      await supabaseClient
+        .storage
+        .from("product-images")
+        .upload(filePath,file,{
+          upsert:false
+        });
+
+    if(uploadError){
+      toast(uploadError.message);
+      return;
+    }
+
+    const {data:urlData} =
+      supabaseClient
+        .storage
+        .from("product-images")
+        .getPublicUrl(filePath);
+
+    imageUrl = urlData.publicUrl;
+  }
+
+  const updateData = {
+    name:name,
+    category:category,
+    price:price,
+    old_price:oldPrice,
+    tag:tag,
+    description:description
+  };
+
+  if(imageUrl){
+    updateData.image_url = imageUrl;
+  }
+
+  const {error} = await supabaseClient
+    .from("products")
+    .update(updateData)
+    .eq("id",id);
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  toast("Product updated successfully");
+
+  renderAdminProducts();
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
