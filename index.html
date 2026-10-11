@@ -2391,6 +2391,115 @@ renderProducts();
 renderCart();
 
 updateBadges();
+function renderAdminProducts(){
+
+  if(!requireAdmin()) return;
+
+  $("adminContent").innerHTML = `
+    <div style="margin-top:20px">
+
+      <button
+        class="primary"
+        style="width:100%;margin-bottom:15px"
+        onclick="showAddProductForm()"
+      >
+        ➕ Add Product
+      </button>
+
+      <div id="adminProductList"></div>
+
+    </div>
+  `;
+
+  loadAdminProducts();
+}
+
+async function loadAdminProducts(){
+
+  const {data,error} = await supabaseClient
+    .from("products")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("adminProductList").innerHTML =
+      `<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;
+    return;
+  }
+
+  if(!data || !data.length){
+    $("adminProductList").innerHTML =
+      `<div class="order-card">
+        <p style="color:var(--muted)">
+          No products added yet.
+        </p>
+      </div>`;
+    return;
+  }
+
+  $("adminProductList").innerHTML = data.map(p => `
+    <div class="order-card" style="margin-bottom:12px">
+
+      <div style="display:flex;gap:12px;align-items:center">
+
+        <div style="
+          width:70px;
+          height:70px;
+          border-radius:12px;
+          overflow:hidden;
+          background:#111;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          flex-shrink:0
+        ">
+          ${
+            p.image_url
+            ? `<img src="${p.image_url}"
+                style="width:100%;height:100%;object-fit:contain">`
+            : `<span style="font-size:32px">${p.icon || "📦"}</span>`
+          }
+        </div>
+
+        <div style="flex:1">
+
+          <h3 style="margin:0 0 5px">
+            ${escapeHtml(p.name)}
+          </h3>
+
+          <p style="margin:0;color:var(--muted)">
+            ${escapeHtml(p.category)}
+          </p>
+
+          <strong>₹${Number(p.price || 0)}</strong>
+
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:12px">
+
+        <button
+          class="secondary"
+          style="flex:1"
+          onclick="editProduct('${p.id}')"
+        >
+          ✏️ Edit
+        </button>
+
+        <button
+          class="secondary"
+          style="flex:1"
+          onclick="deleteProduct('${p.id}')"
+        >
+          🗑️ Delete
+        </button>
+
+      </div>
+
+    </div>
+  `).join("");
+}
 
 </script>
 function requireAdmin(){
