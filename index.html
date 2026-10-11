@@ -2651,6 +2651,100 @@ async function addProduct(){
 
   renderAdminProducts();
 }
+async function editProduct(id){
+
+  if(!requireAdmin()) return;
+
+  const {data:p,error} = await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("id",id)
+    .single();
+
+  if(error || !p){
+    toast("Product not found");
+    return;
+  }
+
+  $("adminContent").innerHTML = `
+    <div style="margin-top:20px">
+
+      <button
+        class="secondary"
+        onclick="adminTab('products')"
+        style="margin-bottom:15px"
+      >
+        ← Back to Products
+      </button>
+
+      <div class="order-card">
+
+        <h3 style="margin-top:0">✏️ Edit Product</h3>
+
+        <input
+          id="editName"
+          class="input"
+          value="${escapeHtml(p.name)}"
+          placeholder="Product name"
+        >
+
+        <input
+          id="editCategory"
+          class="input"
+          value="${escapeHtml(p.category)}"
+          placeholder="Category"
+        >
+
+        <input
+          id="editPrice"
+          class="input"
+          type="number"
+          value="${Number(p.price || 0)}"
+          placeholder="Price"
+        >
+
+        <input
+          id="editOldPrice"
+          class="input"
+          type="number"
+          value="${Number(p.old_price || 0)}"
+          placeholder="Old price"
+        >
+
+        <input
+          id="editTag"
+          class="input"
+          value="${escapeHtml(p.tag || "NEW")}"
+          placeholder="Tag"
+        >
+
+        <textarea
+          id="editDescription"
+          class="input"
+          rows="4"
+          placeholder="Product description"
+        >${escapeHtml(p.description || "")}</textarea>
+
+        <input
+          id="editImage"
+          class="input"
+          type="file"
+          accept="image/*"
+        >
+
+        <button
+          class="primary"
+          style="width:100%;margin-top:10px"
+          onclick="saveEditedProduct('${p.id}')"
+        >
+          Save Changes
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
