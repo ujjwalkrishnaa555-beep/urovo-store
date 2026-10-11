@@ -2393,6 +2393,42 @@ renderCart();
 updateBadges();
 
 </script>
+function requireAdmin(){
+  if(!isAdmin()){
+    toast("Admin access only");
+    return false;
+  }
+  return true;
+}
+
+function adminTab(tab){
+
+  if(!requireAdmin()) return;
+
+  const pTab = $("adminProductsTab");
+  const oTab = $("adminOrdersTab");
+
+  if(tab === "products"){
+    pTab.classList.add("active");
+    oTab.classList.remove("active");
+    renderAdminProducts();
+  }
+
+  if(tab === "orders"){
+    oTab.classList.add("active");
+    pTab.classList.remove("active");
+    renderAdminOrders();
+  }
+}
+
+function openAdmin(){
+
+  if(!requireAdmin()) return;
+
+  $("adminModal").classList.add("show");
+
+  adminTab("products");
+}
 
 <!-- ADMIN DASHBOARD -->
 <div class="modal" id="adminModal">
