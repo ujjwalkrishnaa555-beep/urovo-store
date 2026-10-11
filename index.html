@@ -590,7 +590,13 @@ const supabaseClient =
   SUPABASE_URL,
   SUPABASE_KEY
  );
+const ADMIN_EMAIL = "ujjwalkrishna0555@gmail.com";
 
+function isAdmin(){
+ return !!user &&
+  String(user.email || "").toLowerCase() ===
+  ADMIN_EMAIL.toLowerCase();
+}
 
 /* ================= DATA ================= */
 
