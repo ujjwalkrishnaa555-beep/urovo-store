@@ -2500,7 +2500,84 @@ async function loadAdminProducts(){
     </div>
   `).join("");
 }
+function showAddProductForm(){
 
+  if(!requireAdmin()) return;
+
+  $("adminContent").innerHTML = `
+    <div style="margin-top:20px">
+
+      <button
+        class="secondary"
+        onclick="adminTab('products')"
+        style="margin-bottom:15px"
+      >
+        ← Back to Products
+      </button>
+
+      <div class="order-card">
+
+        <h3 style="margin-top:0">➕ Add Product</h3>
+
+        <input
+          id="adminName"
+          class="input"
+          placeholder="Product name"
+        >
+
+        <input
+          id="adminCategory"
+          class="input"
+          placeholder="Category"
+        >
+
+        <input
+          id="adminPrice"
+          class="input"
+          type="number"
+          placeholder="Price"
+        >
+
+        <input
+          id="adminOldPrice"
+          class="input"
+          type="number"
+          placeholder="Old price"
+        >
+
+        <input
+          id="adminTag"
+          class="input"
+          placeholder="Tag (NEW / BEST SELLER)"
+        >
+
+        <textarea
+          id="adminDescription"
+          class="input"
+          placeholder="Product description"
+          rows="4"
+        ></textarea>
+
+        <input
+          id="adminImage"
+          class="input"
+          type="file"
+          accept="image/*"
+        >
+
+        <button
+          class="primary"
+          style="width:100%;margin-top:10px"
+          onclick="addProduct()"
+        >
+          Add Product
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
