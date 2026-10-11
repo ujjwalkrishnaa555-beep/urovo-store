@@ -2394,5 +2394,43 @@ updateBadges();
 
 </script>
 
+<!-- ADMIN DASHBOARD -->
+<div class="modal" id="adminModal">
+  <div class="box" style="max-width:950px">
+
+    <button class="close" onclick="closeModal('adminModal')">✕</button>
+
+    <h2 style="font-family:'Space Grotesk';margin:15px 0">
+      👑 UROVO Admin
+    </h2>
+
+    <p style="color:var(--muted)">
+      Product & Order Management
+    </p>
+
+    <div class="tabs">
+
+      <button
+        id="adminProductsTab"
+        class="active"
+        onclick="adminTab('products')"
+      >
+        Products
+      </button>
+
+      <button
+        id="adminOrdersTab"
+        onclick="adminTab('orders')"
+      >
+        Orders
+      </button>
+
+    </div>
+
+    <div id="adminContent"></div>
+
+  </div>
+</div>
+
 </body>
 </html>
