@@ -2984,6 +2984,26 @@ async function renderAdminOrders(){
 
   }).join("");
 }
+async function updateOrderStatus(id, status){
+
+  if(!requireAdmin()) return;
+
+  const {error} = await supabaseClient
+    .from("orders")
+    .update({
+      status: status
+    })
+    .eq("id", id);
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  toast("Order status updated");
+
+  renderAdminOrders();
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
