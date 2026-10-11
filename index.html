@@ -2823,6 +2823,28 @@ async function saveEditedProduct(id){
 
   renderAdminProducts();
 }
+async function deleteProduct(id){
+
+  if(!requireAdmin()) return;
+
+  if(!confirm("Delete this product?")){
+    return;
+  }
+
+  const {error} = await supabaseClient
+    .from("products")
+    .delete()
+    .eq("id",id);
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  toast("Product deleted");
+
+  renderAdminProducts();
+}
 </script>
 function requireAdmin(){
   if(!isAdmin()){
