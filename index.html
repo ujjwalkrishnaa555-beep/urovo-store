@@ -2816,6 +2816,10 @@ async function saveEditedProduct(id){
 
   toast("Product updated successfully");
 
+await loadStoreProducts();
+
+renderAdminProducts();
+
   renderAdminProducts();
 }
 async function deleteProduct(id){
