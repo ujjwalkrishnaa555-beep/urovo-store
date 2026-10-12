@@ -2641,10 +2641,10 @@ async function addProduct(){
     toast(error.message);
     return;
   }
+toast("Product added successfully");
 
-  toast("Product added successfully");
-
-  renderAdminProducts();
+await loadStoreProducts();
+renderAdminProducts();
 }
 async function editProduct(id){
 
@@ -2820,7 +2820,6 @@ await loadStoreProducts();
 
 renderAdminProducts();
 
-  renderAdminProducts();
 }
 async function deleteProduct(id){
 
