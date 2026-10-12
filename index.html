@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080808">
 <title>UROVO — Upgrade Your Everyday</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">loadSupabaseSession().then(()=>loadStoreProducts());
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 :root{--bg:#070707;--surface:#101010;--surface2:#171717;--surface3:#202020;--text:#fff;--muted:#8d8d8d;--line:rgba(255,255,255,.09);--lime:#c8ff00;--red:#ff3655;--shadow:0 20px 70px rgba(0,0,0,.4)}
@@ -21,6 +20,10 @@ header{position:sticky;top:0;z-index:1000;height:72px;padding:0 5%;display:flex;
 .overlay,.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);z-index:3000}.overlay{z-index:1400;opacity:0;visibility:hidden}.overlay.show{opacity:1;visibility:visible}.drawer{position:fixed;right:0;top:0;width:min(440px,94vw);height:100dvh;z-index:1500;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:.35s;padding:24px;display:flex;flex-direction:column}.drawer.show{transform:none}.drawer-head{display:flex;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--line)}.close{width:40px;height:40px;border-radius:12px;background:var(--surface2)}.drawer-body{flex:1;overflow:auto;padding:18px 0}.empty{min-height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:var(--muted)}.empty div{font-size:55px;margin-bottom:15px}.cart-item{display:flex;gap:12px;padding:12px;margin-bottom:10px;border-radius:16px;background:var(--surface)}.cart-img{width:55px;height:55px;background:var(--surface2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:25px;overflow:hidden}.cart-img img{width:100%;height:100%;object-fit:cover}.cart-info{flex:1}.cart-info h4{font-size:13px}.cart-info p{color:var(--lime);font-size:13px;margin-top:5px}.qty{display:flex;align-items:center;gap:7px;margin-top:7px}.qty button{width:25px;height:25px;border-radius:8px;background:var(--surface3)}.remove{background:none!important;color:var(--muted);font-size:11px;margin-left:7px;width:auto!important}.drawer-bottom{border-top:1px solid var(--line);padding-top:18px}.total{display:flex;justify-content:space-between;margin-bottom:15px}.total strong{font-size:21px}.checkout{width:100%;height:52px;border-radius:15px;background:var(--lime);color:#000;font-weight:900}
 .modal{display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:.3s}.modal.show{opacity:1;visibility:visible}.box{width:min(900px,100%);max-height:90vh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:28px;padding:24px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px}.detail-image{min-height:380px;border-radius:22px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:130px;overflow:hidden}.detail-image img{width:100%;height:100%;min-height:380px;object-fit:cover}.detail-content{padding:15px}.detail-content small{color:var(--lime)}.detail-content h2{font:700 38px "Space Grotesk";margin:10px 0}.detail-price{font-size:28px;font-weight:900;margin:15px 0}.detail-desc{color:var(--muted);line-height:1.7;margin-bottom:20px}.detail-actions{display:flex;gap:10px}.detail-actions button{flex:1}.form{display:grid;gap:12px;margin-top:20px}.form input,.form textarea,.input{width:100%;padding:14px;border:1px solid var(--line);background:var(--surface);color:var(--text);outline:none;border-radius:13px}.input:focus,.form input:focus,.form textarea:focus{border-color:var(--lime)}.form textarea{min-height:90px;resize:vertical}.payment{display:grid;grid-template-columns:1fr 1fr;gap:10px}.payment label{padding:15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}.success{text-align:center;padding:30px}.check{width:80px;height:80px;margin:auto auto 20px;border-radius:50%;border:2px solid var(--lime);background:rgba(200,255,0,.08);color:var(--lime);display:flex;align-items:center;justify-content:center;font-size:40px}.order-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:17px;margin:10px 0}.order-card h3{font-size:15px}.order-card p{color:var(--muted);font-size:12px;margin-top:7px}.order-actions{display:flex;gap:8px;margin-top:12px}.order-actions button{flex:1;padding:11px;border-radius:11px;background:var(--surface2)}.order-actions .track{background:var(--lime);color:#000;font-weight:800}.timeline{margin:25px 0}.step{display:flex;gap:15px;align-items:flex-start;padding:15px 0;border-left:2px solid var(--surface3);margin-left:12px;padding-left:22px;position:relative}.step:before{content:"";position:absolute;left:-8px;top:17px;width:14px;height:14px;border-radius:50%;background:var(--surface3);border:3px solid var(--bg)}.step.done{border-color:var(--lime)}.step.done:before{background:var(--lime)}.step b{font-size:14px}.step small{display:block;color:var(--muted);margin-top:3px}.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.stat{background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:14px}.stat small{color:var(--muted);display:block;font-size:10px}.stat b{font-size:22px;display:block;margin-top:5px}.tracking-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.tracking-grid .full{grid-column:1/-1}@media(max-width:750px){.admin-stats{grid-template-columns:repeat(2,1fr)}.tracking-grid{grid-template-columns:1fr}}.tabs{display:flex;gap:7px;background:var(--surface2);padding:5px;border-radius:14px;margin:20px 0}.tabs button{flex:1;padding:11px;border-radius:10px;background:none;color:var(--muted)}.tabs button.active{background:var(--lime);color:#000;font-weight:800}.toast{position:fixed;z-index:6000;bottom:25px;left:50%;transform:translate(-50%,30px);opacity:0;pointer-events:none;padding:13px 17px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);transition:.35s}.toast.show{opacity:1;transform:translate(-50%,0)}.bottom-nav{display:none}footer{padding:45px 5%;color:var(--muted);text-align:center;border-top:1px solid var(--line);font-size:13px}
 @media(max-width:1050px){.products{grid-template-columns:repeat(3,1fr)}.feature-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:750px){header{padding:0 18px}.hero{min-height:550px;padding:65px 20px}.hero h1{font-size:58px;letter-spacing:-3px}.hero p{font-size:15px}.hero-buttons{flex-wrap:wrap}.deal{margin:0 18px 40px;flex-direction:column;align-items:flex-start}.search-wrap,.categories,.section,.features{padding-left:18px;padding-right:18px}.products{grid-template-columns:repeat(2,1fr);gap:10px}.product-media{height:175px}.product-emoji{font-size:52px}.info{padding:12px}.title{font-size:13px}.price{font-size:17px}.add{height:42px;font-size:12px}.feature-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.detail-image,.detail-image img{min-height:260px}.detail-content h2{font-size:28px}.bottom-nav{position:fixed;display:flex;bottom:0;left:0;right:0;height:68px;z-index:1100;background:rgba(10,10,10,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line);justify-content:space-around;align-items:center}.bottom-nav button{background:none;color:var(--muted);font-size:10px}.bottom-nav button.active{color:var(--lime)}footer{padding-bottom:90px}}
+</style>
+
+<style>
+.stock-pill{display:inline-block;margin-top:6px;padding:5px 8px;border-radius:8px;background:var(--surface2);color:var(--muted);font-size:10px;font-weight:800}.stock-pill.low{color:#ffd166}.stock-pill.out{color:#ff3655}.review-box{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.stars{color:#ffd166;letter-spacing:2px}.review-item{padding:10px 0;border-bottom:1px solid var(--line)}.coupon-row{display:flex;gap:8px;margin:10px 0}.coupon-row input{flex:1}.admin-search{margin:10px 0}.order-status-pill{display:inline-block;padding:6px 9px;border-radius:10px;background:var(--surface2);font-size:11px;font-weight:800}.cancel-btn{background:rgba(255,54,85,.12)!important;color:#ff3655!important}.success-code{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -143,7 +146,7 @@ function closeCheckout(){$("checkoutModal").classList.remove("show")}
 
 async function saveOrderToSupabase(order){
  try{
-  const payload={id:order.id,customer_name:order.customer.name,phone:order.customer.phone,address:`${order.customer.house}, ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`,payment_method:order.payment,items:order.items,subtotal:order.total,delivery:0,discount:0,total:order.total,status:order.status,user_email:order.user==="guest"?null:order.user,created_at:order.createdAt,tracking_number:order.trackingNumber||null,courier:order.courier||null,tracking_url:order.trackingUrl||null,estimated_delivery:order.estimatedDelivery||null};
+  const payload={order_number:order.id,customer_name:order.customer.name,phone:order.customer.phone,address:`${order.customer.house}, ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`,payment_method:order.payment,payment_status:order.paymentStatus||"Pending",items:order.items,subtotal:order.total,delivery:0,discount:0,total:order.total,status:order.status,user_email:order.user==="guest"?null:order.user,created_at:order.createdAt};
   const {error}=await supabaseClient.from("orders").insert([payload]);
   if(error){console.error(error);toast(error.message);return false}return true
  }catch(e){console.error(e);return false}
@@ -154,7 +157,7 @@ $("checkoutForm").addEventListener("submit",async e=>{
  if(document.querySelector('input[name="payment"]:checked').value==="online"){toast("Online payment is not connected yet. Choose COD.");return}
  if(!checkoutItems.length){toast("No products selected");return}
  const items=checkoutItems.map(item=>{const p=product(item.id);return{id:String(item.id),name:p?.name||"Product",price:p?.price||0,image:p?.image||"",qty:item.qty}});
- const order={id:makeOrderNumber(),createdAt:new Date().toISOString(),user:user?.email||"guest",items,customer:{name:$("cName").value.trim(),phone:$("cPhone").value.trim(),house:$("cHouse").value.trim(),city:$("cCity").value.trim(),pincode:$("cPin").value.trim(),address:$("cAddress").value.trim()},payment:"Cash on Delivery",total:checkoutItems.reduce((s,i)=>s+(product(i.id)?.price||0)*i.qty,0),status:"Order Placed",step:0,trackingNumber:"",courier:"",trackingUrl:"",estimatedDelivery:""};
+ const order={id:makeOrderNumber(),createdAt:new Date().toISOString(),user:user?.email||"guest",items,customer:{name:$("cName").value.trim(),phone:$("cPhone").value.trim(),house:$("cHouse").value.trim(),city:$("cCity").value.trim(),pincode:$("cPin").value.trim(),address:$("cAddress").value.trim()},payment:"Cash on Delivery",paymentStatus:"Pending",total:checkoutItems.reduce((s,i)=>s+(product(i.id)?.price||0)*i.qty,0),status:"Order Placed",step:0,trackingNumber:"",courier:"",trackingUrl:"",estimatedDelivery:""};
  const saved=await saveOrderToSupabase(order);
  if(!saved){toast("Order could not be saved to database.");return}
  orders.unshift(order);if(checkoutMode==="cart")cart=[];save();$("checkoutForm").reset();$("orderId").textContent=order.id;$("checkoutModal").classList.remove("show");$("successModal").classList.add("show");$("successTrack").onclick=()=>{closeModal("successModal");openTracking(order.id)};renderCart();updateBadges();toast("Order placed successfully")
@@ -178,7 +181,7 @@ async function findOrderForCustomer(id){
  if(user){const {data}=await supabaseClient.from("orders").select("*").eq("id",id).eq("user_email",user.email).maybeSingle();if(data)o=data}
  return o;
 }
-function normalizeOrder(o){if(!o)return null;let items=o.items||[];if(typeof items==="string")try{items=JSON.parse(items)}catch{items=[]}return {...o,items,step:o.step??orderStep(o.status||"Order Placed"),trackingNumber:o.tracking_number||o.trackingNumber||"",courier:o.courier||"",trackingUrl:o.tracking_url||o.trackingUrl||"",estimatedDelivery:o.estimated_delivery||o.estimatedDelivery||"",customer:o.customer||{name:o.customer_name||"",phone:o.phone||"",address:o.address||""}}}
+function normalizeOrder(o){if(!o)return null;let items=o.items||[];if(typeof items==="string")try{items=JSON.parse(items)}catch{items=[]}return {...o,items,step:o.step??orderStep(o.status||"Order Placed"),trackingNumber:o.tracking_number||o.trackingNumber||"",courier:o.courier||"",trackingUrl:o.tracking_url||o.trackingUrl||"",estimatedDelivery:o.estimated_delivery||o.estimatedDelivery||"",paymentStatus:o.payment_status||o.paymentStatus||"Pending",customer:o.customer||{name:o.customer_name||"",phone:o.phone||"",address:o.address||""}}}
 async function openTracking(id){
  const o=normalizeOrder(await findOrderForCustomer(id));if(!o){toast("Order not found");return}
  const status=o.status||"Order Placed",step=orderStep(status);
@@ -246,12 +249,243 @@ async function renderAdminOrders(){
  const {data,error}=await supabaseClient.from("orders").select("*").order("created_at",{ascending:false});
  if(error){$("adminOrderList").innerHTML=`<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;return}
  const rows=data||[];const total=rows.reduce((s,o)=>s+Number(o.total||0),0),pending=rows.filter(o=>!['Delivered','Cancelled'].includes(o.status)).length,delivered=rows.filter(o=>o.status==='Delivered').length;
- $("adminOrderList").innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${rows.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${delivered}</b></div><div class="stat"><small>Sales</small><b>${money(total)}</b></div></div>${!rows.length?`<div class="order-card"><p>No orders yet.</p></div>`:rows.map(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>Order #${escapeHtml(o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p style="margin-top:10px"><strong>Customer:</strong> ${escapeHtml(o.customer_name||'Unknown')}</p><p><strong>Email:</strong> ${escapeHtml(o.user_email||'Guest')}</p><p><strong>Phone:</strong> ${escapeHtml(o.phone||'Not provided')}</p><p><strong>Address:</strong><br>${escapeHtml(o.address||'Not provided')}</p><div style="margin-top:12px"><strong>Products:</strong>${items.map(i=>`<div>${escapeHtml(i.name||'Product')} × ${Number(i.qty||1)}</div>`).join('')}</div><p style="margin-top:12px"><strong>Total:</strong> ${money(o.total)} · <strong>Payment:</strong> ${escapeHtml(o.payment_method||'Unknown')}</p><select class="input" onchange="updateOrderStatus('${String(o.id)}',this.value)">${['Order Placed','Order Confirmed','Processing','Shipped','Out for Delivery','Delivered','Cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${String(o.id)}" value="${escapeHtml(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${String(o.id)}" value="${escapeHtml(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${String(o.id)}" value="${escapeHtml(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${String(o.id)}" value="${escapeHtml(o.estimated_delivery||'')}" placeholder="Estimated delivery (e.g. 18 Oct 2026)"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${String(o.id)}')">🚚 Save Tracking Update</button></div>`}).join('')}`
+ $("adminOrderList").innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${rows.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${delivered}</b></div><div class="stat"><small>Sales</small><b>${money(total)}</b></div></div>${!rows.length?`<div class="order-card"><p>No orders yet.</p></div>`:rows.map(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>Order #${escapeHtml(o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p style="margin-top:10px"><strong>Customer:</strong> ${escapeHtml(o.customer_name||'Unknown')}</p><p><strong>Email:</strong> ${escapeHtml(o.user_email||'Guest')}</p><p><strong>Phone:</strong> ${escapeHtml(o.phone||'Not provided')}</p><p><strong>Address:</strong><br>${escapeHtml(o.address||'Not provided')}</p><div style="margin-top:12px"><strong>Products:</strong>${items.map(i=>`<div>${escapeHtml(i.name||'Product')} × ${Number(i.qty||1)}</div>`).join('')}</div><p style="margin-top:12px"><strong>Total:</strong> ${money(o.total)} · <strong>Payment:</strong> ${escapeHtml(o.payment_method||'Unknown')} · <strong>Cash:</strong> ${o.status==='Delivered'?'Collected':'Pending until Delivered'}</p><select class="input" onchange="updateOrderStatus('${String(o.id)}',this.value)">${['Order Placed','Order Confirmed','Processing','Shipped','Out for Delivery','Delivered','Cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${String(o.id)}" value="${escapeHtml(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${String(o.id)}" value="${escapeHtml(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${String(o.id)}" value="${escapeHtml(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${String(o.id)}" value="${escapeHtml(o.estimated_delivery||'')}" placeholder="Estimated delivery (e.g. 18 Oct 2026)"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${String(o.id)}')">🚚 Save Tracking Update</button></div>`}).join('')}`
 }
 async function updateOrderStatus(id,status){if(!requireAdmin())return;const {error}=await supabaseClient.from('orders').update({status}).eq('id',id);if(error){toast(error.message);return}toast('Order status updated');renderAdminOrders()}
 async function saveOrderTracking(id){if(!requireAdmin())return;const tracking_number=$("trackNo_"+id)?.value.trim()||null,courier=$("courier_"+id)?.value.trim()||null,tracking_url=$("trackUrl_"+id)?.value.trim()||null,estimated_delivery=$("eta_"+id)?.value.trim()||null;const {error}=await supabaseClient.from('orders').update({tracking_number,courier,tracking_url,estimated_delivery}).eq('id',id);if(error){toast(error.message);return}toast('🚚 Tracking updated');renderAdminOrders()}
 
-loadSupabaseSession().then(()=>loadStoreProducts());
+
+
+/* ===== UROVO PRO FUNCTIONALITY PACK ===== */
+const UROVO_STATUSES=["Order Placed","Order Confirmed","Processing","Shipped","Out for Delivery","Delivered"];
+const UROVO_ALL_STATUSES=[...UROVO_STATUSES,"Cancelled"];
+const COUPONS={"UROVO10":10,"WELCOME10":10};
+let appliedCoupon=JSON.parse(localStorage.getItem("urovo_coupon")||"null");
+
+function makeOrderNumber(){
+  const day=new Date().toISOString().slice(0,10).replace(/-/g,"");
+  let n=Number(localStorage.getItem("urovo_order_seq")||0)+1;
+  localStorage.setItem("urovo_order_seq",String(n));
+  return `UROVO-${day}-${String(n).padStart(4,"0")}`;
+}
+function orderStep(status){
+  const i=UROVO_STATUSES.indexOf(status);
+  return i<0?0:i;
+}
+function stockOf(p){
+  const n=Number(p?.stock);
+  return Number.isFinite(n)?n:null;
+}
+function stockText(p){
+  const s=stockOf(p);
+  if(s===null)return "";
+  if(s<=0)return `<span class="stock-pill out">Out of stock</span>`;
+  if(s<=5)return `<span class="stock-pill low">Only ${s} left</span>`;
+  return `<span class="stock-pill">${s} in stock</span>`;
+}
+function canBuy(p,qty=1){
+  const s=stockOf(p);
+  return s===null || s>=qty;
+}
+
+function renderProducts(){
+  const q=$("search").value.toLowerCase().trim();
+  const list=products.filter(p=>{
+    const cat=category==="All"||String(p.category).toLowerCase()===String(category).toLowerCase();
+    const search=String(p.name).toLowerCase().includes(q)||String(p.category).toLowerCase().includes(q)||String(p.desc).toLowerCase().includes(q);
+    return cat&&search;
+  });
+  $("count").textContent=list.length+" products";
+  if(!list.length){$("products").innerHTML=`<div class="empty" style="grid-column:1/-1"><div>📦</div><h3>No products found</h3><p>Products will appear here.</p></div>`;return;}
+  $("products").innerHTML=list.map(p=>{
+    const wished=wishlist.some(x=>String(x)===String(p.id));
+    const out=stockOf(p)!==null&&stockOf(p)<=0;
+    const image=p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:70px">${p.icon||"📦"}</div>`:`<div class="product-emoji">${p.icon||"📦"}</div>`;
+    return `<article class="product"><div class="product-media"><span class="tag">${escapeHtml(p.tag||"NEW")}</span><button class="wish ${wished?"active":""}" onclick="toggleWish('${String(p.id)}',this)"><svg viewBox="0 0 24 24"><path d="M20.8 8.6c0 5.5-8.8 10.4-8.8 10.4S3.2 14.1 3.2 8.6A5 5 0 0 1 12 5.7a5 5 0 0 1 8.8 2.9Z"/></svg></button>${image}</div><div class="info"><div class="category-name">${escapeHtml(p.category)}</div><div class="title">${escapeHtml(p.name)}</div><div class="price-row"><span class="price">${money(p.price)}</span>${p.old>0?`<span class="old">${money(p.old)}</span>`:""}</div>${stockText(p)}<button class="add" ${out?'disabled style="opacity:.45;cursor:not-allowed"':''} onclick="addCart('${String(p.id)}')">${out?'Out of Stock':'Add to Cart'}</button><button style="width:100%;background:none;color:var(--muted);font-size:11px;margin-top:10px" onclick="openProduct('${String(p.id)}')">View Details →</button></div></article>`;
+  }).join("");
+}
+
+function addCart(id){
+  id=String(id);const p=product(id);if(!p){toast("Product not found");return;}
+  const item=cart.find(x=>String(x.id)===id);const next=(item?.qty||0)+1;
+  if(!canBuy(p,next)){toast("Not enough stock");return;}
+  if(item)item.qty++;else cart.push({id,qty:1});
+  save();renderCart();updateBadges();toast("🛒 Added to cart");
+}
+function changeQty(id,n){
+  const x=cart.find(i=>String(i.id)===String(id));const p=product(id);if(!x||!p)return;
+  const next=x.qty+n;if(next>0&&!canBuy(p,next)){toast("Not enough stock");return;}
+  x.qty=next;if(x.qty<=0)cart=cart.filter(i=>String(i.id)!==String(id));save();renderCart();updateBadges();
+}
+function applyCoupon(){
+  const code=$("couponInput")?.value.trim().toUpperCase();
+  if(!code){appliedCoupon=null;localStorage.removeItem("urovo_coupon");$("couponMessage").textContent="";renderCart();return;}
+  if(COUPONS[code]){appliedCoupon={code,percent:COUPONS[code]};localStorage.setItem("urovo_coupon",JSON.stringify(appliedCoupon));$("couponMessage").textContent=`${code} applied — ${COUPONS[code]}% off`;$("couponMessage").style.color="var(--lime)";renderCart();toast("Coupon applied");}
+  else {$("couponMessage").textContent="Invalid coupon";$("couponMessage").style.color="var(--red)";toast("Invalid coupon");}
+}
+function cartTotals(){
+  let subtotal=0;cart.forEach(i=>{const p=product(i.id);if(p)subtotal+=Number(p.price||0)*Number(i.qty||1)});
+  const discount=appliedCoupon?Math.round(subtotal*Number(appliedCoupon.percent||0)/100):0;
+  return {subtotal,discount,total:Math.max(0,subtotal-discount)};
+}
+function renderCart(){
+  if(!cart.length){$("cartItems").innerHTML=`<div class="empty"><div>🛒</div><h3>Your cart is empty</h3><p>Add products you like.</p></div>`;$("cartTotal").textContent="₹0";return;}
+  let html="";cart=cart.filter(x=>product(x.id));
+  cart.forEach(item=>{const p=product(item.id);if(!p)return;html+=`<div class="cart-item"><div class="cart-img">${p.image?`<img src="${escapeHtml(p.image)}">`:(p.icon||"📦")}</div><div class="cart-info"><h4>${escapeHtml(p.name)}</h4><p>${money(p.price*item.qty)}</p><div class="qty"><button onclick="changeQty('${String(p.id)}',-1)">−</button><span>${item.qty}</span><button onclick="changeQty('${String(p.id)}',1)">+</button><button class="remove" onclick="removeItem('${String(p.id)}')">Remove</button></div></div></div>`});
+  const t=cartTotals();$("cartItems").innerHTML=html;$("cartTotal").textContent=money(t.total);save();
+}
+
+function openCheckout(){
+  if(!cart.length){toast("Your cart is empty");return;}
+  checkoutItems=cart.map(x=>({...x}));checkoutMode="cart";closeCart();$("checkoutModal").classList.add("show");
+}
+
+async function saveOrderToSupabase(order){
+  try{
+    const t=cartTotals();
+    const payload={order_number:order.id,customer_name:order.customer.name,phone:order.customer.phone,address:`${order.customer.house}, ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`,payment_method:order.payment,payment_status:order.paymentStatus||"Pending",items:order.items,subtotal:order.subtotal??order.total,delivery:0,discount:order.discount||0,total:order.total,status:order.status,user_email:order.user==="guest"?null:order.user,created_at:order.createdAt,tracking_number:order.trackingNumber||null,courier:order.courier||null,tracking_url:order.trackingUrl||null,estimated_delivery:order.estimatedDelivery||null};
+    let {error}=await supabaseClient.from("orders").insert([payload]);
+    if(error && /order_number|column .* does not exist/i.test(error.message||"")){
+      const fallback={...payload};delete fallback.order_number;
+      const retry=await supabaseClient.from("orders").insert([fallback]);
+      error=retry.error;
+    }
+    if(error){console.error(error);toast(error.message);return false;}return true;
+  }catch(e){console.error(e);toast(e.message||"Order save failed");return false;}
+}
+
+$("checkoutForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!user){toast("Please login before placing an order.");closeCheckout();showAccount();return;}
+  if(document.querySelector('input[name="payment"]:checked').value!=="cod"){toast("Online payment is not connected yet. Choose COD.");return;}
+  if(!checkoutItems.length){toast("No products selected");return;}
+  for(const i of checkoutItems){const p=product(i.id);if(!p||!canBuy(p,i.qty)){toast("One or more products are out of stock");return;}}
+  const items=checkoutItems.map(item=>{const p=product(item.id);return{id:String(item.id),name:p?.name||"Product",price:p?.price||0,image:p?.image||"",qty:item.qty}});
+  const subtotal=checkoutItems.reduce((s,i)=>s+(product(i.id)?.price||0)*i.qty,0);
+  const discount=appliedCoupon?Math.round(subtotal*Number(appliedCoupon.percent||0)/100):0;
+  const total=Math.max(0,subtotal-discount);
+  const order={id:makeOrderNumber(),createdAt:new Date().toISOString(),user:user?.email||"guest",items,customer:{name:$('cName').value.trim(),phone:$('cPhone').value.trim(),house:$('cHouse').value.trim(),city:$('cCity').value.trim(),pincode:$('cPin').value.trim(),address:$('cAddress').value.trim()},payment:"Cash on Delivery",paymentStatus:"Pending",subtotal,discount,total,status:"Order Placed",trackingNumber:"",courier:"",trackingUrl:"",estimatedDelivery:""};
+  const saved=await saveOrderToSupabase(order);if(!saved){toast("Order could not be saved. Check Supabase orders table/policies.");return;}
+  // Best-effort stock decrement when stock exists.
+  for(const i of checkoutItems){const p=product(i.id);if(stockOf(p)!==null){const newStock=Math.max(0,stockOf(p)-Number(i.qty));await supabaseClient.from("products").update({stock:newStock}).eq("id",i.id);}}
+  orders.unshift(order);if(checkoutMode==="cart")cart=[];appliedCoupon=null;localStorage.removeItem("urovo_coupon");save();$("checkoutForm").reset();$("orderId").textContent=order.id;$("checkoutModal").classList.remove("show");$("successModal").classList.add("show");$("successTrack").onclick=()=>{closeModal("successModal");openTracking(order.id)};await loadStoreProducts();renderCart();updateBadges();toast("Order placed successfully");
+});
+
+async function findOrderForCustomer(id){
+  let o=orders.find(x=>String(x.id)===String(id));
+  if(user){const {data}=await supabaseClient.from("orders").select("*").eq("id",id).eq("user_email",user.email).maybeSingle();if(data)o=data;}
+  return o;
+}
+async function openTracking(id){
+  const o=normalizeOrder(await findOrderForCustomer(id));if(!o){toast("Order not found");return;}
+  const status=o.status||"Order Placed",step=orderStep(status);
+  $("trackingContent").innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">🚚 Track Order</h2><p style="color:var(--lime);font-weight:800">${escapeHtml(o.id)}</p><p style="color:var(--muted);margin-top:5px">${money(o.total)} · ${escapeHtml(o.payment_method||o.payment||"Cash on Delivery")}</p><div class="timeline">${UROVO_STATUSES.map((s,i)=>`<div class="step ${i<=step&&status!=="Cancelled"?"done":""}"><div><b>${s}</b>${i===step&&status!=="Cancelled"?"<small>Current status</small>":""}</div></div>`).join("")}${status==="Cancelled"?`<div class="step done"><div><b>Cancelled</b><small>Order cancelled</small></div></div>`:""}</div>${o.trackingNumber?`<div style="padding:15px;background:var(--surface);border-radius:15px;margin-bottom:10px"><b>🚚 Shipment</b><p style="color:var(--muted);margin-top:6px">${escapeHtml(o.courier||"Courier")} · ${escapeHtml(o.trackingNumber)}</p>${o.trackingUrl?`<a href="${escapeHtml(o.trackingUrl)}" target="_blank" rel="noopener" style="color:var(--lime);display:inline-block;margin-top:8px">Track on courier →</a>`:""}${o.estimatedDelivery?`<p style="margin-top:8px">Estimated delivery: <b>${escapeHtml(o.estimatedDelivery)}</b></p>`:""}</div>`:""}<div style="padding:15px;background:var(--surface);border-radius:15px"><b>Delivery</b><p style="color:var(--muted);margin-top:6px">${escapeHtml(o.address||o.customer.address||"Not provided")}</p></div>`;
+  $("trackModal").classList.add("show");
+}
+
+async function openOrders(){
+  if(!user){toast("Login to view your orders");showAccount();return;}
+  let list=[];
+  const {data,error}=await supabaseClient.from("orders").select("*").eq("user_email",user.email).order("created_at",{ascending:false});
+  if(!error&&data)list=data;
+  if(!list.length)list=orders.filter(o=>o.user===user.email).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  $("ordersList").innerHTML=!list.length?`<div class="empty"><div>📦</div><h3>No orders yet</h3><p>Your orders will appear here.</p></div>`:list.map(o=>{
+    let items=o.items||[];
+    if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}
+    const status=String(o.status||"Order Placed");
+    const terminal=["Delivered","Order Delivered","Cancelled"].includes(status);
+    const orderId=String(o.id);
+    return `<div class="order-card">
+      <div style="display:flex;justify-content:space-between;gap:10px">
+        <div><h3>${escapeHtml(o.order_number||o.id)}</h3><p>${new Date(o.created_at||o.createdAt).toLocaleString("en-IN")} · ${items.reduce((a,b)=>a+Number(b.qty||1),0)} item(s)</p></div>
+        <strong style="color:var(--lime)">${money(o.total)}</strong>
+      </div>
+      <p style="margin-top:10px"><span class="order-status-pill">${escapeHtml(status)}</span></p>
+      ${o.tracking_number?`<p style="color:var(--muted);font-size:12px">🚚 ${escapeHtml(o.courier||"Courier")} · ${escapeHtml(o.tracking_number)}</p>`:""}
+      <div class="order-actions">
+        <button class="track" onclick="openTracking('${escapeHtml(orderId)}')">Track Order</button>
+        <button onclick="viewOrder('${escapeHtml(orderId)}')">Details</button>
+      </div>
+      ${!terminal?`<button class="cancel-btn" style="display:block!important;width:100%;margin-top:10px;padding:13px;border-radius:12px;font-weight:900;border:1px solid rgba(255,54,85,.3)" onclick="cancelCustomerOrder('${escapeHtml(orderId)}')">✕ Cancel Order</button>`:(status==='Cancelled'?`<p style="color:var(--red);margin-top:10px;font-size:12px;font-weight:800">Order cancelled</p>`:"")}
+    </div>`;
+  }).join("");
+  $("ordersModal").classList.add("show");
+}
+async function cancelCustomerOrder(id){
+  if(!user){toast("Login required");return;}
+  if(!confirm("Cancel this order?"))return;
+  const {error}=await supabaseClient.from("orders").update({status:"Cancelled"}).eq("id",id).eq("user_email",user.email);
+  if(error){toast(error.message);return;}toast("Order cancelled");openOrders();
+}
+
+function openProduct(id){
+  const p=product(id);if(!p)return;selectedProduct=p;
+  $("detailImage").innerHTML=p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" onerror="this.outerHTML='<span>📦</span>'">`:(p.icon||"📦");
+  $("detailCategory").textContent=(p.category||"All").toUpperCase();$("detailTitle").textContent=p.name;$("detailPrice").textContent=money(p.price);$("detailDescription").textContent=p.desc||"";
+  const wished=wishlist.some(x=>String(x)===String(id));$("detailWish").textContent=wished?"♥ Wishlisted":"♡ Wishlist";$("detailWish").onclick=()=>{toggleWish(id);const w=wishlist.some(x=>String(x)===String(id));$("detailWish").textContent=w?"♥ Wishlisted":"♡ Wishlist"};
+  $("detailAdd").disabled=!canBuy(p,1);$("detailAdd").textContent=stockOf(p)!==null&&stockOf(p)<=0?"Out of Stock":"Add to Cart";$("detailAdd").onclick=()=>{if(canBuy(p,1)){addCart(id);closeProductModal();openCart();}};
+  $("detailBuy").disabled=!canBuy(p,1);$("detailBuy").onclick=()=>{if(!canBuy(p,1))return;checkoutItems=[{id:String(id),qty:1}];checkoutMode="buy";closeProductModal();$("checkoutModal").classList.add("show")};
+  $("productModal").classList.add("show");
+}
+
+async function loadStoreProducts(){
+  const {data,error}=await supabaseClient.from("products").select("*").order("created_at",{ascending:false});
+  if(error){console.error("Products loading error:",error);$("products").innerHTML=`<div class="empty" style="grid-column:1/-1"><div>⚠️</div><h3>Could not load products</h3><p>${escapeHtml(error.message)}</p></div>`;return;}
+  products=(data||[]).map(p=>({id:String(p.id),name:p.name||"",category:p.category||"All",price:Number(p.price||0),old:Number(p.old_price||0),icon:p.icon||"📦",tag:p.tag||"NEW",desc:p.description||"",image:p.image_url||"",stock:p.stock===null||p.stock===undefined?null:Number(p.stock)}));
+  wishlist=wishlist.filter(id=>product(id));cart=cart.filter(x=>product(x.id));save();renderProducts();renderCart();updateBadges();
+}
+
+function showAddProductForm(){if(!requireAdmin())return;$("adminContent").innerHTML=`<button class="secondary" onclick="adminTab('products')">← Back</button><div class="order-card"><h3>➕ Add Product</h3><input id="adminName" class="input" placeholder="Product name"><input id="adminCategory" class="input" placeholder="Category"><input id="adminPrice" class="input" type="number" placeholder="Price"><input id="adminOldPrice" class="input" type="number" placeholder="Old price"><input id="adminStock" class="input" type="number" min="0" placeholder="Stock (leave empty for unlimited)"><input id="adminTag" class="input" placeholder="Tag"><textarea id="adminDescription" class="input" placeholder="Product description" rows="4"></textarea><input id="adminImage" class="input" type="file" accept="image/*"><button class="primary" style="width:100%;margin-top:10px" onclick="addProduct()">Add Product</button></div>`}
+async function addProduct(){if(!requireAdmin())return;const name=$("adminName").value.trim(),cat=$("adminCategory").value.trim(),price=Number($("adminPrice").value),old=Number($("adminOldPrice").value||0),stockVal=$("adminStock").value.trim(),stock=stockVal===""?null:Number(stockVal),tag=$("adminTag").value.trim()||"NEW",desc=$("adminDescription").value.trim(),file=$("adminImage").files[0];if(!name||!cat||!price||!desc||(stock!==null&&(!Number.isFinite(stock)||stock<0))){toast("Please fill all required fields");return}try{const image_url=await uploadProductImage(file);const {error}=await supabaseClient.from("products").insert([{name,category:cat,price,old_price:old,image_url,icon:"📦",tag,description:desc,stock}]);if(error)throw error;toast("Product added successfully");await loadStoreProducts();renderAdminProducts()}catch(e){console.error(e);toast(e.message||"Could not add product")}}
+async function editProduct(id){if(!requireAdmin())return;const {data:p,error}=await supabaseClient.from("products").select("*").eq("id",id).single();if(error||!p){toast("Product not found");return}$("adminContent").innerHTML=`<button class="secondary" onclick="adminTab('products')">← Back</button><div class="order-card"><h3>✏️ Edit Product</h3><input id="editName" class="input" value="${escapeHtml(p.name)}"><input id="editCategory" class="input" value="${escapeHtml(p.category)}"><input id="editPrice" class="input" type="number" value="${Number(p.price||0)}"><input id="editOldPrice" class="input" type="number" value="${Number(p.old_price||0)}"><input id="editStock" class="input" type="number" min="0" value="${p.stock===null||p.stock===undefined?"":Number(p.stock)}" placeholder="Stock (empty = unlimited)"><input id="editTag" class="input" value="${escapeHtml(p.tag||"NEW")}"><textarea id="editDescription" class="input" rows="4">${escapeHtml(p.description||"")}</textarea><input id="editImage" class="input" type="file" accept="image/*"><button class="primary" style="width:100%;margin-top:10px" onclick="saveEditedProduct('${String(p.id)}')">Save Changes</button></div>`}
+async function saveEditedProduct(id){if(!requireAdmin())return;const name=$("editName").value.trim(),cat=$("editCategory").value.trim(),price=Number($("editPrice").value),old=Number($("editOldPrice").value||0),stockVal=$("editStock").value.trim(),stock=stockVal===""?null:Number(stockVal),tag=$("editTag").value.trim()||"NEW",desc=$("editDescription").value.trim(),file=$("editImage").files[0];if(!name||!cat||!price||!desc||(stock!==null&&(!Number.isFinite(stock)||stock<0))){toast("Please fill all required fields");return}try{const update={name,category:cat,price,old_price:old,tag,description:desc,stock};if(file)update.image_url=await uploadProductImage(file);const {error}=await supabaseClient.from("products").update(update).eq("id",id);if(error)throw error;toast("Product updated successfully");await loadStoreProducts();renderAdminProducts()}catch(e){console.error(e);toast(e.message||"Update failed")}}
+
+async function renderAdminOrders(){
+  if(!requireAdmin())return;$("adminContent").innerHTML=`<div id="adminOrderList"><p style="color:var(--muted)">Loading orders...</p></div>`;
+  const {data,error}=await supabaseClient.from("orders").select("*").order("created_at",{ascending:false});if(error){$("adminOrderList").innerHTML=`<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;return;}
+  const rows=data||[],total=rows.filter(o=>o.status==='Delivered').reduce((s,o)=>s+Number(o.total||0),0),pending=rows.filter(o=>!['Delivered','Cancelled'].includes(o.status)).length,delivered=rows.filter(o=>o.status==='Delivered').length;
+  $("adminOrderList").innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${rows.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${delivered}</b></div><div class="stat"><small>Sales</small><b>${money(total)}</b></div></div><input class="input admin-search" id="adminOrderSearch" placeholder="Search order number, name, phone"><div id="adminOrderCards"></div>`;
+  window.__urovoAdminOrders=rows;renderAdminOrderCards(rows);
+}
+function renderAdminOrderCards(rows){
+  const q=$("adminOrderSearch")?.value.toLowerCase().trim()||"";const filtered=rows.filter(o=>[o.id,o.customer_name,o.phone,o.user_email].join(" ").toLowerCase().includes(q));
+  $("adminOrderCards").innerHTML=!filtered.length?`<div class="order-card"><p>No matching orders.</p></div>`:filtered.map(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>#${escapeHtml(o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p><strong>Customer:</strong> ${escapeHtml(o.customer_name||'Unknown')}</p><p><strong>Email:</strong> ${escapeHtml(o.user_email||'Guest')}</p><p><strong>Phone:</strong> ${escapeHtml(o.phone||'Not provided')}</p><p><strong>Address:</strong><br>${escapeHtml(o.address||'Not provided')}</p><div style="margin-top:12px"><strong>Products:</strong>${items.map(i=>`<div>${escapeHtml(i.name||'Product')} × ${Number(i.qty||1)}</div>`).join('')}</div><p style="margin-top:12px"><strong>Total:</strong> ${money(o.total)} · <strong>Payment:</strong> ${escapeHtml(o.payment_method||'Unknown')} · <strong>Cash:</strong> ${o.status==='Delivered'?'Collected':'Pending until Delivered'}</p><select class="input" onchange="updateOrderStatus('${String(o.id)}',this.value)">${UROVO_ALL_STATUSES.map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${String(o.id)}" value="${escapeHtml(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${String(o.id)}" value="${escapeHtml(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${String(o.id)}" value="${escapeHtml(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${String(o.id)}" value="${escapeHtml(o.estimated_delivery||'')}" placeholder="Estimated delivery (e.g. 18 Oct 2026)"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${String(o.id)}')">🚚 Save Tracking Update</button></div>`}).join("");
+  $("adminOrderSearch")?.addEventListener("input",()=>renderAdminOrderCards(window.__urovoAdminOrders||[]));
+}
+async function updateOrderStatus(id,status){if(!requireAdmin())return;const {error}=await supabaseClient.from("orders").update({status}).eq("id",id);if(error){toast(error.message);return}toast("Order status updated");renderAdminOrders()}
+async function saveOrderTracking(id){if(!requireAdmin())return;const tracking_number=$("trackNo_"+id)?.value.trim()||null,courier=$("courier_"+id)?.value.trim()||null,tracking_url=$("trackUrl_"+id)?.value.trim()||null,estimated_delivery=$("eta_"+id)?.value.trim()||null;const {error}=await supabaseClient.from("orders").update({tracking_number,courier,tracking_url,estimated_delivery}).eq("id",id);if(error){toast(error.message);return}toast("🚚 Tracking updated");renderAdminOrders()}
+
+/* Lightweight product reviews stored in Supabase when the optional table exists; otherwise local fallback. */
+const REVIEW_KEY="urovo_reviews";
+function localReviews(){try{return JSON.parse(localStorage.getItem(REVIEW_KEY)||"{}")}catch{return {}}}
+async function submitReview(productId,stars,text){
+  if(!user){toast("Login to review products");return;}
+  stars=Math.max(1,Math.min(5,Number(stars)));text=String(text||"").trim();if(!text){toast("Write a review first");return;}
+  const {error}=await supabaseClient.from("product_reviews").insert([{product_id:productId,user_email:user.email,stars,review:text}]);
+  if(error){const all=localReviews();all[productId]=all[productId]||[];all[productId].push({stars,review:text,user_email:user.email,created_at:new Date().toISOString()});localStorage.setItem(REVIEW_KEY,JSON.stringify(all));toast("Review saved on this device");}else toast("⭐ Review added");
+}
+
+// Re-render product modal with stock + review box while keeping the existing UI style.
+async function renderProductReviews(productId){
+  let reviews=[];const {data,error}=await supabaseClient.from("product_reviews").select("*").eq("product_id",productId).order("created_at",{ascending:false}).limit(20);if(!error&&data)reviews=data;else reviews=(localReviews()[productId]||[]);
+  const avg=reviews.length?(reviews.reduce((s,r)=>s+Number(r.stars||0),0)/reviews.length).toFixed(1):"—";
+  const area=$("productReviewArea");if(!area)return;area.innerHTML=`<div class="review-box"><h3>⭐ Reviews <span style="color:var(--muted);font-size:12px">${avg}${reviews.length?` · ${reviews.length} review${reviews.length>1?'s':''}`:""}</span></h3>${user?`<div class="form"><select id="reviewStars" class="input"><option value="5">★★★★★ 5</option><option value="4">★★★★☆ 4</option><option value="3">★★★☆☆ 3</option><option value="2">★★☆☆☆ 2</option><option value="1">★☆☆☆☆ 1</option></select><textarea id="reviewText" class="input" placeholder="Write your review"></textarea><button class="primary" onclick="submitReview('${String(productId)}',$('reviewStars').value,$('reviewText').value).then(()=>renderProductReviews('${String(productId)}'))">Submit Review</button></div>`:`<p style="color:var(--muted);margin-top:8px">Login to write a review.</p>`}${reviews.length?reviews.map(r=>`<div class="review-item"><span class="stars">${'★'.repeat(Number(r.stars||0))}${'☆'.repeat(5-Number(r.stars||0))}</span><p>${escapeHtml(r.review||'')}</p></div>`).join(""):``}</div>`;
+}
+function openProduct(id){
+  const p=product(id);if(!p)return;selectedProduct=p;$("detailImage").innerHTML=p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" onerror="this.outerHTML='<span>📦</span>'">`:(p.icon||"📦");$("detailCategory").textContent=(p.category||"All").toUpperCase();$("detailTitle").textContent=p.name;$("detailPrice").textContent=money(p.price);$("detailDescription").textContent=(p.desc||"")+`\n\n${stockOf(p)!==null?(stockOf(p)>0?`Stock: ${stockOf(p)}`:"Out of stock"):""}`;
+  const wished=wishlist.some(x=>String(x)===String(id));$("detailWish").textContent=wished?"♥ Wishlisted":"♡ Wishlist";$("detailWish").onclick=()=>{toggleWish(id);const w=wishlist.some(x=>String(x)===String(id));$("detailWish").textContent=w?"♥ Wishlisted":"♡ Wishlist"};$("detailAdd").disabled=!canBuy(p,1);$("detailAdd").textContent=stockOf(p)!==null&&stockOf(p)<=0?"Out of Stock":"Add to Cart";$("detailAdd").onclick=()=>{if(canBuy(p,1)){addCart(id);closeProductModal();openCart();}};$("detailBuy").disabled=!canBuy(p,1);$("detailBuy").onclick=()=>{if(!canBuy(p,1))return;checkoutItems=[{id:String(id),qty:1}];checkoutMode="buy";closeProductModal();$("checkoutModal").classList.add("show")};$("productModal").classList.add("show");
+  let area=$("productReviewArea");if(!area){area=document.createElement("div");area.id="productReviewArea";$("detailDescription").parentElement.appendChild(area);}renderProductReviews(id);
+}
+
+// Extend product schema mapping with optional stock.
+async function loadStoreProducts(){
+  const {data,error}=await supabaseClient.from("products").select("*").order("created_at",{ascending:false});
+  if(error){console.error("Products loading error:",error);$("products").innerHTML=`<div class="empty" style="grid-column:1/-1"><div>⚠️</div><h3>Could not load products</h3><p>${escapeHtml(error.message)}</p></div>`;return;}
+  products=(data||[]).map(p=>({id:String(p.id),name:p.name||"",category:p.category||"All",price:Number(p.price||0),old:Number(p.old_price||0),icon:p.icon||"📦",tag:p.tag||"NEW",desc:p.description||"",image:p.image_url||"",stock:p.stock===null||p.stock===undefined?null:Number(p.stock)}));
+  wishlist=wishlist.filter(id=>product(id));cart=cart.filter(x=>product(x.id));save();renderProducts();renderCart();updateBadges();
+}
+
+loadSupabaseSession().then(()=>loadStoreProducts()).catch(e=>{console.error(e);toast("Could not start UROVO");});
 </script>
 </body>
 </html>
