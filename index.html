@@ -3086,6 +3086,29 @@ function openAdmin(){
 
   adminTab("products");
 }
+async function deleteProduct(id){
+
+  if(!requireAdmin()) return;
+
+  if(!confirm("Delete this product?")){
+    return;
+  }
+
+  const {error} = await supabaseClient
+    .from("products")
+    .delete()
+    .eq("id", id);
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  toast("Product deleted");
+
+  await loadStoreProducts();
+  renderAdminProducts();
+}
 </script>
 
 
