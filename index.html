@@ -967,31 +967,36 @@ function renderProducts(){
 
 function toggleWish(id,btn){
 
- if(wishlist.includes(id)){
+  id=String(id);
 
-  wishlist=
-   wishlist.filter(x=>x!=id);
-
-  toast(
-   "Removed from wishlist"
+  const index=wishlist.findIndex(
+    x=>String(x)===id
   );
 
- }else{
+  if(index!==-1){
 
-  wishlist.push(id);
+    wishlist.splice(index,1);
 
-  toast(
-   "❤️ Added to wishlist"
-  );
- }
+    toast("Removed from wishlist");
 
- save();
- updateBadges();
- renderProducts();
+  }else{
+
+    wishlist.push(id);
+
+    toast("❤️ Added to wishlist");
+
+  }
+
+  save();
+
+  updateBadges();
+
+  renderProducts();
+
+  if($("wishlistModal").classList.contains("show")){
+    openWishlist();
+  }
 }
-
-function openWishlist(){
-
  $("wishlistList").innerHTML="";
 
  if(!wishlist.length){
