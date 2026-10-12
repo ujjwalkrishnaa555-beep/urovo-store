@@ -1241,25 +1241,54 @@ function openProduct(id){
 
  selectedProduct=p;
 
- $("detailImage").textContent=
-  p.icon;
+
+ /* PRODUCT IMAGE */
+
+ if(p.image){
+
+  $("detailImage").innerHTML=
+   `<img
+      src="${p.image}"
+      alt="${p.name}"
+      style="
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        border-radius:18px;
+        display:block;
+      "
+    >`;
+
+ }else{
+
+  $("detailImage").textContent=
+   p.icon || "📦";
+
+ }
+
+
+ /* PRODUCT DETAILS */
 
  $("detailCategory").textContent=
-  p.category.toUpperCase();
+  (p.category || "All").toUpperCase();
 
  $("detailTitle").textContent=
-  p.name;
+  p.name || "";
 
  $("detailPrice").textContent=
   money(p.price);
 
  $("detailDescription").textContent=
-  p.desc;
+  p.desc || "";
+
+
+ /* WISHLIST */
 
  $("detailWish").textContent=
   wishlist.includes(id)
    ?"♥ Wishlisted"
    :"♡ Wishlist";
+
 
  $("detailWish").onclick=()=>{
 
@@ -1269,7 +1298,11 @@ function openProduct(id){
    wishlist.includes(id)
     ?"♥ Wishlisted"
     :"♡ Wishlist";
+
  };
+
+
+ /* ADD TO CART */
 
  $("detailAdd").onclick=()=>{
 
@@ -1278,7 +1311,11 @@ function openProduct(id){
   closeProductModal();
 
   openCart();
+
  };
+
+
+ /* BUY NOW */
 
  $("detailBuy").onclick=()=>{
 
@@ -1295,16 +1332,23 @@ function openProduct(id){
 
   $("checkoutModal")
    .classList.add("show");
+
  };
+
+
+ /* OPEN PRODUCT MODAL */
 
  $("productModal")
   .classList.add("show");
+
 }
+
 
 function closeProductModal(){
 
  $("productModal")
   .classList.remove("show");
+
 }
 
 
