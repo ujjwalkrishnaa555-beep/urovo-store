@@ -2836,7 +2836,11 @@ async function deleteProduct(id){
     return;
   }
 
-  toast("Product deleted");
+ toast("Product added successfully");
+
+await loadStoreProducts();
+
+renderAdminProducts();
 
   renderAdminProducts();
 }
