@@ -55,7 +55,7 @@ header{position:sticky;top:0;z-index:1000;height:72px;padding:0 5%;display:flex;
 <div class="modal" id="wishlistModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('wishlistModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">❤️ Wishlist</h2><div id="wishlistList"></div></div></div>
 <div class="modal" id="ordersModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('ordersModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">📦 My Orders</h2><div id="ordersList"></div></div></div>
 <div class="modal" id="trackModal"><div class="box" style="max-width:600px"><button class="close" onclick="closeModal('trackModal')">✕</button><div id="trackingContent"></div></div></div>
-<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO Admin</h2><p style="color:var(--muted)">Product & Order Management</p><div class="tabs"><button id="adminProductsTab" class="active" onclick="adminTab('products')">Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">Orders</button></div><div id="adminContent"></div></div></div>
+<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO Admin</h2><p style="color:var(--muted)">Product & Order Management</p><div class="tabs"><button id="adminProductsTab" class="active" onclick="adminTab('products')">Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">Orders</button><button id="adminUsersTab" onclick="adminTab('users')">Users</button></div><div id="adminContent"></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -76,6 +76,7 @@ function save(){localStorage.setItem(CART,JSON.stringify(cart));localStorage.set
 function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2400)}
 function closeModal(id){$(id).classList.remove("show")}
 function isAdmin(){return !!user&&String(user.email||"").toLowerCase()===ADMIN_EMAIL.toLowerCase()}
+async function recordUserActivity(event){if(!user?.email)return;try{const now=new Date().toISOString();const payload={email:user.email.toLowerCase(),name:user.name||user.email.split("@")[0],last_seen:now};if(event==="login"||event==="signup")payload.last_login=now;const {error}=await supabaseClient.from("urovo_user_activity").upsert(payload,{onConflict:"email"});if(error)console.warn("User activity:",error.message)}catch(e){console.warn("User activity:",e.message)}}
 function requireAdmin(){if(!isAdmin()){toast("Admin access only");return false}return true}
 
 function renderProducts(){
@@ -144,24 +145,7 @@ function openCheckout(){
 }
 function closeCheckout(){$("checkoutModal").classList.remove("show")}
 
-async function saveOrderToSupabase(order){
- try{
-  const payload={order_number:order.id,customer_name:order.customer.name,phone:order.customer.phone,address:`${order.customer.house}, ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`,payment_method:order.payment,payment_status:order.paymentStatus||"Pending",items:order.items,subtotal:order.total,delivery:0,discount:0,total:order.total,status:order.status,user_email:order.user==="guest"?null:order.user,created_at:order.createdAt};
-  const {error}=await supabaseClient.from("orders").insert([payload]);
-  if(error){console.error(error);toast(error.message);return false}return true
- }catch(e){console.error(e);return false}
-}
 
-$("checkoutForm").addEventListener("submit",async e=>{
- e.preventDefault();
- if(document.querySelector('input[name="payment"]:checked').value==="online"){toast("Online payment is not connected yet. Choose COD.");return}
- if(!checkoutItems.length){toast("No products selected");return}
- const items=checkoutItems.map(item=>{const p=product(item.id);return{id:String(item.id),name:p?.name||"Product",price:p?.price||0,image:p?.image||"",qty:item.qty}});
- const order={id:makeOrderNumber(),createdAt:new Date().toISOString(),user:user?.email||"guest",items,customer:{name:$("cName").value.trim(),phone:$("cPhone").value.trim(),house:$("cHouse").value.trim(),city:$("cCity").value.trim(),pincode:$("cPin").value.trim(),address:$("cAddress").value.trim()},payment:"Cash on Delivery",paymentStatus:"Pending",total:checkoutItems.reduce((s,i)=>s+(product(i.id)?.price||0)*i.qty,0),status:"Order Placed",step:0,trackingNumber:"",courier:"",trackingUrl:"",estimatedDelivery:""};
- const saved=await saveOrderToSupabase(order);
- if(!saved){toast("Order could not be saved to database.");return}
- orders.unshift(order);if(checkoutMode==="cart")cart=[];save();$("checkoutForm").reset();$("orderId").textContent=order.id;$("checkoutModal").classList.remove("show");$("successModal").classList.add("show");$("successTrack").onclick=()=>{closeModal("successModal");openTracking(order.id)};renderCart();updateBadges();toast("Order placed successfully")
-});
 
 async function openOrders(){
  if(!user){toast("Login to view your orders");showAccount();return}
@@ -171,20 +155,20 @@ async function openOrders(){
  if(!list.length) list=orders.filter(o=>o.user===user.email).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
  if(!list.length){$("ordersList").innerHTML=`<div class="empty"><div>📦</div><h3>No orders yet</h3><p>Your orders will appear here.</p></div>`;}
  else {
-  $("ordersList").innerHTML=list.map(o=>{let items=o.items||[];if(typeof items==="string")try{items=JSON.parse(items)}catch{items=[]}const status=o.status||"Order Placed";return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>${escapeHtml(o.id)}</h3><p>${new Date(o.created_at||o.createdAt).toLocaleString("en-IN")} · ${items.reduce((a,b)=>a+Number(b.qty||1),0)} item(s)</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p style="margin-top:10px;font-weight:800">${escapeHtml(status)}</p>${o.tracking_number?`<p style="color:var(--muted);font-size:12px">🚚 ${escapeHtml(o.courier||"Courier")} · ${escapeHtml(o.tracking_number)}</p>`:""}<div class="order-actions"><button class="track" onclick="openTracking('${escapeHtml(o.id)}')">Track Order</button><button onclick="viewOrder('${escapeHtml(o.id)}')">Details</button></div></div>`}).join("");
+  $("ordersList").innerHTML=list.map(o=>{let items=o.items||[];if(typeof items==="string")try{items=JSON.parse(items)}catch{items=[]}const status=o.status||"Placed";return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>${escapeHtml(o.id)}</h3><p>${new Date(o.created_at||o.createdAt).toLocaleString("en-IN")} · ${items.reduce((a,b)=>a+Number(b.qty||1),0)} item(s)</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p style="margin-top:10px;font-weight:800">${escapeHtml(status)}</p>${o.tracking_number?`<p style="color:var(--muted);font-size:12px">🚚 ${escapeHtml(o.courier||"Courier")} · ${escapeHtml(o.tracking_number)}</p>`:""}<div class="order-actions"><button class="track" onclick="openTracking('${escapeHtml(o.id)}')">Track Order</button><button onclick="viewOrder('${escapeHtml(o.id)}')">Details</button></div></div>`}).join("");
  }
  $("ordersModal").classList.add("show")
 }
-const statuses=["Order Placed","Order Confirmed","Processing","Shipped","Out for Delivery","Delivered"];
+const statuses=["Placed","Placed","Processing","Shipped","Out for Delivery","Delivered"];
 async function findOrderForCustomer(id){
  let o=orders.find(x=>x.id===id);
  if(user){const {data}=await supabaseClient.from("orders").select("*").eq("id",id).eq("user_email",user.email).maybeSingle();if(data)o=data}
  return o;
 }
-function normalizeOrder(o){if(!o)return null;let items=o.items||[];if(typeof items==="string")try{items=JSON.parse(items)}catch{items=[]}return {...o,items,step:o.step??orderStep(o.status||"Order Placed"),trackingNumber:o.tracking_number||o.trackingNumber||"",courier:o.courier||"",trackingUrl:o.tracking_url||o.trackingUrl||"",estimatedDelivery:o.estimated_delivery||o.estimatedDelivery||"",paymentStatus:o.payment_status||o.paymentStatus||"Pending",customer:o.customer||{name:o.customer_name||"",phone:o.phone||"",address:o.address||""}}}
+function normalizeOrder(o){if(!o)return null;let items=o.items||[];if(typeof items==="string")try{items=JSON.parse(items)}catch{items=[]}return {...o,items,step:o.step??orderStep(o.status||"Placed"),trackingNumber:o.tracking_number||o.trackingNumber||"",courier:o.courier||"",trackingUrl:o.tracking_url||o.trackingUrl||"",estimatedDelivery:o.estimated_delivery||o.estimatedDelivery||"",paymentStatus:o.payment_status||o.paymentStatus||"Pending",customer:o.customer||{name:o.customer_name||"",phone:o.phone||"",address:o.address||""}}}
 async function openTracking(id){
  const o=normalizeOrder(await findOrderForCustomer(id));if(!o){toast("Order not found");return}
- const status=o.status||"Order Placed",step=orderStep(status);
+ const status=o.status||"Placed",step=orderStep(status);
  $("trackingContent").innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">🚚 Track Order</h2><p style="color:var(--lime);font-weight:800">${escapeHtml(o.id)}</p><p style="color:var(--muted);margin-top:5px">${money(o.total)} · ${escapeHtml(o.payment_method||o.payment||"Cash on Delivery")}</p><div class="timeline">${statuses.map((s,i)=>`<div class="step ${i<=step?"done":""}"><div><b>${s}</b>${i===step?"<small>Current status</small>":""}</div></div>`).join("")}</div>${o.trackingNumber?`<div style="padding:15px;background:var(--surface);border-radius:15px;margin-bottom:10px"><b>🚚 Shipment</b><p style="color:var(--muted);margin-top:6px">${escapeHtml(o.courier||"Courier")} · ${escapeHtml(o.trackingNumber)}</p>${o.trackingUrl?`<a href="${escapeHtml(o.trackingUrl)}" target="_blank" rel="noopener" style="color:var(--lime);display:inline-block;margin-top:8px">Track on courier →</a>`:""}${o.estimatedDelivery?`<p style="margin-top:8px">Estimated delivery: <b>${escapeHtml(o.estimatedDelivery)}</b></p>`:""}</div>`:""}<div style="padding:15px;background:var(--surface);border-radius:15px"><b>Delivery</b><p style="color:var(--muted);margin-top:6px">${escapeHtml(o.address||o.customer.address||"Not provided")}</p></div>`;
  $("trackModal").classList.add("show")
 }
@@ -207,8 +191,8 @@ function accountTab(type){
  $("loginTab").classList.toggle("active",type==="login");$("signupTab").classList.toggle("active",type==="signup");
  $("authArea").innerHTML=type==="login"?`<form class="form" onsubmit="login(event)"><input id="loginEmail" type="email" required placeholder="Email"><input id="loginPassword" type="password" required placeholder="Password"><button class="primary" type="submit">Login →</button></form>`:`<form class="form" onsubmit="signup(event)"><input id="signupName" required placeholder="Full name"><input id="signupEmail" type="email" required placeholder="Email"><input id="signupPassword" type="password" minlength="6" required placeholder="Password"><button class="primary" type="submit">Create Account →</button></form>`
 }
-async function signup(e){e.preventDefault();const name=$("signupName").value.trim(),email=$("signupEmail").value.trim().toLowerCase(),password=$("signupPassword").value;const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name}}});if(error){toast(error.message);return}if(data.session){user={name,email};save();toast("Account created ❤️");renderAccount()}else{toast("Account created. Check your email to verify.");accountTab("login")}}
-async function login(e){e.preventDefault();const email=$("loginEmail").value.trim().toLowerCase(),password=$("loginPassword").value;const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){toast(error.message);return}user={name:data.user.user_metadata?.name||email.split("@")[0],email:data.user.email};save();toast("Welcome back 👋");renderAccount()}
+async function signup(e){e.preventDefault();const name=$("signupName").value.trim(),email=$("signupEmail").value.trim().toLowerCase(),password=$("signupPassword").value;const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name}}});if(error){toast(error.message);return}if(data.session){user={name,email};save();recordUserActivity("signup");toast("Account created ❤️");renderAccount()}else{toast("Account created. Check your email to verify.");accountTab("login")}}
+async function login(e){e.preventDefault();const email=$("loginEmail").value.trim().toLowerCase(),password=$("loginPassword").value;const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){toast(error.message);return}user={name:data.user.user_metadata?.name||email.split("@")[0],email:data.user.email};save();recordUserActivity("login");toast("Welcome back 👋");renderAccount()}
 async function logout(){const {error}=await supabaseClient.auth.signOut();if(error){toast(error.message);return}user=null;save();toast("Logged out");renderAccount()}
 
 async function loadSupabaseSession(){const {data,error}=await supabaseClient.auth.getSession();if(error){console.error(error);return}if(data.session?.user){const u=data.session.user;user={name:u.user_metadata?.name||u.email?.split("@")[0]||"UROVO Customer",email:u.email};save();}}
@@ -233,7 +217,19 @@ function scrollProducts(){$("productsSection").scrollIntoView({behavior:"smooth"
 let seconds=8*60*60;setInterval(()=>{if(seconds<=0)return;seconds--;let h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;$("hh").textContent=String(h).padStart(2,"0");$("mm").textContent=String(m).padStart(2,"0");$("ss").textContent=String(s).padStart(2,"0")},1000);
 
 /* ADMIN */
-function adminTab(tab){if(!requireAdmin())return;$("adminProductsTab").classList.toggle("active",tab==="products");$("adminOrdersTab").classList.toggle("active",tab==="orders");tab==="products"?renderAdminProducts():renderAdminOrders()}
+async function renderAdminUsers(){
+  if(!requireAdmin())return;
+  $("adminContent").innerHTML=`<div id="adminUsersList"><p style="color:var(--muted)">Loading users...</p></div>`;
+  const {data,error}=await supabaseClient.from("urovo_user_activity").select("email,name,last_login,last_seen,created_at").order("last_seen",{ascending:false});
+  if(error){$("adminUsersList").innerHTML=`<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;return}
+  const rows=data||[];
+  $("adminUsersList").innerHTML=!rows.length?`<div class="order-card"><p>No users recorded yet.</p></div>`:rows.map(u=>{
+    const seen=u.last_seen?new Date(u.last_seen):null;
+    const active=seen&&((Date.now()-seen.getTime())<5*60*1000);
+    return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h3>${escapeHtml(u.name||u.email||"User")}</h3><p>${escapeHtml(u.email||"")}</p></div><span class="order-status-pill" style="color:${active?'var(--lime)':'var(--muted)'}">● ${active?'Active':'Offline'}</span></div><p><strong>Last Login:</strong> ${u.last_login?new Date(u.last_login).toLocaleString('en-IN'):'Not recorded'}</p><p><strong>Last Seen:</strong> ${u.last_seen?new Date(u.last_seen).toLocaleString('en-IN'):'Not recorded'}</p><p><strong>Joined:</strong> ${u.created_at?new Date(u.created_at).toLocaleString('en-IN'):'Not recorded'}</p></div>`
+  }).join("");
+}
+function adminTab(tab){if(!requireAdmin())return;$("adminProductsTab").classList.toggle("active",tab==="products");$("adminOrdersTab").classList.toggle("active",tab==="orders");$("adminUsersTab").classList.toggle("active",tab==="users");if(tab==="products")renderAdminProducts();else if(tab==="orders")renderAdminOrders();else renderAdminUsers()}
 function openAdmin(){if(!requireAdmin())return;$("adminModal").classList.add("show");adminTab("products")}
 function renderAdminProducts(){if(!requireAdmin())return;$("adminContent").innerHTML=`<button class="primary" style="width:100%;margin-bottom:15px" onclick="showAddProductForm()">➕ Add Product</button><div id="adminProductList"><p style="color:var(--muted)">Loading...</p></div>`;loadAdminProducts()}
 async function loadAdminProducts(){const {data,error}=await supabaseClient.from("products").select("*").order("created_at",{ascending:false});if(error){$("adminProductList").innerHTML=`<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;return}if(!data?.length){$("adminProductList").innerHTML=`<div class="order-card"><p>No products added yet.</p></div>`;return}$("adminProductList").innerHTML=data.map(p=>`<div class="order-card"><div style="display:flex;gap:12px;align-items:center"><div style="width:70px;height:70px;border-radius:12px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;flex-shrink:0">${p.image_url?`<img src="${escapeHtml(p.image_url)}" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:32px">${p.icon||"📦"}</span>`}</div><div style="flex:1"><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.category)}</p><strong>${money(p.price)}</strong></div></div><div style="display:flex;gap:8px;margin-top:12px"><button class="secondary" style="flex:1" onclick="editProduct('${String(p.id)}')">✏️ Edit</button><button class="secondary" style="flex:1" onclick="deleteProduct('${String(p.id)}')">🗑️ Delete</button></div></div>`).join("")}
@@ -248,16 +244,18 @@ async function renderAdminOrders(){
  $("adminContent").innerHTML=`<div id="adminOrderList"><p style="color:var(--muted)">Loading orders...</p></div>`;
  const {data,error}=await supabaseClient.from("orders").select("*").order("created_at",{ascending:false});
  if(error){$("adminOrderList").innerHTML=`<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;return}
- const rows=data||[];const total=rows.reduce((s,o)=>s+Number(o.total||0),0),pending=rows.filter(o=>!['Delivered','Cancelled'].includes(o.status)).length,delivered=rows.filter(o=>o.status==='Delivered').length;
- $("adminOrderList").innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${rows.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${delivered}</b></div><div class="stat"><small>Sales</small><b>${money(total)}</b></div></div>${!rows.length?`<div class="order-card"><p>No orders yet.</p></div>`:rows.map(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>Order #${escapeHtml(o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p style="margin-top:10px"><strong>Customer:</strong> ${escapeHtml(o.customer_name||'Unknown')}</p><p><strong>Email:</strong> ${escapeHtml(o.user_email||'Guest')}</p><p><strong>Phone:</strong> ${escapeHtml(o.phone||'Not provided')}</p><p><strong>Address:</strong><br>${escapeHtml(o.address||'Not provided')}</p><div style="margin-top:12px"><strong>Products:</strong>${items.map(i=>`<div>${escapeHtml(i.name||'Product')} × ${Number(i.qty||1)}</div>`).join('')}</div><p style="margin-top:12px"><strong>Total:</strong> ${money(o.total)} · <strong>Payment:</strong> ${escapeHtml(o.payment_method||'Unknown')} · <strong>Cash:</strong> ${o.status==='Delivered'?'Collected':'Pending until Delivered'}</p><select class="input" onchange="updateOrderStatus('${String(o.id)}',this.value)">${['Order Placed','Order Confirmed','Processing','Shipped','Out for Delivery','Delivered','Cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${String(o.id)}" value="${escapeHtml(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${String(o.id)}" value="${escapeHtml(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${String(o.id)}" value="${escapeHtml(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${String(o.id)}" value="${escapeHtml(o.estimated_delivery||'')}" placeholder="Estimated delivery (e.g. 18 Oct 2026)"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${String(o.id)}')">🚚 Save Tracking Update</button></div>`}).join('')}`
+ const rows=data||[];const total=rows.filter(o=>o.status==='Delivered').reduce((s,o)=>s+Number(o.total||0),0),pending=rows.filter(o=>!['Delivered','Cancelled'].includes(o.status)).length,delivered=rows.filter(o=>o.status==='Delivered').length;
+ $("adminOrderList").innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${rows.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${delivered}</b></div><div class="stat"><small>Sales</small><b>${money(total)}</b></div></div>${!rows.length?`<div class="order-card"><p>No orders yet.</p></div>`:rows.map(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>Order #${escapeHtml(o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${money(o.total)}</strong></div><p style="margin-top:10px"><strong>Customer:</strong> ${escapeHtml(o.customer_name||'Unknown')}</p><p><strong>Email:</strong> ${escapeHtml(o.user_email||'Guest')}</p><p><strong>Phone:</strong> ${escapeHtml(o.phone||'Not provided')}</p><p><strong>Address:</strong><br>${escapeHtml(o.address||'Not provided')}</p><div style="margin-top:12px"><strong>Products:</strong>${items.map(i=>`<div>${escapeHtml(i.name||'Product')} × ${Number(i.qty||1)}</div>`).join('')}</div><p style="margin-top:12px"><strong>Total:</strong> ${money(o.total)} · <strong>Payment:</strong> ${escapeHtml(o.payment_method||'Unknown')} · <strong>Cash:</strong> ${o.status==='Delivered'?'Collected':'Pending until Delivered'}</p><select class="input" onchange="updateOrderStatus('${String(o.id)}',this.value)">${['Placed','Processing','Shipped','Out for Delivery','Delivered','Cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${String(o.id)}" value="${escapeHtml(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${String(o.id)}" value="${escapeHtml(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${String(o.id)}" value="${escapeHtml(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${String(o.id)}" value="${escapeHtml(o.estimated_delivery||'')}" placeholder="Estimated delivery (e.g. 18 Oct 2026)"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${String(o.id)}')">🚚 Save Tracking Update</button></div>`}).join('')}`
 }
 async function updateOrderStatus(id,status){if(!requireAdmin())return;const {error}=await supabaseClient.from('orders').update({status}).eq('id',id);if(error){toast(error.message);return}toast('Order status updated');renderAdminOrders()}
 async function saveOrderTracking(id){if(!requireAdmin())return;const tracking_number=$("trackNo_"+id)?.value.trim()||null,courier=$("courier_"+id)?.value.trim()||null,tracking_url=$("trackUrl_"+id)?.value.trim()||null,estimated_delivery=$("eta_"+id)?.value.trim()||null;const {error}=await supabaseClient.from('orders').update({tracking_number,courier,tracking_url,estimated_delivery}).eq('id',id);if(error){toast(error.message);return}toast('🚚 Tracking updated');renderAdminOrders()}
 
 
 
+let urovoOrderSubmitting=false;
+
 /* ===== UROVO PRO FUNCTIONALITY PACK ===== */
-const UROVO_STATUSES=["Order Placed","Order Confirmed","Processing","Shipped","Out for Delivery","Delivered"];
+const UROVO_STATUSES=["Placed","Processing","Shipped","Out for Delivery","Delivered"];
 const UROVO_ALL_STATUSES=[...UROVO_STATUSES,"Cancelled"];
 const COUPONS={"UROVO10":10,"WELCOME10":10};
 let appliedCoupon=JSON.parse(localStorage.getItem("urovo_coupon")||"null");
@@ -342,33 +340,58 @@ function openCheckout(){
 
 async function saveOrderToSupabase(order){
   try{
-    const t=cartTotals();
-    const payload={order_number:order.id,customer_name:order.customer.name,phone:order.customer.phone,address:`${order.customer.house}, ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`,payment_method:order.payment,payment_status:order.paymentStatus||"Pending",items:order.items,subtotal:order.subtotal??order.total,delivery:0,discount:order.discount||0,total:order.total,status:order.status,user_email:order.user==="guest"?null:order.user,created_at:order.createdAt,tracking_number:order.trackingNumber||null,courier:order.courier||null,tracking_url:order.trackingUrl||null,estimated_delivery:order.estimatedDelivery||null};
-    let {error}=await supabaseClient.from("orders").insert([payload]);
-    if(error && /order_number|column .* does not exist/i.test(error.message||"")){
-      const fallback={...payload};delete fallback.order_number;
-      const retry=await supabaseClient.from("orders").insert([fallback]);
-      error=retry.error;
+    const payload={
+      customer_name:order.customer.name,
+      phone:order.customer.phone,
+      address:`${order.customer.house}, ${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`,
+      payment_method:order.payment,
+      items:order.items,
+      subtotal:Number(order.subtotal||0),
+      delivery:0,
+      discount:Number(order.discount||0),
+      total:Number(order.total||0),
+      status:order.status||"Placed",
+      user_email:order.user&&order.user!=="guest"?order.user:null,
+      created_at:order.createdAt
+    };
+
+    // Insert only the core columns first. This avoids failures caused by
+    // optional tracking/payment columns not existing in an older database.
+    let result=await supabaseClient.from("orders").insert([payload]);
+    if(result.error){
+      console.error("UROVO order insert error:",result.error);
+      toast("Order failed: "+(result.error.message||"Supabase insert error"));
+      return false;
     }
-    if(error){console.error(error);toast(error.message);return false;}return true;
-  }catch(e){console.error(e);toast(e.message||"Order save failed");return false;}
+    return true;
+  }catch(e){
+    console.error("UROVO order save exception:",e);
+    toast("Order failed: "+(e.message||"Unknown error"));
+    return false;
+  }
 }
 
 $("checkoutForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  if(!user){toast("Please login before placing an order.");closeCheckout();showAccount();return;}
+  if(urovoOrderSubmitting)return;
   if(document.querySelector('input[name="payment"]:checked').value!=="cod"){toast("Online payment is not connected yet. Choose COD.");return;}
   if(!checkoutItems.length){toast("No products selected");return;}
+  urovoOrderSubmitting=true;
+  const submitBtn=e.submitter||document.querySelector('#checkoutForm button[type="submit"]');
+  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent="Saving Order…";}
   for(const i of checkoutItems){const p=product(i.id);if(!p||!canBuy(p,i.qty)){toast("One or more products are out of stock");return;}}
   const items=checkoutItems.map(item=>{const p=product(item.id);return{id:String(item.id),name:p?.name||"Product",price:p?.price||0,image:p?.image||"",qty:item.qty}});
   const subtotal=checkoutItems.reduce((s,i)=>s+(product(i.id)?.price||0)*i.qty,0);
   const discount=appliedCoupon?Math.round(subtotal*Number(appliedCoupon.percent||0)/100):0;
   const total=Math.max(0,subtotal-discount);
-  const order={id:makeOrderNumber(),createdAt:new Date().toISOString(),user:user?.email||"guest",items,customer:{name:$('cName').value.trim(),phone:$('cPhone').value.trim(),house:$('cHouse').value.trim(),city:$('cCity').value.trim(),pincode:$('cPin').value.trim(),address:$('cAddress').value.trim()},payment:"Cash on Delivery",paymentStatus:"Pending",subtotal,discount,total,status:"Order Placed",trackingNumber:"",courier:"",trackingUrl:"",estimatedDelivery:""};
-  const saved=await saveOrderToSupabase(order);if(!saved){toast("Order could not be saved. Check Supabase orders table/policies.");return;}
+  const order={id:makeOrderNumber(),createdAt:new Date().toISOString(),user:user?.email||"guest",items,customer:{name:$('cName').value.trim(),phone:$('cPhone').value.trim(),house:$('cHouse').value.trim(),city:$('cCity').value.trim(),pincode:$('cPin').value.trim(),address:$('cAddress').value.trim()},payment:"Cash on Delivery",paymentStatus:"Pending",subtotal,discount,total,status:"Placed",trackingNumber:"",courier:"",trackingUrl:"",estimatedDelivery:""};
+  const saved=await saveOrderToSupabase(order);
+  if(!saved){urovoOrderSubmitting=false;if(submitBtn){submitBtn.disabled=false;submitBtn.textContent="Place Order →";}return;}
   // Best-effort stock decrement when stock exists.
   for(const i of checkoutItems){const p=product(i.id);if(stockOf(p)!==null){const newStock=Math.max(0,stockOf(p)-Number(i.qty));await supabaseClient.from("products").update({stock:newStock}).eq("id",i.id);}}
   orders.unshift(order);if(checkoutMode==="cart")cart=[];appliedCoupon=null;localStorage.removeItem("urovo_coupon");save();$("checkoutForm").reset();$("orderId").textContent=order.id;$("checkoutModal").classList.remove("show");$("successModal").classList.add("show");$("successTrack").onclick=()=>{closeModal("successModal");openTracking(order.id)};await loadStoreProducts();renderCart();updateBadges();toast("Order placed successfully");
+  urovoOrderSubmitting=false;
+  if(submitBtn){submitBtn.disabled=false;submitBtn.textContent="Place Order →";}
 });
 
 async function findOrderForCustomer(id){
@@ -378,7 +401,7 @@ async function findOrderForCustomer(id){
 }
 async function openTracking(id){
   const o=normalizeOrder(await findOrderForCustomer(id));if(!o){toast("Order not found");return;}
-  const status=o.status||"Order Placed",step=orderStep(status);
+  const status=o.status||"Placed",step=orderStep(status);
   $("trackingContent").innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">🚚 Track Order</h2><p style="color:var(--lime);font-weight:800">${escapeHtml(o.id)}</p><p style="color:var(--muted);margin-top:5px">${money(o.total)} · ${escapeHtml(o.payment_method||o.payment||"Cash on Delivery")}</p><div class="timeline">${UROVO_STATUSES.map((s,i)=>`<div class="step ${i<=step&&status!=="Cancelled"?"done":""}"><div><b>${s}</b>${i===step&&status!=="Cancelled"?"<small>Current status</small>":""}</div></div>`).join("")}${status==="Cancelled"?`<div class="step done"><div><b>Cancelled</b><small>Order cancelled</small></div></div>`:""}</div>${o.trackingNumber?`<div style="padding:15px;background:var(--surface);border-radius:15px;margin-bottom:10px"><b>🚚 Shipment</b><p style="color:var(--muted);margin-top:6px">${escapeHtml(o.courier||"Courier")} · ${escapeHtml(o.trackingNumber)}</p>${o.trackingUrl?`<a href="${escapeHtml(o.trackingUrl)}" target="_blank" rel="noopener" style="color:var(--lime);display:inline-block;margin-top:8px">Track on courier →</a>`:""}${o.estimatedDelivery?`<p style="margin-top:8px">Estimated delivery: <b>${escapeHtml(o.estimatedDelivery)}</b></p>`:""}</div>`:""}<div style="padding:15px;background:var(--surface);border-radius:15px"><b>Delivery</b><p style="color:var(--muted);margin-top:6px">${escapeHtml(o.address||o.customer.address||"Not provided")}</p></div>`;
   $("trackModal").classList.add("show");
 }
@@ -392,7 +415,7 @@ async function openOrders(){
   $("ordersList").innerHTML=!list.length?`<div class="empty"><div>📦</div><h3>No orders yet</h3><p>Your orders will appear here.</p></div>`:list.map(o=>{
     let items=o.items||[];
     if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}
-    const status=String(o.status||"Order Placed");
+    const status=String(o.status||"Placed");
     const terminal=["Delivered","Order Delivered","Cancelled"].includes(status);
     const orderId=String(o.id);
     return `<div class="order-card">
