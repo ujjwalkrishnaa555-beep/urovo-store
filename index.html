@@ -2840,6 +2840,32 @@ async function deleteProduct(id){
 
   renderAdminProducts();
 }
+async function loadStoreProducts(){
+
+  const {data,error} = await supabaseClient
+    .from("products")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    console.error("Products loading error:",error);
+    return;
+  }
+
+  products = (data || []).map(p => ({
+    id:p.id,
+    name:p.name || "",
+    category:p.category || "All",
+    price:Number(p.price || 0),
+    old:Number(p.old_price || 0),
+    icon:p.icon || "📦",
+    tag:p.tag || "NEW",
+    desc:p.description || "",
+    image:p.image_url || ""
+  }));
+
+  renderProducts();
+}
 async function renderAdminOrders(){
 
   if(!requireAdmin()) return;
