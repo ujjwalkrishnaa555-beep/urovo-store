@@ -10,6 +10,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+.input{
+ width:100%;
+ padding:14px;
+ margin-top:10px;
+ border:1px solid var(--line);
+ background:var(--surface);
+ color:var(--text);
+ outline:none;
+ border-radius:13px;
+}
+
+.input:focus{
+ border-color:var(--lime);
+}
+
+.input::placeholder{
+ color:var(--muted);
+}
+
+select.input{
+ appearance:auto;
+}
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root{
