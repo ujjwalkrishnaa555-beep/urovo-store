@@ -11,11 +11,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-:root{--bg:#090606;--surface:#140b0b;--surface2:#1d1010;--surface3:#291515;--text:#fff8e8;--muted:#b9a99a;--line:rgba(255,190,70,.16);--lime:#ffc247;--red:#ff5b45;--gold:#ffd76a;--saffron:#ff8a3d;--deepred:#8f1720;--shadow:0 20px 70px rgba(0,0,0,.5)}
-.light{--bg:#fff9ee;--surface:#fff;--surface2:#fff1d6;--surface3:#ffe7b0;--text:#2a1208;--muted:#7d6656;--line:rgba(130,70,10,.14)}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;overflow-x:hidden}button,input,textarea,select{font:inherit}button{border:0;cursor:pointer;color:inherit}button:active{transform:scale(.97)}.hidden{display:none!important}
-header{position:sticky;top:0;z-index:1000;height:72px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(7,7,7,.84);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}.logo{font:700 26px "Space Grotesk";letter-spacing:-1.5px}.logo span{color:var(--lime)}.header-actions{display:flex;gap:9px}.icon-btn{width:43px;height:43px;border-radius:14px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative}.badge{position:absolute;top:-5px;right:-4px;min-width:19px;height:19px;padding:0 5px;border-radius:20px;background:var(--lime);color:#000;border:2px solid var(--bg);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.hero{min-height:600px;padding:90px 6%;display:flex;align-items:center;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:500px;height:500px;right:-150px;top:-120px;background:var(--lime);opacity:.09;filter:blur(150px)}.hero-content{max-width:900px;position:relative}.pill{display:inline-flex;padding:9px 14px;border:1px solid rgba(255,194,71,.32);background:rgba(255,194,71,.08);color:var(--lime);border-radius:30px;font-size:13px;margin-bottom:24px}.hero h1{font:700 clamp(52px,9vw,110px)/.9 "Space Grotesk";letter-spacing:-6px;margin-bottom:25px}.hero h1 span{color:var(--lime)}.hero p{color:var(--muted);max-width:610px;line-height:1.7;font-size:17px}.hero-buttons{display:flex;gap:12px;margin-top:32px}.primary{background:var(--lime);color:#000;padding:15px 21px;border-radius:14px;font-weight:800}.secondary{background:var(--surface2);border:1px solid var(--line);padding:15px 21px;border-radius:14px;font-weight:700}
+:root{--bg:#ffffff;--surface:#ffffff;--surface2:#f3f7f3;--surface3:#e7f1e7;--text:#111111;--muted:#667066;--line:rgba(35,140,55,.16);--lime:#c8ff00;--green:#21a33a;--red:#ff3655;--gold:#b8e600;--saffron:#21a33a;--deepred:#176b2a;--shadow:0 20px 70px rgba(20,80,30,.12)}
+.dark{--bg:#090909;--surface:#111;--surface2:#181818;--surface3:#222;--text:#fff;--muted:#aaa;--line:rgba(200,255,0,.16);--shadow:0 20px 70px rgba(0,0,0,.5)}
+*{box-sizing:border-box;margin:0;padding:0}#urovoSplash{position:fixed;inset:0;z-index:99999;background:#fff;display:flex;align-items:center;justify-content:center;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}#urovoSplash.hide{opacity:0;visibility:hidden;pointer-events:none}.splash-logo{font:700 48px/1 "Space Grotesk";letter-spacing:-3px;color:#111;animation:urovoSplashPop .65s cubic-bezier(.2,.8,.2,1) both}.splash-logo span{color:#21a33a}.splash-line{position:absolute;bottom:22%;width:70px;height:4px;border-radius:10px;background:#c8ff00;animation:urovoSplashLine .8s ease both}@keyframes urovoSplashPop{from{opacity:0;transform:translateY(12px) scale(.92)}to{opacity:1;transform:none}}@keyframes urovoSplashLine{from{width:0;opacity:0}to{width:70px;opacity:1}}
+.urovo-seller-badge{display:inline-flex;align-items:center;justify-content:center;max-width:150px;min-width:0;padding:6px 9px;border-radius:999px;background:var(--lime);color:#111;font-size:10px;font-weight:900;line-height:1.15;text-align:center;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word}.seller-admin-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}@media(max-width:520px){.seller-admin-actions{grid-template-columns:1fr}.urovo-seller-badge{max-width:120px;font-size:9px}}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;overflow-x:hidden}button,input,textarea,select{font:inherit}button{border:0;cursor:pointer;color:inherit}button:active{transform:scale(.97)}.hidden{display:none!important}
+.dark header{background:rgba(7,7,7,.84)}
+header{position:sticky;top:0;z-index:1000;height:72px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}.logo{font:700 26px "Space Grotesk";letter-spacing:-1.5px}.logo span{color:var(--lime)}.header-actions{display:flex;gap:9px}.icon-btn{width:43px;height:43px;border-radius:14px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative}.badge{position:absolute;top:-5px;right:-4px;min-width:19px;height:19px;padding:0 5px;border-radius:20px;background:var(--lime);color:#000;border:2px solid var(--bg);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.home-ads{position:relative;width:100%;overflow:hidden}.home-ad{position:relative;display:none;overflow:hidden;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--surface2);min-height:150px}.home-ad.active{display:block;animation:urovoBannerIn .45s ease}.home-ad img{width:100%;height:100%;max-height:300px;min-height:150px;object-fit:cover;display:block}.home-ad-dots{display:flex;justify-content:center;gap:7px;margin-top:10px}.home-ad-dot{width:7px;height:7px;border:0;border-radius:50%;padding:0;background:var(--line);opacity:.7}.home-ad-dot.active{background:var(--lime);opacity:1;transform:scale(1.2)}@keyframes urovoBannerIn{from{opacity:.35;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}.home-ad-copy{position:absolute;left:16px;right:16px;bottom:16px;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.55);color:#fff;backdrop-filter:blur(8px)}.home-ad-copy h3{font-size:18px}.home-ad-copy p{font-size:12px;margin-top:4px;opacity:.9}.home-ad-btn{margin-top:10px;padding:9px 13px;border-radius:10px;background:var(--lime);color:#000;font-weight:800;font-size:12px}.hero{min-height:600px;padding:90px 6%;display:flex;align-items:center;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:500px;height:500px;right:-150px;top:-120px;background:var(--lime);opacity:.09;filter:blur(150px)}.hero-content{max-width:900px;position:relative}.pill{display:inline-flex;padding:9px 14px;border:1px solid rgba(255,194,71,.32);background:rgba(255,194,71,.08);color:var(--lime);border-radius:30px;font-size:13px;margin-bottom:24px}.hero h1{font:700 clamp(52px,9vw,110px)/.9 "Space Grotesk";letter-spacing:-6px;margin-bottom:25px}.hero h1 span{color:var(--lime)}.hero p{color:var(--muted);max-width:610px;line-height:1.7;font-size:17px}.hero-buttons{display:flex;gap:12px;margin-top:32px}.primary{background:var(--lime);color:#000;padding:15px 21px;border-radius:14px;font-weight:800}.secondary{background:var(--surface2);border:1px solid var(--line);padding:15px 21px;border-radius:14px;font-weight:700}
 .search-wrap{padding:0 5% 18px}.search{max-width:950px;height:58px;margin:auto;padding:0 18px;display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px}.search input{flex:1;border:0;outline:0;background:none;color:var(--text)}.suggestions,.categories{display:flex;gap:9px;overflow:auto;scrollbar-width:none}.suggestions{max-width:950px;margin:10px auto}.suggestion{white-space:nowrap;padding:8px 12px;border-radius:20px;background:var(--surface2);color:var(--muted);font-size:12px}.categories{padding:12px 5% 30px}.cat{white-space:nowrap;padding:11px 17px;border-radius:30px;background:var(--surface);color:var(--muted);border:1px solid var(--line)}.cat.active{background:var(--lime);color:#000;font-weight:800}
 .deal{margin:0 5% 50px;padding:25px;border-radius:24px;border:1px solid rgba(255,194,71,.22);background:radial-gradient(circle at 90% 30%,rgba(255,194,71,.14),transparent 40%),var(--surface);display:flex;justify-content:space-between;align-items:center;gap:20px}.deal small{color:var(--lime);font-weight:800}.deal h2{font:700 28px "Space Grotesk";margin:5px 0}.deal p{color:var(--muted);font-size:14px}.timer{display:flex;gap:7px}.time{min-width:52px;padding:9px;background:var(--surface2);border-radius:12px;text-align:center}.time b{display:block}.time span{font-size:9px;color:var(--muted)}
 .section{padding:15px 5% 75px}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}.head h2{font:700 28px "Space Grotesk"}.head p{font-size:12px;color:var(--muted)}.products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.product{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:.3s}.product:hover{transform:translateY(-7px);box-shadow:var(--shadow)}.product-media{height:245px;background:radial-gradient(circle,rgba(255,194,71,.11),transparent 45%),var(--surface2);display:flex;align-items:center;justify-content:center;position:relative}.product-media>img{width:100%;height:100%;object-fit:cover}.product-emoji{font-size:72px}.tag{position:absolute;z-index:2;top:12px;left:12px;background:var(--lime);color:#000;padding:6px 9px;border-radius:8px;font-size:9px;font-weight:900}.wish{position:absolute;z-index:3;right:12px;top:12px;width:40px;height:40px;border-radius:13px;background:rgba(0,0,0,.5);color:#aaa;display:flex;align-items:center;justify-content:center}.wish svg{width:20px;fill:none;stroke:currentColor;stroke-width:2}.wish.active{color:var(--red)}.wish.active svg{fill:var(--red)}.info{padding:17px}.category-name{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px}.title{font-weight:700;margin:7px 0 9px;font-size:15px}.price-row{display:flex;gap:9px;align-items:center;margin-bottom:15px}.price{font-size:20px;font-weight:900}.old{text-decoration:line-through;color:var(--muted);font-size:12px}.add{width:100%;height:44px;border-radius:13px;background:var(--surface2);border:1px solid var(--line);font-weight:800}.add:hover{background:var(--lime);color:#000}
@@ -55,8 +58,38 @@ header{background:rgba(9,6,6,.88);border-bottom-color:rgba(255,194,71,.18)}
 @media(prefers-reduced-motion:reduce){.hero:after{animation:none}}
 </style>
 </style>
+
+<style id="urovo-initial-menu-fix">
+/* Keep the account side menu closed when the website first opens. */
+.urovo-account-menu{visibility:hidden!important;opacity:0!important;pointer-events:none!important;display:block}
+.urovo-account-menu.show{visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+.urovo-account-menu.show aside{transform:none!important}
+</style>
+
+<style id="urovo-start-home-fix">
+html{scroll-behavior:smooth}
+body{overflow-x:hidden}
+.urovo-page,.urovo-search-page{display:none}
+.urovo-page.show,.urovo-search-page.show{display:block}
+</style>
+<script id="urovo-start-home-js">
+(function(){
+  try{if('scrollRestoration' in history) history.scrollRestoration='manual';}catch(e){}
+  function startHome(){
+    try{window.scrollTo(0,0);}catch(e){}
+    document.documentElement.scrollTop=0; document.body.scrollTop=0;
+    var ap=document.getElementById('accountPage'); if(ap) ap.classList.remove('show');
+    var sp=document.getElementById('searchPage'); if(sp) sp.classList.remove('show');
+    var am=document.getElementById('accountMenu'); if(am) am.classList.remove('show');
+  }
+  function bootHome(){startHome();loadHomeAds();}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bootHome); else bootHome();
+  window.addEventListener('pageshow',bootHome);
+})();
+</script>
 </head>
 <body>
+<div id="urovoSplash" aria-hidden="true"><div class="splash-logo">URO<span>VO</span></div><div class="splash-line"></div></div>
 <div class="diwali-strip"><span class="spark">✦</span> UROVO DIWALI SPECIAL · Festive Picks from ₹499 <span class="spark">🪔</span> Limited Time <span class="spark">✦</span></div>
 <header><div class="logo">URO<span>VO</span></div><div class="header-actions"><button class="icon-btn" id="themeBtn">☼</button><button class="icon-btn" id="wishTop">♡<span class="badge hidden" id="wishBadge">0</span></button><button class="icon-btn" id="cartBtn">🛒<span class="badge" id="cartBadge">0</span></button></div></header>
 
@@ -65,6 +98,7 @@ header{background:rgba(9,6,6,.88);border-bottom-color:rgba(255,194,71,.18)}
 <section class="diwali-banner"><div class="diwali-copy"><small>✨ UROVO FESTIVE EDIT</small><h2>Light Up Your Everyday</h2><p>Diwali-ready picks, festive offers and premium everyday essentials.</p></div><div class="diwali-diyas" aria-hidden="true">🪔 ✨ 🪔</div></section>
 
 <div class="image-lightbox" id="imageLightbox" onclick="closeImageLightbox(event)"><button class="lightbox-close" onclick="closeImageLightbox(event)">✕</button><img id="lightboxImage" alt="Product image"></div>
+<section id="homeAdsSection" class="section" style="padding-top:0;display:none"><div id="homeAds" class="home-ads"></div></section>
 <section class="search-wrap"><div class="search">🔎<input id="search" placeholder="Search UROVO products..." autocomplete="off"></div><div id="searchResults" class="search-results hidden"></div><div class="suggestions"><button class="suggestion" onclick="quickSearch('gadget')">Gadgets</button><button class="suggestion" onclick="quickSearch('stand')">Phone Stand</button><button class="suggestion" onclick="quickSearch('home')">Home</button><button class="suggestion" onclick="quickSearch('cleaning')">Cleaning</button></div></section>
 <div class="categories"><button class="cat active" data-cat="All">All</button><button class="cat" data-cat="Gadgets">Gadgets</button><button class="cat" data-cat="Home">Home</button><button class="cat" data-cat="Lifestyle">Lifestyle</button></div>
 <section class="urovo-discovery"><div class="discovery-left"><span>Sort & Filter</span><select id="sortSelect" onchange="applyDiscovery()"><option value="featured">Featured</option><option value="newest">Newest</option><option value="priceLow">Price: Low to High</option><option value="priceHigh">Price: High to Low</option><option value="rating">Top Rated</option><option value="stock">In Stock First</option></select></div><div class="discovery-right"><button class="filter-chip active" data-filter="all" onclick="setProductFilter('all',this)">All</button><button class="filter-chip" data-filter="best" onclick="setProductFilter('best',this)">🔥 Best Seller</button><button class="filter-chip" data-filter="new" onclick="setProductFilter('new',this)">✨ New</button><button class="filter-chip" data-filter="sale" onclick="setProductFilter('sale',this)">💸 Deals</button></div></section>
@@ -75,7 +109,39 @@ header{background:rgba(9,6,6,.88);border-bottom-color:rgba(255,194,71,.18)}
 <section class="features"><div class="head"><div><h2>Why UROVO?</h2><p>Simple shopping. Better experience.</p></div></div><div class="feature-grid"><div class="feature"><div class="feature-icon">⚡</div><h3>Simple Shopping</h3><p>Discover useful products without unnecessary complexity.</p></div><div class="feature"><div class="feature-icon">🛡️</div><h3>Quality Focus</h3><p>Products selected around usefulness and everyday value.</p></div><div class="feature"><div class="feature-icon">🚚</div><h3>Easy Delivery</h3><p>Designed for a smooth shopping and delivery experience.</p></div><div class="feature"><div class="feature-icon">💚</div><h3>Made for You</h3><p>A clean shopping experience built around modern customers.</p></div></div></section>
 <footer>© 2026 <strong>UROVO</strong> · Celebrate Every Moment. 🪔</footer>
 
-<nav class="bottom-nav"><button onclick="scrollTopPage()">⌂<br>Home</button><button onclick="scrollProducts()">⌕<br>Search</button><button onclick="openWishlist()">♡<br>Wishlist</button><button onclick="openCart()">🛒<br>Cart</button><button onclick="showAccount()">♙<br>Account</button></nav>
+<nav class="bottom-nav"><button onclick="scrollTopPage()">⌂<br>Home</button><button onclick="openSearchPage()">⌕<br>Search</button><button onclick="openWishlist()">♡<br>Wishlist</button><button onclick="openCart()">🛒<br>Cart</button><button onclick="showAccount()">♙<br>Account</button></nav>
+
+<!-- UROVO FULL ACCOUNT PAGE -->
+<div class="urovo-page" id="accountPage">
+  <div class="urovo-page-head">
+    <div><div class="urovo-page-kicker">UROVO</div><h2 id="accountPageTitle">My Account</h2></div>
+    <div class="urovo-page-actions"><button class="icon-btn" onclick="openAccountMenu()" aria-label="Account menu">☰</button><button class="icon-btn" onclick="closeAccountPage()">✕</button></div>
+  </div>
+  <div class="urovo-account-scroll" id="fullAccountContent"></div>
+</div>
+<div class="urovo-account-menu" id="accountMenu" onclick="if(event.target===this)closeAccountMenu()">
+  <aside><div class="urovo-menu-head"><b id="accountMenuTitle">Account Menu</b><button class="close" onclick="closeAccountMenu()">✕</button></div><div class="urovo-menu-list">
+    <button onclick="accountMenuAction('orders')">📦 <span>Order History</span></button>
+    <button onclick="accountMenuAction('recent')">🕘 <span>Recently Viewed</span></button>
+    <button onclick="accountMenuAction('wishlist')">❤️ <span>Wishlist</span></button>
+    <button onclick="accountMenuAction('addresses')">📍 <span>Addresses</span></button>
+    <button onclick="accountMenuAction('payments')">💳 <span>Payment Methods</span></button>
+    <button onclick="accountMenuAction('security')">🔐 <span>Security</span></button>
+    <button onclick="accountMenuAction('notifications')">🔔 <span>Notifications</span></button>
+    <button onclick="accountMenuAction('settings')">⚙️ <span>Settings</span></button>
+    <button onclick="accountMenuAction('help')">💬 <span>Help & Support</span></button>
+    <button onclick="accountMenuAction('policies')">📄 <span>Policies</span></button>
+    <button id="accountAdminMenuItem" onclick="accountMenuAction('admin')" style="display:none">👑 <span>CEO Dashboard</span></button>
+    <button class="menu-danger" onclick="logout()">🚪 <span>Logout</span></button>
+    <button class="menu-danger" onclick="accountMenuAction('delete')">🗑️ <span>Delete Account</span></button>
+  </div></aside>
+</div>
+<!-- UROVO FULL SEARCH PAGE -->
+<div class="urovo-search-page" id="searchPage">
+  <div class="urovo-search-head"><button class="icon-btn" onclick="closeSearchPage()">←</button><div class="urovo-search-title">Search UROVO</div></div>
+  <div class="urovo-search-box"><span>⌕</span><input id="fullSearchInput" placeholder="Search products..." autocomplete="off" autofocus><button onclick="clearFullSearch()">×</button></div>
+  <div id="fullSearchBody"></div>
+</div>
 <div class="overlay" id="overlay"></div>
 
 <aside class="drawer" id="cartDrawer"><div class="drawer-head"><h2>Your Cart</h2><button class="close" onclick="closeCart()">✕</button></div><div class="drawer-body" id="cartItems"></div><div class="drawer-bottom"><div class="total"><span>Total</span><strong id="cartTotal">₹0</strong></div><button class="checkout" onclick="openCheckout()">Continue to Checkout →</button></div></aside>
@@ -90,7 +156,7 @@ header{background:rgba(9,6,6,.88);border-bottom-color:rgba(255,194,71,.18)}
 <div class="modal" id="wishlistModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('wishlistModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">❤️ Wishlist</h2><div id="wishlistList"></div></div></div>
 <div class="modal" id="ordersModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('ordersModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">📦 My Orders</h2><div id="ordersList"></div></div></div>
 <div class="modal" id="trackModal"><div class="box" style="max-width:600px"><button class="close" onclick="closeModal('trackModal')">✕</button><div id="trackingContent"></div></div></div>
-<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO Admin</h2><p style="color:var(--muted)">Product & Order Management</p><div class="tabs"><button id="adminProductsTab" class="active" onclick="adminTab('products')">Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">Orders</button><button id="adminUsersTab" onclick="adminTab('users')">Users</button><button id="adminAnalyticsTab" onclick="adminTab('analytics')">Analytics</button></div><div id="adminContent"></div></div></div>
+<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO CEO Dashboard</h2><p style="color:var(--muted)">Each management function opens as its own CEO page. CEO access only.</p><div class="tabs"><button id="adminProductsTab" class="active" onclick="adminTab('products')">Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">Orders</button><button id="adminUsersTab" onclick="adminTab('users')">Users</button><button id="adminSellersTab" onclick="adminTab('sellers')">🏪 Sellers</button><button id="adminAnalyticsTab" onclick="adminTab('analytics')">📊 Analytics</button><button id="adminAdsTab" onclick="adminTab('ads')">📢 Ads & Banners</button></div><div id="adminContent"></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -240,7 +306,7 @@ function showAccount(){renderAccount();$("accountModal").classList.add("show")}
 function closeAccount(){$("accountModal").classList.remove("show")}
 function renderAccount(){
  if(user){
-  $("accountContent").innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">👤 My Account</h2><div class="order-card"><h3>${escapeHtml(user.name)}</h3><p>${escapeHtml(user.email)}</p></div><button class="primary" style="width:100%;margin-top:10px" onclick="closeAccount();openOrders()">📦 My Orders</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openWishlist()">❤️ Wishlist</button>${isAdmin()?`<button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openAdmin()">👑 Admin Dashboard</button>`:""}<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">Logout</button>`
+  $("accountContent").innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">👤 My Account</h2><div class="order-card"><h3>${escapeHtml(user.name)}</h3><p>${escapeHtml(user.email)}</p></div><button class="primary" style="width:100%;margin-top:10px" onclick="closeAccount();openOrders()">📦 My Orders</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openWishlist()">❤️ Wishlist</button>${isAdmin()?`<button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openAdmin()">👑 CEO Dashboard</button>`:""}<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">Logout</button>`
  }else{
   $("accountContent").innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">👤 UROVO Account</h2><p style="color:var(--muted);font-size:12px">Create an account or login anytime — no UROVO admin permission is required.</p><div class="tabs"><button id="loginTab" class="active" onclick="accountTab('login')">Login</button><button id="signupTab" onclick="accountTab('signup')">Sign Up</button></div><div id="authArea"></div>`;accountTab("login")
  }
@@ -331,11 +397,60 @@ document.addEventListener("click",e=>{if(!e.target.closest(".search-wrap"))$("se
 function quickSearch(t){$("search").value=t;renderProducts();renderSearchResults();scrollProducts()}
 document.querySelectorAll(".cat").forEach(btn=>btn.onclick=()=>{document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));btn.classList.add("active");category=btn.dataset.cat;renderProducts()});
 function openCategory(cat){category=cat;document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===cat));renderProducts();scrollProducts()}
-$("themeBtn").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("urovoTheme",document.body.classList.contains("light")?"light":"dark")};
-if(localStorage.getItem("urovoTheme")==="light")document.body.classList.add("light");
+$("themeBtn").onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("urovoTheme",document.body.classList.contains("dark")?"dark":"light")};
+if(localStorage.getItem("urovoTheme")==="dark")document.body.classList.add("dark");
 $("cartBtn").onclick=openCart;$("wishTop").onclick=openWishlist;
-function scrollProducts(){$("productsSection").scrollIntoView({behavior:"smooth"})}function scrollTopPage(){window.scrollTo({top:0,behavior:"smooth"})}function finishOrder(){closeModal("successModal");scrollTopPage();toast("Order saved successfully")}
+function scrollProducts(){$("productsSection").scrollIntoView({behavior:"smooth"})}function scrollTopPage(){window.scrollTo({top:0,behavior:"smooth"});document.documentElement.scrollTop=0;document.body.scrollTop=0}function finishOrder(){closeModal("successModal");scrollTopPage();toast("Order saved successfully")}
 let seconds=8*60*60;setInterval(()=>{if(seconds<=0)return;seconds--;let h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;$("hh").textContent=String(h).padStart(2,"0");$("mm").textContent=String(m).padStart(2,"0");$("ss").textContent=String(s).padStart(2,"0")},1000);
+
+let urovoBannerTimer=null;
+let urovoBannerIndex=0;
+
+function startUrovoBannerSlider(){
+ clearInterval(urovoBannerTimer);
+ const el=$("homeAds");
+ if(!el)return;
+ const slides=[...el.querySelectorAll('.home-ad')];
+ const dots=[...el.querySelectorAll('.home-ad-dot')];
+ if(slides.length<=1)return;
+ const show=(index)=>{
+  urovoBannerIndex=(index+slides.length)%slides.length;
+  slides.forEach((s,i)=>s.classList.toggle('active',i===urovoBannerIndex));
+  dots.forEach((d,i)=>d.classList.toggle('active',i===urovoBannerIndex));
+ };
+ show(urovoBannerIndex);
+ urovoBannerTimer=setInterval(()=>show(urovoBannerIndex+1),5000);
+}
+
+async function loadHomeAds(){
+ const sec=$("homeAdsSection"),el=$("homeAds");
+ if(!sec||!el)return;
+ clearInterval(urovoBannerTimer);
+ try{
+  const {data,error}=await supabaseClient.from('urovo_banners').select('id,title,subtitle,button_text,button_link,image_url,active,sort_order').eq('active',true).order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+  if(error||!data?.length){sec.style.display='none';el.innerHTML='';return}
+  const valid=data.filter(a=>a.image_url);
+  if(!valid.length){sec.style.display='none';el.innerHTML='';return}
+  urovoBannerIndex=0;
+  sec.style.display='block';
+  el.innerHTML=valid.map((a,i)=>`<article class="home-ad ${i===0?'active':''}" data-banner-index="${i}">
+    <img src="${escapeHtml(a.image_url)}" alt="${escapeHtml(a.title||'UROVO Banner')}">
+    ${(a.title||a.subtitle||a.button_text)?`<div class="home-ad-copy">${a.title?`<h3>${escapeHtml(a.title)}</h3>`:''}${a.subtitle?`<p>${escapeHtml(a.subtitle)}</p>`:''}${a.button_text&&a.button_link?`<button class="home-ad-btn" onclick="event.stopPropagation();window.open('${escapeHtml(a.button_link)}','_blank')">${escapeHtml(a.button_text)} →</button>`:''}</div>`:''}
+  </article>`).join('')+`<div class="home-ad-dots" aria-label="Banner navigation">${valid.map((_,i)=>`<button class="home-ad-dot ${i===0?'active':''}" aria-label="Banner ${i+1}" onclick="urovoBannerGo(${i})"></button>`).join('')}</div>`;
+  startUrovoBannerSlider();
+ }catch(e){sec.style.display='none';el.innerHTML='';console.error('Banner load error',e)}
+}
+
+function urovoBannerGo(index){
+ const el=$("homeAds"); if(!el)return;
+ const slides=[...el.querySelectorAll('.home-ad')]; const dots=[...el.querySelectorAll('.home-ad-dot')];
+ if(!slides.length)return;
+ urovoBannerIndex=(index+slides.length)%slides.length;
+ slides.forEach((s,i)=>s.classList.toggle('active',i===urovoBannerIndex));
+ dots.forEach((d,i)=>d.classList.toggle('active',i===urovoBannerIndex));
+ clearInterval(urovoBannerTimer);
+ urovoBannerTimer=setInterval(()=>urovoBannerGo(urovoBannerIndex+1),5000);
+}
 
 /* ADMIN */
 async function renderAdminUsers(){
@@ -350,8 +465,73 @@ async function renderAdminUsers(){
     return `<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h3>${escapeHtml(u.name||u.email||"User")}</h3><p>${escapeHtml(u.email||"")}</p></div><span class="order-status-pill" style="color:${active?'var(--lime)':'var(--muted)'}">● ${active?'Active':'Offline'}</span></div><p><strong>Last Login:</strong> ${u.last_login?new Date(u.last_login).toLocaleString('en-IN'):'Not recorded'}</p><p><strong>Last Seen:</strong> ${u.last_seen?new Date(u.last_seen).toLocaleString('en-IN'):'Not recorded'}</p><p><strong>Joined:</strong> ${u.created_at?new Date(u.created_at).toLocaleString('en-IN'):'Not recorded'}</p></div>`
   }).join("");
 }
-function adminTab(tab){if(!requireAdmin())return;$("adminProductsTab").classList.toggle("active",tab==="products");$("adminOrdersTab").classList.toggle("active",tab==="orders");$("adminUsersTab").classList.toggle("active",tab==="users");if(tab==="products")renderAdminProducts();else if(tab==="orders")renderAdminOrders();else renderAdminUsers()}
+function adminTab(tab){if(!requireAdmin())return;["products","orders","users","sellers","analytics","ads"].forEach(t=>{const el=$("admin"+t.charAt(0).toUpperCase()+t.slice(1)+"Tab");if(el)el.classList.toggle("active",tab===t)});if(tab==="products")renderAdminProducts();else if(tab==="orders")renderAdminOrders();else if(tab==="users")renderAdminUsers();else if(tab==="sellers")renderCEOSellers();else if(tab==="ads")renderCEOAds();else openAnalytics()}
 function openAdmin(){if(!requireAdmin())return;$("adminModal").classList.add("show");adminTab("products")}
+
+async function renderCEOSellers(){
+ if(!requireAdmin())return;
+ const c=$("adminContent");
+ c.innerHTML=`<div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Only a Gmail that is already registered in UROVO can receive a Seller Badge.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Registered seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
+ const {data,error}=await supabaseClient.from("urovo_sellers").select("*").order("created_at",{ascending:false});
+ if(error){$("ceoSellerList").innerHTML=`<div class="order-card"><p style="color:#ff5555">Seller table error: ${escapeHtml(error.message)}</p><p style="color:var(--muted);font-size:12px">Make sure the <b>urovo_sellers</b> table exists in Supabase.</p></div>`;return}
+ renderCEOSellerList(data||[]);
+}
+function renderCEOSellerList(rows){
+ const el=$("ceoSellerList");if(!el)return;
+ el.innerHTML=rows.length?rows.map(s=>{const email=escapeHtml(s.email||"");const name=escapeHtml(s.name||"Seller");const active=s.active!==false;return `<div class="order-card" style="margin-top:10px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h3 style="margin:0">${email}</h3><p style="color:var(--muted);margin:5px 0">${name}</p></div><span class="urovo-seller-badge" style="white-space:nowrap">${active?"ACTIVE SELLER":"INACTIVE"}</span></div><div class="seller-admin-actions"><button class="secondary" onclick="ceoToggleSeller('${email}',${!active})">${active?"⏸ Make Inactive":"▶ Activate Seller"}</button><button class="secondary" onclick="openSellerAnalytics('${email}')">📊 Full Analysis</button><button class="secondary" onclick="ceoDeleteSeller('${email}')">🗑️ Delete Badge</button></div></div>`}).join(""):'<div class="order-card"><p style="color:var(--muted)">No sellers yet.</p></div>';
+}
+async function ceoGrantSeller(){
+ if(!requireAdmin())return;
+ const email=$("ceoSellerEmail")?.value.trim().toLowerCase();
+ const name=$("ceoSellerName")?.value.trim();
+ if(!email){toast("Enter seller Gmail");return}
+ if(email===ADMIN_EMAIL.toLowerCase()){toast("CEO Gmail cannot be added as Seller");return}
+ const {data:registered,error:regError}=await supabaseClient.from("urovo_user_activity").select("email,name").eq("email",email).maybeSingle();
+ if(regError){toast("Could not verify account: "+regError.message);return}
+ if(!registered){toast("This Gmail has not registered/sign-in to UROVO yet");return}
+ const {error}=await supabaseClient.from("urovo_sellers").upsert({email,name:name||registered.name||email.split("@")[0],active:true,granted_by:ADMIN_EMAIL},{onConflict:"email"});
+ if(error){toast("Seller save failed: "+error.message);return}
+ toast("🏷️ Seller Badge granted");renderCEOSellers();
+}
+async function ceoToggleSeller(email,active){
+ if(!requireAdmin())return;
+ const {error}=await supabaseClient.from("urovo_sellers").update({active}).eq("email",String(email).toLowerCase());
+ if(error){toast("Seller update failed: "+error.message);return}
+ toast(active?"Seller activated":"Seller made inactive");renderCEOSellers();
+}
+async function ceoDeleteSeller(email){
+ if(!requireAdmin())return;
+ if(!confirm("Delete Seller Badge for "+email+"? The account will become a normal customer."))return;
+ const {error}=await supabaseClient.from("urovo_sellers").delete().eq("email",String(email).toLowerCase());
+ if(error){toast("Seller delete failed: "+error.message);return}
+ toast("Seller Badge deleted");renderCEOSellers();
+}
+async function renderCEOAds(){
+ if(!requireAdmin())return;
+ const c=$("adminContent");
+ c.innerHTML=`<div class="order-card"><h3>📢 Home Ads & Banners</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">CEO only. If there are no active banners, the Home page stays completely normal.</p><input id="ceoAdTitle" class="input" placeholder="Banner title (optional)"><input id="ceoAdSubtitle" class="input" placeholder="Banner subtitle (optional)"><input id="ceoAdButton" class="input" placeholder="Button text (optional)"><input id="ceoAdLink" class="input" placeholder="Button/link URL (optional)"><input id="ceoAdOrder" class="input" type="number" min="0" value="0" placeholder="Display order"><input id="ceoAdImage" class="input" type="file" accept="image/*"><small style="color:var(--muted)">Banner image is required. Recommended: wide image such as 16:5.</small><button class="primary" style="width:100%;margin-top:8px" onclick="ceoAddBanner()">➕ Add Banner</button></div><div id="ceoAdsList"><p style="color:var(--muted)">Loading banners...</p></div>`;
+ const {data,error}=await supabaseClient.from('urovo_banners').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+ if(error){c.querySelector('#ceoAdsList').innerHTML=`<div class="order-card"><p style="color:var(--red)">${escapeHtml(error.message)}</p><p style="font-size:12px;color:var(--muted)">Run the UROVO banner schema SQL in Supabase first.</p></div>`;return}
+ renderCEOAdsList(data||[]);
+}
+function renderCEOAdsList(rows){const el=$("ceoAdsList");if(!el)return;el.innerHTML=rows.length?rows.map(a=>`<div class="order-card" style="margin-top:10px"><img src="${escapeHtml(a.image_url||'')}" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px" onerror="this.style.display='none'"><h3 style="margin-top:10px">${escapeHtml(a.title||'Untitled Banner')}</h3><p style="color:var(--muted)">${escapeHtml(a.subtitle||'')}</p><p style="font-size:12px;color:var(--muted)">${a.active===false?'Disabled':'Active'} · Order ${Number(a.sort_order||0)}</p><div class="seller-admin-actions"><button class="secondary" onclick="ceoToggleBanner('${String(a.id)}',${a.active===false})">${a.active===false?'▶ Enable':'⏸ Disable'}</button><button class="secondary" onclick="ceoEditBanner('${String(a.id)}')">✏️ Edit</button><button class="secondary" onclick="ceoDeleteBanner('${String(a.id)}')">🗑️ Delete</button></div></div>`).join(''):'<div class="order-card"><p style="color:var(--muted)">No banners added yet.</p></div>'}
+async function ceoUploadBannerImage(file){if(!file)return'';const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'-'),path=`banners/${Date.now()}-${Math.random().toString(36).slice(2)}-${safe}`;const {error}=await supabaseClient.storage.from('banner-images').upload(path,file,{upsert:false});if(error)throw error;return supabaseClient.storage.from('banner-images').getPublicUrl(path).data.publicUrl}
+async function ceoAddBanner(){if(!requireAdmin())return;const title=$("ceoAdTitle").value.trim(),subtitle=$("ceoAdSubtitle").value.trim(),button_text=$("ceoAdButton").value.trim(),button_link=$("ceoAdLink").value.trim(),sort_order=Math.max(0,Number($("ceoAdOrder").value||0)),file=$("ceoAdImage").files[0];if(!file){toast('Select a banner image');return}try{const image_url=await ceoUploadBannerImage(file);const {error}=await supabaseClient.from('urovo_banners').insert({title,subtitle,button_text,button_link,image_url,active:true,sort_order,created_by:ADMIN_EMAIL});if(error)throw error;toast('📢 Banner added');await loadHomeAds();renderCEOAds()}catch(e){console.error(e);toast('Banner save failed: '+e.message)}}
+async function ceoToggleBanner(id,active){if(!requireAdmin())return;const {error}=await supabaseClient.from('urovo_banners').update({active,updated_at:new Date().toISOString()}).eq('id',id);if(error){toast(error.message);return}await loadHomeAds();renderCEOAds()}
+async function ceoEditBanner(id){if(!requireAdmin())return;const {data,error}=await supabaseClient.from('urovo_banners').select('*').eq('id',id).single();if(error||!data){toast('Banner not found');return}const title=prompt('Banner title',data.title||'');if(title===null)return;const subtitle=prompt('Banner subtitle',data.subtitle||'');if(subtitle===null)return;const button_text=prompt('Button text',data.button_text||'');if(button_text===null)return;const button_link=prompt('Button/link URL',data.button_link||'');if(button_link===null)return;const sortRaw=prompt('Display order',String(data.sort_order||0));if(sortRaw===null)return;let image_url=data.image_url;const replace=confirm('Do you want to replace the banner image?');if(replace){const input=document.createElement('input');input.type='file';input.accept='image/*';input.onchange=async()=>{try{if(input.files[0])image_url=await ceoUploadBannerImage(input.files[0]);await saveEditedBanner(id,{title,subtitle,button_text,button_link,sort_order:Math.max(0,Number(sortRaw)||0),image_url})}catch(e){toast('Banner image update failed: '+e.message)}};input.click();return}await saveEditedBanner(id,{title,subtitle,button_text,button_link,sort_order:Math.max(0,Number(sortRaw)||0),image_url})}
+async function saveEditedBanner(id,update){const {error}=await supabaseClient.from('urovo_banners').update({...update,updated_at:new Date().toISOString()}).eq('id',id);if(error){toast(error.message);return}toast('Banner updated');await loadHomeAds();renderCEOAds()}
+async function ceoDeleteBanner(id){if(!requireAdmin()||!confirm('Delete this banner?'))return;const {error}=await supabaseClient.from('urovo_banners').delete().eq('id',id);if(error){toast(error.message);return}toast('Banner deleted');await loadHomeAds();renderCEOAds()}
+async function openSellerAnalytics(email){
+ if(!requireAdmin())return;const c=$("adminContent");c.innerHTML=`<button class="secondary" onclick="adminTab('sellers')">← Back to Sellers</button><div id="sellerAnalytics"><p style="color:var(--muted)">Loading seller analysis...</p></div>`;
+ const em=String(email).toLowerCase();
+ const [sR,pR,oR]=await Promise.all([supabaseClient.from('urovo_sellers').select('*').eq('email',em).maybeSingle(),supabaseClient.from('products').select('*').eq('seller_email',em),supabaseClient.from('orders').select('*').order('created_at',{ascending:false})]);
+ if(sR.error||pR.error||oR.error){c.querySelector('#sellerAnalytics').innerHTML=`<div class="order-card"><p style="color:var(--red)">${escapeHtml((sR.error||pR.error||oR.error).message)}</p></div>`;return}
+ const seller=sR.data||{},products=pR.data||[],all=oR.data||[];const mine=[];let sales=0,items=0;const status={Placed:0,Processing:0,Shipped:0,Delivered:0,Cancelled:0};
+ all.forEach(o=>{let its=o.items||[];if(typeof its==='string')try{its=JSON.parse(its)}catch{its=[]}const own=its.filter(i=>String(i.seller_email||'').toLowerCase()===em || products.some(p=>String(p.id)===String(i.id)));if(!own.length)return;mine.push(o);status[o.status||'Placed']=(status[o.status||'Placed']||0)+1;own.forEach(i=>{items+=Number(i.qty||1);if(o.status==='Delivered')sales+=Number(i.price||0)*Number(i.qty||1)})});
+ const activeProducts=products.filter(p=>p.active!==false).length,out=products.filter(p=>Number(p.stock||0)<=0).length;const counts={};mine.forEach(o=>{let its=o.items||[];if(typeof its==='string')try{its=JSON.parse(its)}catch{its=[]}its.forEach(i=>{if(products.some(p=>String(p.id)===String(i.id)))counts[i.name]=(counts[i.name]||0)+Number(i.qty||1)})});const best=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+ c.querySelector('#sellerAnalytics').innerHTML=`<div class="premium-card" style="margin-top:12px"><span class="premium-level">${seller.active===false?'INACTIVE':'ACTIVE SELLER'}</span><h3 style="margin-top:10px">${escapeHtml(seller.name||em)}</h3><p style="color:var(--muted);margin-top:4px">${escapeHtml(em)}</p></div><div class="analytics-grid" style="margin-top:12px"><div class="stat"><small>Products</small><b>${products.length}</b></div><div class="stat"><small>Active</small><b>${activeProducts}</b></div><div class="stat"><small>Out of Stock</small><b>${out}</b></div><div class="stat"><small>Orders</small><b>${mine.length}</b></div><div class="stat"><small>Items Sold</small><b>${items}</b></div><div class="stat"><small>Delivered Sales</small><b>${money(sales)}</b></div></div><div class="order-card" style="margin-top:14px"><h3>📦 Order Status</h3><p>Placed: ${status.Placed||0} · Processing: ${status.Processing||0} · Shipped: ${status.Shipped||0} · Delivered: ${status.Delivered||0} · Cancelled: ${status.Cancelled||0}</p></div><div class="order-card" style="margin-top:14px"><h3>🔥 Best Products</h3>${best.length?best.map(([n,q])=>`<p style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0"><span>${escapeHtml(n)}</span><b>${q} sold</b></p>`).join(''):'<p style="color:var(--muted)">No sales yet.</p>'}</div>`;
+}
+
 function renderAdminProducts(){if(!requireAdmin())return;$("adminContent").innerHTML=`<button class="primary" style="width:100%;margin-bottom:15px" onclick="showAddProductForm()">➕ Add Product</button><div id="adminProductList"><p style="color:var(--muted)">Loading...</p></div>`;loadAdminProducts()}
 async function loadAdminProducts(){const {data,error}=await supabaseClient.from("products").select("*").order("created_at",{ascending:false});if(error){$("adminProductList").innerHTML=`<p style="color:#ff5555">${escapeHtml(error.message)}</p>`;return}if(!data?.length){$("adminProductList").innerHTML=`<div class="order-card"><p>No products added yet.</p></div>`;return}$("adminProductList").innerHTML=data.map(p=>`<div class="order-card"><div style="display:flex;gap:12px;align-items:center"><div style="width:70px;height:70px;border-radius:12px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;flex-shrink:0">${p.image_url?`<img src="${escapeHtml(p.image_url)}" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:32px">${p.icon||"📦"}</span>`}</div><div style="flex:1"><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.category)}</p><strong>${money(p.price)}</strong></div></div><div style="display:flex;gap:8px;margin-top:12px"><button class="secondary" style="flex:1" onclick="editProduct('${String(p.id)}')">✏️ Edit</button><button class="secondary" style="flex:1" onclick="deleteProduct('${String(p.id)}')">🗑️ Delete</button></div></div>`).join("")}
 function showAddProductForm(){if(!requireAdmin())return;$("adminContent").innerHTML=`<button class="secondary" onclick="adminTab('products')">← Back</button><div class="order-card"><h3>➕ Add Product</h3><input id="adminName" class="input" placeholder="Product name"><input id="adminCategory" class="input" placeholder="Category"><input id="adminPrice" class="input" type="number" placeholder="Price"><input id="adminOldPrice" class="input" type="number" placeholder="Old price"><input id="adminTag" class="input" placeholder="Tag"><textarea id="adminDescription" class="input" placeholder="Product description" rows="4"></textarea><input id="adminImage" class="input" type="file" accept="image/*" multiple><small style="color:var(--muted)">Select multiple product images. First image is the main image.</small><button class="primary" style="width:100%;margin-top:10px" onclick="addProduct()">Add Product</button></div>`}
@@ -725,6 +905,16 @@ function urovoinfoData(type){
 function urovoInfo(type){const m=document.getElementById('urovoInfoModal'),c=document.getElementById('urovoInfoContent');if(!m||!c)return;c.innerHTML=urovoinfoData(type);m.classList.add('show')}
 </script>
 
+
+<style>
+.urovo-page,.urovo-search-page{position:fixed;inset:0;z-index:5200;background:var(--bg);visibility:hidden;opacity:0;transform:translateY(24px) scale(.985);transition:opacity .32s ease,transform .38s cubic-bezier(.2,.8,.2,1),visibility .32s;overflow:auto}
+.urovo-page.show,.urovo-search-page.show{visibility:visible;opacity:1;transform:none}
+.urovo-page-head{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:20px 5%;background:rgba(9,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.urovo-page-head h2{font:700 32px 'Space Grotesk';margin-top:3px}.urovo-page-kicker{font-size:10px;color:var(--lime);font-weight:900;letter-spacing:2px}.urovo-page-actions{display:flex;gap:8px}.urovo-account-scroll{max-width:1050px;margin:auto;padding:25px 5% 100px}
+.urovo-profile-hero{padding:24px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,rgba(247,212,122,.1),rgba(95,16,23,.16));display:flex;align-items:center;gap:18px;margin-bottom:18px}.urovo-avatar{width:68px;height:68px;border-radius:22px;background:linear-gradient(135deg,#f7d47a,#8b1d21);color:#170905;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}.urovo-profile-hero h3{font:700 22px 'Space Grotesk'}.urovo-profile-hero p{color:var(--muted);font-size:12px;margin-top:5px}.urovo-account-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.urovo-account-card{padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--surface);cursor:pointer;transition:.25s}.urovo-account-card:hover{transform:translateY(-3px);border-color:rgba(247,212,122,.35)}.urovo-account-card .big{font-size:24px}.urovo-account-card h4{margin:9px 0 4px}.urovo-account-card p{font-size:11px;color:var(--muted);line-height:1.5}.urovo-menu-head{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid var(--line)}.urovo-menu-list{padding:10px}.urovo-menu-list button{width:100%;display:flex;align-items:center;gap:13px;padding:15px;border-radius:13px;background:transparent;color:var(--text);text-align:left}.urovo-menu-list button:hover{background:var(--surface2)}.urovo-menu-list .menu-danger{color:#ff8578}.urovo-account-menu{position:fixed;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(8px);z-index:5400;visibility:hidden;opacity:0;transition:.25s}.urovo-account-menu.show{visibility:visible;opacity:1}.urovo-account-menu aside{margin-left:auto;width:min(390px,92vw);height:100%;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:.32s}.urovo-account-menu.show aside{transform:none}
+.urovo-search-head{display:flex;align-items:center;gap:12px;padding:22px 5%;position:sticky;top:0;background:rgba(9,6,6,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);z-index:2}.urovo-search-title{font:700 24px 'Space Grotesk'}.urovo-search-box{max-width:900px;margin:28px auto 18px;width:90%;height:62px;display:flex;align-items:center;gap:12px;padding:0 17px;border:1px solid rgba(247,212,122,.25);border-radius:20px;background:var(--surface);box-shadow:0 15px 50px rgba(0,0,0,.25);animation:searchBoxIn .45s ease}.urovo-search-box span{font-size:25px;color:var(--lime)}.urovo-search-box input{flex:1;background:none;border:0;outline:0;color:var(--text);font-size:17px}.urovo-search-box button{background:none;color:var(--muted);font-size:25px}.urovo-search-body,.urovo-search-page>#fullSearchBody{max-width:1100px;margin:auto;padding:0 5% 100px}.search-section-title{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin:22px 0 12px}.search-chips{display:flex;gap:8px;flex-wrap:wrap}.search-chip{padding:11px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text)}.full-search-results{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.full-search-result{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}.full-search-result img{width:100%;height:170px;object-fit:cover}.full-search-result .rs-info{padding:13px}.full-search-result h4{font-size:14px}.full-search-result p{color:var(--lime);font-weight:800;margin-top:6px}.search-empty{text-align:center;padding:65px 20px;color:var(--muted)}@keyframes searchBoxIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@media(max-width:760px){.urovo-page-head{padding:17px 18px}.urovo-account-scroll{padding:20px 18px 90px}.urovo-account-grid{grid-template-columns:1fr}.full-search-results{grid-template-columns:repeat(2,1fr)}.urovo-search-head{padding:17px 18px}.urovo-search-box{width:calc(100% - 36px);margin-top:20px}.urovo-search-page>#fullSearchBody{padding:0 18px 90px}}
+</style>
 <style>
 .urovo-discovery{margin:0 5% 26px;padding:12px 14px;border:1px solid rgba(247,212,122,.14);border-radius:18px;background:rgba(255,255,255,.025);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.discovery-left,.discovery-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.discovery-left>span{font-size:12px;color:var(--muted);font-weight:700}.discovery-left select{width:auto;min-width:150px;padding:9px 12px;border-radius:11px}.filter-chip{padding:9px 12px!important;border-radius:20px!important;background:rgba(255,255,255,.035)!important;color:var(--muted)!important;border:1px solid var(--line)!important;box-shadow:none!important;font-size:11px!important}.filter-chip.active{color:#1a0c05!important;background:linear-gradient(135deg,#f7d47a,#c88a32)!important}.price-save{display:flex;gap:7px;align-items:center;margin:4px 0 7px;font-size:10px}.save-pill{color:#78d66b;font-weight:800}.mrp-label{color:var(--muted)}.recent-wrap{margin:0 5% 55px}.recent-wrap .products{grid-template-columns:repeat(5,1fr)}.related-wrap{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.related-wrap .products{grid-template-columns:repeat(3,1fr)}.premium-card{padding:18px;border-radius:18px;border:1px solid rgba(247,212,122,.18);background:linear-gradient(145deg,rgba(247,212,122,.08),rgba(95,16,23,.08));margin-bottom:12px}.premium-level{display:inline-block;padding:5px 9px;border-radius:10px;background:rgba(247,212,122,.12);color:#f7d47a;font-size:10px;font-weight:900;letter-spacing:.08em}.floating-tool{position:fixed;right:16px;z-index:2400;text-decoration:none;border-radius:999px;padding:11px 14px;font-size:12px;font-weight:900;border:1px solid rgba(247,212,122,.3);box-shadow:0 15px 35px rgba(0,0,0,.35)}.whatsapp-tool{bottom:84px;background:#15351e;color:#c9ffd4}.install-tool{bottom:135px;background:linear-gradient(135deg,#f7d47a,#c88a32);color:#1a0c05}.invoice-btn{width:100%;margin-top:10px}.analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.chart-card{background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:15px}.chart-bar{height:9px;border-radius:8px;background:linear-gradient(90deg,#f7d47a,#8b1d21);margin-top:7px}.security-note{font-size:11px;color:var(--muted);padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-top:10px}.stock-pill.out{background:rgba(184,44,37,.12)}.stock-pill.low{background:rgba(247,212,122,.09)}
 @media(max-width:800px){.urovo-discovery{margin-left:18px;margin-right:18px}.recent-wrap{margin-left:18px;margin-right:18px}.recent-wrap .products{grid-template-columns:repeat(2,1fr)}.related-wrap .products{grid-template-columns:repeat(2,1fr)}.analytics-grid{grid-template-columns:repeat(2,1fr)}.floating-tool{right:10px}.install-tool{bottom:132px}.whatsapp-tool{bottom:76px}}
@@ -802,9 +992,9 @@ function renderPremiumProfile(){
   if(!user)return;
   const content=document.getElementById('accountContent'); if(!content)return;
   const count=orders.filter(o=>o.user===user.email).length;
-  const level=count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER';
+  const level=isAdmin()?'CEO':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
   const old=content.innerHTML;
-  content.innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">👑 My UROVO Profile</h2><div class="premium-card"><span class="premium-level">${level} MEMBER</span><h3 style="margin-top:10px">${escapeHtml(user.name||'UROVO Customer')}</h3><p style="color:var(--muted);margin-top:5px">${escapeHtml(user.email)}</p><p style="margin-top:10px;color:#f7d47a">${count} order${count===1?'':'s'} · Premium shopping profile</p></div><button class="primary" style="width:100%;margin-top:10px" onclick="closeAccount();openOrders()">📦 My Orders</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openWishlist()">❤️ Wishlist</button>${isAdmin()?`<button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openAdmin()">👑 Admin Dashboard</button>`:''}<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">Logout</button>`;
+  content.innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">👑 ${isAdmin()?'CEO Profile':'My UROVO Profile'}</h2><div class="premium-card"><span class="premium-level">${level}${isAdmin()?'':' MEMBER'}</span><h3 style="margin-top:10px">${escapeHtml(user.name||'UROVO Customer')}</h3><p style="color:var(--muted);margin-top:5px">${escapeHtml(user.email)}</p><p style="margin-top:10px;color:#f7d47a">${count} order${count===1?'':'s'} · Premium shopping profile</p></div><button class="primary" style="width:100%;margin-top:10px" onclick="closeAccount();openOrders()">📦 My Orders</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openWishlist()">❤️ Wishlist</button>${isAdmin()?`<button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openAdmin()">👑 CEO Dashboard</button>`:''}<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">Logout</button>`;
   return old;
 }
 
@@ -841,7 +1031,8 @@ function generateInvoice(order){
   const o=normalizeOrder(order);if(!o)return;
   const rows=o.items.map(i=>`<tr><td>${escapeHtml(i.name||'Product')}</td><td>${Number(i.qty||1)}</td><td>${money(i.price)}</td><td>${money(Number(i.price||0)*Number(i.qty||1))}</td></tr>`).join('');
   const w=window.open('','_blank','width=800,height=900');if(!w){toast('Allow pop-ups to generate invoice');return}
-  w.document.write(`<!doctype html><html><head><title>${escapeHtml(o.id)} — UROVO Invoice</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#111}h1{letter-spacing:3px}table{width:100%;border-collapse:collapse;margin-top:25px}th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left}.total{font-size:20px;font-weight:bold;margin-top:20px;text-align:right}.muted{color:#666}</style></head><body><h1>UROVO</h1><p class="muted">Invoice · ${escapeHtml(o.id)}</p><hr><p><b>Customer:</b> ${escapeHtml(o.customer?.name||o.customer_name||'')}<br><b>Email:</b> ${escapeHtml(o.user_email||'')}<br><b>Phone:</b> ${escapeHtml(o.customer?.phone||o.phone||'')}<br><b>Address:</b> ${escapeHtml(o.address||o.customer?.address||'')}</p><table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="total">Total: ${money(o.total)}</div><p class="muted">Payment: ${escapeHtml(o.payment_method||o.payment||'')} · Status: ${escapeHtml(o.status||'Placed')}</p><script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script></body></html>`);w.document.close();
+  w.document.write(`<!doctype html><html><head><title>${escapeHtml(o.id)} — UROVO Invoice</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#111}h1{letter-spacing:3px}table{width:100%;border-collapse:collapse;margin-top:25px}th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left}.total{font-size:20px;font-weight:bold;margin-top:20px;text-align:right}.muted{color:#666}</style></head><body><h1>UROVO</h1><p class="muted">Invoice · ${escapeHtml(o.id)}</p><hr><p><b>Customer:</b> ${escapeHtml(o.customer?.name||o.customer_name||'')}<br><b>Email:</b> ${escapeHtml(o.user_email||'')}<br><b>Phone:</b> ${escapeHtml(o.customer?.phone||o.phone||'')}<br><b>Address:</b> ${escapeHtml(o.address||o.customer?.address||'')}</p><table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="total">Total: ${money(o.total)}</div><p class="muted">Payment: ${escapeHtml(o.payment_method||o.payment||'')} · Status: ${escapeHtml(o.status||'Placed')}</p><p class="muted">Please use your browser print option to print this invoice.</p>
+</body></html>`);w.document.close();
 }
 function whatsappOrder(order){
   const msg=encodeURIComponent(`Hello UROVO CEO 👋, I need help with my order.
@@ -874,17 +1065,92 @@ const _form=document.getElementById('checkoutForm');
 if(_form){_form.addEventListener('submit',()=>{},true)}
 
 // Enhance existing account rendering without breaking auth/admin logic.
-const _showAccountOriginal=window.showAccount;
-window.showAccount=function(){const r=_showAccountOriginal?.();if(user)renderPremiumProfile();return r};
+// Full account page upgrade: profile, order history, recently viewed and 3-line menu.
+function closeAccountPage(){document.getElementById('accountPage')?.classList.remove('show');closeAccountMenu();}
+const _legacyShowAccount=window.showAccount;
+function openAccountPage(){
+  if(!user){_legacyShowAccount?.();return;}
+  renderFullAccount();document.getElementById('accountPage')?.classList.add('show');
+}
+function renderFullAccount(){
+  const c=document.getElementById('fullAccountContent');if(!c||!user)return;
+  const mine=orders.filter(o=>o.user===user.email);const count=mine.length;
+  const level=isAdmin()?'CEO':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
+  const initials=String(user.name||'U').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+  const admin=isAdmin();
+  document.getElementById('accountPageTitle')?.replaceChildren(document.createTextNode(admin?'CEO':'My Account'));
+  document.getElementById('accountMenuTitle')?.replaceChildren(document.createTextNode(admin?'CEO Menu':'Account Menu'));
+  c.innerHTML=`<div class="urovo-profile-hero"><div class="urovo-avatar">${escapeHtml(initials)}</div><div style="flex:1"><div class="premium-level">${isAdmin()?"CEO":level}${isAdmin()?"":" MEMBER"}</div><h3>${escapeHtml(user.name||'UROVO Customer')}</h3><p>${escapeHtml(user.email||'')}</p></div></div>
+  <div class="urovo-account-grid">
+   <div class="urovo-account-card" onclick="accountSection('orders')"><div class="big">📦</div><h4>Order History</h4><p>${count} order${count===1?'':'s'} · Track, invoice and manage your orders.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('recent')"><div class="big">🕘</div><h4>Recently Viewed</h4><p>Your latest viewed UROVO products.</p></div>
+   <div class="urovo-account-card" onclick="openWishlist()"><div class="big">❤️</div><h4>Wishlist</h4><p>Your saved products.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('addresses')"><div class="big">📍</div><h4>Addresses</h4><p>Manage delivery addresses.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('payments')"><div class="big">💳</div><h4>Payment Methods</h4><p>View your available payment preferences.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('security')"><div class="big">🔐</div><h4>Security</h4><p>Password, login and account security.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('notifications')"><div class="big">🔔</div><h4>Notifications</h4><p>Manage account notifications.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('help')"><div class="big">💬</div><h4>Help & Support</h4><p>Order help, FAQ and WhatsApp support.</p></div>
+   <div class="urovo-account-card" onclick="accountSection('policies')"><div class="big">📄</div><h4>Policies</h4><p>Shipping, returns, privacy and terms.</p></div>
+   ${isAdmin()?'<div class="urovo-account-card" onclick="closeAccountPage();openAdmin()"><div class="big">👑</div><h4>CEO Dashboard</h4><p>Private UROVO admin controls.</p></div>':''}
+   <div class="urovo-account-card" onclick="logout()"><div class="big">🚪</div><h4>Logout</h4><p>Sign out of this account.</p></div>
+  </div>`;
+}
+function openAccountMenu(){const a=document.getElementById('accountAdminMenuItem');if(a)a.style.display=isAdmin()?'flex':'none';document.getElementById('accountMenu')?.classList.add('show')}
+function accountMenuAction(type){closeAccountMenu();if(type==='admin'){closeAccountPage();openAdmin();return}if(type==='settings'){toast('Settings is not available in UROVO.');return}if(type==='delete'){toast('Account deletion requires a secure server-side flow.');return}accountSection(type)}
+function closeAccountMenu(){document.getElementById('accountMenu')?.classList.remove('show')}
+function accountSection(type){closeAccountMenu();if(type==='orders'){closeAccountPage();openOrders();return}if(type==='wishlist'){closeAccountPage();openWishlist();return}renderAccountSection(type)}
+function renderAccountSection(type){
+ const c=document.getElementById('fullAccountContent');if(!c)return;
+ const titles={recent:'🕘 Recently Viewed',addresses:'📍 Addresses',payments:'💳 Payment Methods',security:'🔐 Security',notifications:'🔔 Notifications',help:'💬 Help & Support',policies:'📄 Policies',delete:'🗑️ Delete Account'};
+ let html=`<button class="secondary" onclick="renderFullAccount()">← Back to Account</button><h2 style="font-family:'Space Grotesk';margin:22px 0 14px">${titles[type]||'Account'}</h2>`;
+ if(type==='recent'){const items=getRecent();html+=items.length?`<div class="full-search-results">${items.map(p=>{const img=p.image?`<img src="${escapeHtml(p.image)}">`:`<div style="height:170px;display:flex;align-items:center;justify-content:center;font-size:60px;background:var(--surface2)">${p.icon||'📦'}</div>`;return `<div class="full-search-result" onclick="closeAccountPage();openProduct('${String(p.id)}')">${img}<div class="rs-info"><h4>${escapeHtml(p.name)}</h4><p>${money(p.price)}</p></div></div>`}).join('')}</div>`:'<div class="search-empty">🕘<h3 style="color:var(--text);margin:10px">No recently viewed products</h3><p>Products you open will appear here.</p></div>'}
+ else if(type==='addresses') html+=`<div class="order-card"><h3>📍 Delivery Addresses</h3><p>Addresses can be added during checkout. A dedicated saved-address database can be connected later without changing the Account UI.</p></div>`;
+ else if(type==='payments') html+=`<div class="order-card"><h3>💳 Payment Preferences</h3><p>Cash on Delivery and online payment options are shown at checkout. No card details are stored in this frontend.</p></div>`;
+ else if(type==='security') html+=`<div class="order-card"><h3>🔐 Account Security</h3><p>Use Forgot Password / password reset from Login. Keep your email verified and never share OTPs.</p><button class="secondary" style="width:100%;margin-top:12px" onclick="logout()">Logout</button></div>`;
+ else if(type==='notifications') html+=`<div class="order-card"><h3>🔔 Notifications</h3><p>Order updates and account messages can be shown here. Browser notification permissions can be added later.</p></div>`;
+ else if(type==='help') html+=`<div class="order-card"><h3>💬 UROVO Support</h3><p>For order help, open Order History. You can also contact UROVO through WhatsApp.</p><button class="primary" style="width:100%;margin-top:12px" onclick="window.open('https://wa.me/918590921747?text='+encodeURIComponent('Hello UROVO CEO 👋, I need help with my order.'),'_blank')">💬 WhatsApp Help</button></div>`;
+ else if(type==='policies') html+=`<div class="order-card"><button class="secondary" style="width:100%;margin-bottom:8px" onclick="urovoInfo('shipping')">Shipping Policy</button><button class="secondary" style="width:100%;margin-bottom:8px" onclick="urovoInfo('returns')">Returns & Refunds</button><button class="secondary" style="width:100%;margin-bottom:8px" onclick="urovoInfo('privacy')">Privacy Policy</button><button class="secondary" style="width:100%" onclick="urovoInfo('terms')">Terms & Conditions</button></div>`;
+ c.innerHTML=html;
+}
+window.showAccount=function(){openAccountPage()};
+
 
 // Add a recent-products section once products are loaded.
-(function(){const sec=document.createElement('section');sec.className='recent-wrap';sec.innerHTML='<div class="head"><div><h2>Recently Viewed</h2><p>Your latest UROVO picks</p></div></div><div class="products" id="recentProducts"></div>';const productSec=document.getElementById('productsSection');productSec?.parentNode.insertBefore(sec,document.querySelector('.features'));renderRecent()})();
+// Recently Viewed is shown only inside Account; it is intentionally removed from Home.
 
 // Upgrade the existing product list with advanced filtering after initial data load.
 setTimeout(()=>{try{applyDiscovery();renderRecent()}catch(e){console.warn(e)}},800);
 
+// Dedicated animated Search page. It never scrolls Home to the search section.
+function openSearchPage(){
+  const page=document.getElementById('searchPage');if(!page)return;
+  page.classList.add('show');document.body.style.overflow='hidden';
+  const input=document.getElementById('fullSearchInput');
+  renderFullSearch('');setTimeout(()=>input?.focus(),220);
+}
+function closeSearchPage(){document.getElementById('searchPage')?.classList.remove('show');document.body.style.overflow='';}
+function clearFullSearch(){const i=document.getElementById('fullSearchInput');if(i){i.value='';i.focus()}renderFullSearch('')}
+function renderFullSearch(q){
+ const body=document.getElementById('fullSearchBody');if(!body)return; q=String(q||'').trim().toLowerCase();
+ if(!q){body.innerHTML=`<div class="search-section-title">Trending Searches</div><div class="search-chips"><button class="search-chip" onclick="useFullSearch('gadgets')">Gadgets</button><button class="search-chip" onclick="useFullSearch('phone stand')">Phone Stand</button><button class="search-chip" onclick="useFullSearch('home')">Home</button><button class="search-chip" onclick="useFullSearch('cleaning')">Cleaning</button></div><div class="search-section-title">Popular Categories</div><div class="search-chips"><button class="search-chip" onclick="useFullSearch('Gadgets')">⚡ Gadgets</button><button class="search-chip" onclick="useFullSearch('Home')">🏠 Home</button><button class="search-chip" onclick="useFullSearch('Lifestyle')">✨ Lifestyle</button></div><div class="search-section-title">Quick Links</div><div class="search-chips"><button class="search-chip" onclick="closeSearchPage();openWishlist()">❤️ Wishlist</button><button class="search-chip" onclick="closeSearchPage();openCart()">🛒 Cart</button></div>`;return}
+ const matches=(products||[]).filter(p=>`${p.name} ${p.category} ${p.desc||''}`.toLowerCase().includes(q)).slice(0,40);
+ body.innerHTML=matches.length?`<div class="search-section-title">${matches.length} result${matches.length===1?'':'s'}</div><div class="full-search-results">${matches.map(p=>{const img=p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<div style="height:170px;display:flex;align-items:center;justify-content:center;font-size:60px;background:var(--surface2)">${p.icon||'📦'}</div>`;return `<div class="full-search-result" onclick="closeSearchPage();openProduct('${String(p.id)}')">${img}<div class="rs-info"><h4>${escapeHtml(p.name)}</h4><p>${money(p.price)}</p></div></div>`}).join('')}</div>`:`<div class="search-empty"><div style="font-size:55px">🔎</div><h3 style="color:var(--text);margin:10px">No products found</h3><p>Try another keyword or browse a category.</p></div>`;
+}
+function useFullSearch(q){const i=document.getElementById('fullSearchInput');if(i)i.value=q;renderFullSearch(q)}
+document.getElementById('fullSearchInput')?.addEventListener('input',e=>renderFullSearch(e.target.value));
+
 // PWA registration. The generated sw.js is included with this UROVO package.
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+<script id="urovo-menu-startup-fix">
+document.addEventListener('DOMContentLoaded',()=>{
+  const m=document.getElementById('accountMenu');
+  if(m)m.classList.remove('show');
+  window.scrollTo(0,0);
+  const splash=document.getElementById('urovoSplash');
+  setTimeout(()=>splash?.classList.add('hide'),900);
+});
+window.addEventListener('load',()=>window.scrollTo(0,0));
 </script>
 </body>
 </html>
