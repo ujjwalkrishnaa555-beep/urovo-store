@@ -132,6 +132,7 @@ body{overflow-x:hidden}
     <button onclick="accountMenuAction('help')">💬 <span>Help & Support</span></button>
     <button onclick="accountMenuAction('policies')">📄 <span>Policies</span></button>
     <button id="accountAdminMenuItem" onclick="accountMenuAction('admin')" style="display:none">👑 <span>CEO Dashboard</span></button>
+    <button id="accountSellerMenuItem" onclick="accountMenuAction('seller')" style="display:none">🏪 <span>Seller Dashboard</span></button>
     <button class="menu-danger" onclick="logout()">🚪 <span>Logout</span></button>
     <button class="menu-danger" onclick="accountMenuAction('delete')">🗑️ <span>Delete Account</span></button>
   </div></aside>
@@ -1104,8 +1105,60 @@ function renderFullAccount(){
    <div class="urovo-account-card" onclick="logout()"><div class="big">🚪</div><h4>Logout</h4><p>Sign out of this account.</p></div>
   </div>`;
 }
-function openAccountMenu(){const a=document.getElementById('accountAdminMenuItem');if(a)a.style.display=isAdmin()?'flex':'none';document.getElementById('accountMenu')?.classList.add('show')}
-function accountMenuAction(type){closeAccountMenu();if(type==='admin'){closeAccountPage();openAdmin();return}if(type==='settings'){toast('Settings is not available in UROVO.');return}if(type==='delete'){toast('Account deletion requires a secure server-side flow.');return}accountSection(type)}
+async function openAccountMenu(){
+  const a=document.getElementById('accountAdminMenuItem');
+  const s=document.getElementById('accountSellerMenuItem');
+  if(a)a.style.display=isAdmin()?'flex':'none';
+  if(s)s.style.display='none';
+  if(user && !isAdmin()){
+    try{
+      const email=String(user.email||'').trim().toLowerCase();
+      const {data,error}=await supabaseClient.from('urovo_sellers').select('active').eq('email',email).maybeSingle();
+      if(!error && data && data.active!==false && s)s.style.display='flex';
+    }catch(e){console.error('Seller menu check failed',e)}
+  }
+  document.getElementById('accountMenu')?.classList.add('show');
+}
+async function accountMenuAction(type){
+  closeAccountMenu();
+  if(type==='admin'){closeAccountPage();openAdmin();return}
+  if(type==='seller'){closeAccountPage();openSellerDashboard();return}
+  if(type==='settings'){toast('Settings is not available in UROVO.');return}
+  if(type==='delete'){toast('Account deletion requires a secure server-side flow.');return}
+  accountSection(type)
+}
+
+async function openSellerDashboard(){
+  if(!user){showAccount();return}
+  const email=String(user.email||'').trim().toLowerCase();
+  const {data:seller,error:sellerError}=await supabaseClient.from('urovo_sellers').select('*').eq('email',email).maybeSingle();
+  if(sellerError || !seller || seller.active===false){toast('Seller Dashboard is available only for active sellers.');return}
+  let modal=document.getElementById('sellerDashboardModal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='sellerDashboardModal';
+    modal.className='modal';
+    modal.innerHTML='<div class="box" style="max-width:950px"><button class="close" onclick="closeModal(\'sellerDashboardModal\')">✕</button><h2 style="font-family:\'Space Grotesk\';margin:15px 0">🏪 Seller Dashboard</h2><div id="sellerDashboardContent"></div></div>';
+    document.body.appendChild(modal);
+  }
+  const c=document.getElementById('sellerDashboardContent');
+  c.innerHTML='<p style="color:var(--muted)">Loading seller dashboard...</p>';
+  modal.classList.add('show');
+  const [pR,oR]=await Promise.all([
+    supabaseClient.from('products').select('*').eq('seller_email',email).order('created_at',{ascending:false}),
+    supabaseClient.from('orders').select('*').order('created_at',{ascending:false})
+  ]);
+  if(pR.error){c.innerHTML='<div class="order-card"><p style="color:var(--red)">'+escapeHtml(pR.error.message)+'</p></div>';return}
+  const products=pR.data||[];
+  const orders=[];
+  (oR.data||[]).forEach(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]};if(items.some(i=>String(i.seller_email||'').toLowerCase()===email || products.some(p=>String(p.id)===String(i.id))))orders.push(o)});
+  const active=products.filter(p=>p.active!==false).length;
+  const stock=products.reduce((n,p)=>n+Number(p.stock||0),0);
+  c.innerHTML='<div class="premium-card"><span class="premium-level">ACTIVE SELLER</span><h3 style="margin-top:10px">'+escapeHtml(seller.name||email)+'</h3><p style="color:var(--muted)">'+escapeHtml(email)+'</p></div>'
+   +'<div class="analytics-grid" style="margin-top:12px"><div class="stat"><small>My Products</small><b>'+products.length+'</b></div><div class="stat"><small>Active</small><b>'+active+'</b></div><div class="stat"><small>Stock Units</small><b>'+stock+'</b></div><div class="stat"><small>Orders</small><b>'+orders.length+'</b></div></div>'
+   +'<div class="order-card" style="margin-top:14px"><h3>📦 My Products</h3>'+ (products.length?products.map(p=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)"><span>'+escapeHtml(p.name||'Product')+'</span><b>'+money(p.price||0)+'</b></div>').join(''):'<p style="color:var(--muted)">No products yet.</p>')+'</div>'
+   +'<div class="order-card" style="margin-top:14px"><h3>🛒 My Orders</h3><p style="color:var(--muted)">'+orders.length+' order(s) contain your products.</p></div>';
+}
 function closeAccountMenu(){document.getElementById('accountMenu')?.classList.remove('show')}
 function accountSection(type){closeAccountMenu();if(type==='orders'){closeAccountPage();openOrders();return}if(type==='wishlist'){closeAccountPage();openWishlist();return}renderAccountSection(type)}
 function renderAccountSection(type){
