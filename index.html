@@ -481,7 +481,7 @@ function openAdmin(){if(!requireAdmin())return;$("adminModal").classList.add("sh
 async function renderCEOSellers(){
  if(!requireAdmin())return;
  const c=$("adminContent");
- c.innerHTML=`<div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">CEO can grant a UROVO Seller Badge to a registered UROVO account.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
+ c.innerHTML=`<div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Only a Gmail that is already registered in UROVO can receive a Seller Badge.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Registered seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
  const {data,error}=await supabaseClient.from("urovo_sellers").select("*").order("created_at",{ascending:false});
  if(error){$("ceoSellerList").innerHTML=`<div class="order-card"><p style="color:#ff5555">Seller table error: ${escapeHtml(error.message)}</p><p style="color:var(--muted);font-size:12px">Make sure the <b>urovo_sellers</b> table exists in Supabase.</p></div>`;return}
  renderCEOSellerList(data||[]);
@@ -496,13 +496,15 @@ async function ceoGrantSeller(){
  const name=$("ceoSellerName")?.value.trim();
  if(!email){toast("Enter seller Gmail");return}
  if(email===ADMIN_EMAIL.toLowerCase()){toast("CEO Gmail cannot be added as Seller");return}
- const sellerName=name||email.split("@")[0];
+ const {data:registered,error:regError}=await supabaseClient.from("urovo_user_activity").select("email,name").eq("email",email).maybeSingle();
+ let sellerName=name||email.split("@")[0];
+ if(!regError && registered) sellerName=name||registered.name||sellerName;
+ // Do not block a valid Auth account just because activity tracking is missing/RLS-protected.
+ const {data:existing,error:existingError}=await supabaseClient.from("urovo_sellers").select("email,name").eq("email",email).maybeSingle();
+ if(existingError && !regError){ /* continue; CEO permissions may still allow upsert */ }
  const {error}=await supabaseClient.from("urovo_sellers").upsert({email,name:sellerName,active:true,granted_by:ADMIN_EMAIL},{onConflict:"email"});
- if(error){toast("Seller save failed: "+error.message);console.error(error);return}
- toast("🏷️ Seller Badge granted to "+email);
- if($("ceoSellerEmail"))$("ceoSellerEmail").value="";
- if($("ceoSellerName"))$("ceoSellerName").value="";
- renderCEOSellers();
+ if(error){toast("Seller save failed: "+error.message);return}
+ toast("🏷️ Seller Badge granted");renderCEOSellers();
 }
 async function ceoToggleSeller(email,active){
  if(!requireAdmin())return;
@@ -999,11 +1001,15 @@ function renderRelated(p){
   area.innerHTML=rel.length?`<div class="head"><div><h3>You may also like</h3><p>More from ${escapeHtml(p.category)}</p></div></div><div class="products">${rel.map(miniProductCard).join('')}</div>`:'';
 }
 
-function renderPremiumProfile(){
+async function renderPremiumProfile(){
   if(!user)return;
   const content=document.getElementById('accountContent'); if(!content)return;
   const count=orders.filter(o=>o.user===user.email).length;
-  const level=isAdmin()?'CEO':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
+  let seller=null;
+  if(!isAdmin()){
+    try{const sr=await supabaseClient.from('urovo_sellers').select('email,name,active').eq('email',String(user.email||'').trim().toLowerCase()).maybeSingle(); if(!sr.error&&sr.data&&sr.data.active!==false)seller=sr.data;}catch(e){}
+  }
+  const level=isAdmin()?'CEO':seller?'UROVO SELLER':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
   const old=content.innerHTML;
   content.innerHTML=`<h2 style="font-family:'Space Grotesk';margin:15px 0">👑 ${isAdmin()?'CEO Profile':'My UROVO Profile'}</h2><div class="premium-card"><span class="premium-level">${level}${isAdmin()?'':' MEMBER'}</span><h3 style="margin-top:10px">${escapeHtml(user.name||'UROVO Customer')}</h3><p style="color:var(--muted);margin-top:5px">${escapeHtml(user.email)}</p><p style="margin-top:10px;color:#f7d47a">${count} order${count===1?'':'s'} · Premium shopping profile</p></div><button class="primary" style="width:100%;margin-top:10px" onclick="closeAccount();openOrders()">📦 My Orders</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openWishlist()">❤️ Wishlist</button>${isAdmin()?`<button class="secondary" style="width:100%;margin-top:10px" onclick="closeAccount();openAdmin()">👑 CEO Dashboard</button>`:''}<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">Logout</button>`;
   return old;
@@ -1083,36 +1089,19 @@ function openAccountPage(){
   if(!user){_legacyShowAccount?.();return;}
   renderFullAccount();document.getElementById('accountPage')?.classList.add('show');
 }
-async function getMySellerRecord(){
-  if(!user||isAdmin())return null;
-  const email=String(user.email||'').trim().toLowerCase();
-  if(!email)return null;
-  try{
-    // First try the seller table directly. This works when the seller has a
-    // SELECT policy for their own row.
-    const direct=await supabaseClient.from('urovo_sellers').select('email,name,active,granted_by,created_at').eq('email',email).maybeSingle();
-    if(!direct.error && direct.data){
-      if(direct.data.active===false)return null;
-      return direct.data;
-    }
-    // Fallback to the secure RPC so the dashboard still works when RLS
-    // blocks direct table reads.
-    const rpc=await supabaseClient.rpc('urovo_get_my_seller');
-    if(!rpc.error && rpc.data && rpc.data.active!==false)return rpc.data;
-    console.warn('Seller status:',direct.error?.message||rpc.error?.message||'seller record not found');
-    return null;
-  }catch(e){console.warn('Seller status:',e);return null}
-}
 async function renderFullAccount(){
   const c=document.getElementById('fullAccountContent');if(!c||!user)return;
   const mine=orders.filter(o=>o.user===user.email);const count=mine.length;
-  const admin=isAdmin();
-  const seller=await getMySellerRecord();
-  const level=admin?'CEO':seller?'UROVO SELLER':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
+  let seller=null;
+  if(!isAdmin()){
+    try{const sr=await supabaseClient.from('urovo_sellers').select('email,name,active').eq('email',String(user.email||'').trim().toLowerCase()).maybeSingle(); if(!sr.error&&sr.data&&sr.data.active!==false)seller=sr.data;}catch(e){}
+  }
+  const level=isAdmin()?'CEO':seller?'UROVO SELLER':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
   const initials=String(user.name||'U').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+  const admin=isAdmin();
   document.getElementById('accountPageTitle')?.replaceChildren(document.createTextNode(admin?'CEO':'My Account'));
   document.getElementById('accountMenuTitle')?.replaceChildren(document.createTextNode(admin?'CEO Menu':'Account Menu'));
-  c.innerHTML=`<div class="urovo-profile-hero"><div class="urovo-avatar">${escapeHtml(initials)}</div><div style="flex:1"><div class="premium-level">${escapeHtml(level)}</div><h3>${escapeHtml(user.name||'UROVO Customer')}</h3><p>${escapeHtml(user.email||'')}</p></div></div>
+  c.innerHTML=`<div class="urovo-profile-hero"><div class="urovo-avatar">${escapeHtml(initials)}</div><div style="flex:1"><div class="premium-level">${isAdmin()?"CEO":level}</div><h3>${escapeHtml(user.name||'UROVO Customer')}</h3><p>${escapeHtml(user.email||'')}</p></div></div>
   <div class="urovo-account-grid">
    <div class="urovo-account-card" onclick="accountSection('orders')"><div class="big">📦</div><h4>Order History</h4><p>${count} order${count===1?'':'s'} · Track, invoice and manage your orders.</p></div>
    <div class="urovo-account-card" onclick="accountSection('recent')"><div class="big">🕘</div><h4>Recently Viewed</h4><p>Your latest viewed UROVO products.</p></div>
@@ -1124,7 +1113,7 @@ async function renderFullAccount(){
    <div class="urovo-account-card" onclick="accountSection('help')"><div class="big">💬</div><h4>Help & Support</h4><p>Order help, FAQ and WhatsApp support.</p></div>
    <div class="urovo-account-card" onclick="accountSection('policies')"><div class="big">📄</div><h4>Policies</h4><p>Shipping, returns, privacy and terms.</p></div>
    ${isAdmin()?'<div class="urovo-account-card" onclick="closeAccountPage();openAdmin()"><div class="big">👑</div><h4>CEO Dashboard</h4><p>Private UROVO admin controls.</p></div>':''}
-   ${seller?'<div class="urovo-account-card" onclick="closeAccountPage();openSellerDashboard()"><div class="big">🏪</div><h4>Seller Dashboard</h4><p>Manage your UROVO products and seller orders.</p></div>':''}
+   ${seller?'<div class="urovo-account-card" onclick="closeAccountPage();openSellerDashboard()"><div class="big">🏪</div><h4>Seller Dashboard</h4><p>Manage products, stock, orders and sales.</p></div>':''}
    <div class="urovo-account-card" onclick="logout()"><div class="big">🚪</div><h4>Logout</h4><p>Sign out of this account.</p></div>
   </div>`;
 }
@@ -1134,8 +1123,11 @@ async function openAccountMenu(){
   if(a)a.style.display=isAdmin()?'flex':'none';
   if(s)s.style.display='none';
   if(user && !isAdmin()){
-    const seller=await getMySellerRecord();
-    if(seller&&s)s.style.display='flex';
+    try{
+      const email=String(user.email||'').trim().toLowerCase();
+      const {data,error}=await supabaseClient.from('urovo_sellers').select('active').eq('email',email).maybeSingle();
+      if(!error && data && data.active!==false && s)s.style.display='flex';
+    }catch(e){console.error('Seller menu check failed',e)}
   }
   document.getElementById('accountMenu')?.classList.add('show');
 }
@@ -1151,33 +1143,39 @@ async function accountMenuAction(type){
 async function openSellerDashboard(){
   if(!user){showAccount();return}
   const email=String(user.email||'').trim().toLowerCase();
-  const seller=await getMySellerRecord();
-  if(!seller){toast('Seller Dashboard is available only for active UROVO Sellers.');return}
+  if(!email)return;
+  const {data:seller,error:sellerError}=await supabaseClient.from('urovo_sellers').select('*').eq('email',email).maybeSingle();
+  if(sellerError || !seller || seller.active===false){toast('Seller Dashboard is available only for active sellers.');return}
   let modal=document.getElementById('sellerDashboardModal');
   if(!modal){
-    modal=document.createElement('div');
-    modal.id='sellerDashboardModal';
-    modal.className='modal';
-    modal.innerHTML='<div class="box" style="max-width:950px"><button class="close" onclick="closeModal(\'sellerDashboardModal\')">✕</button><h2 style="font-family:\'Space Grotesk\';margin:15px 0">🏪 Seller Dashboard</h2><div id="sellerDashboardContent"></div></div>';
+    modal=document.createElement('div'); modal.id='sellerDashboardModal'; modal.className='modal';
+    modal.innerHTML='<div class="box" style="max-width:1000px;max-height:92vh;overflow:auto"><button class="close" onclick="closeModal(\'sellerDashboardModal\')">✕</button><h2 style="font-family:\'Space Grotesk\';margin:15px 0">🏪 Seller Dashboard</h2><div id="sellerDashboardContent"></div></div>';
     document.body.appendChild(modal);
   }
-  const c=document.getElementById('sellerDashboardContent');
-  c.innerHTML='<p style="color:var(--muted)">Loading seller dashboard...</p>';
-  modal.classList.add('show');
+  const c=document.getElementById('sellerDashboardContent'); c.innerHTML='<p style="color:var(--muted)">Loading seller dashboard...</p>'; modal.classList.add('show');
   const [pR,oR]=await Promise.all([
     supabaseClient.from('products').select('*').eq('seller_email',email).order('created_at',{ascending:false}),
     supabaseClient.from('orders').select('*').order('created_at',{ascending:false})
   ]);
   if(pR.error){c.innerHTML='<div class="order-card"><p style="color:var(--red)">'+escapeHtml(pR.error.message)+'</p></div>';return}
-  const products=pR.data||[];
-  const orders=[];
-  (oR.data||[]).forEach(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]};if(items.some(i=>String(i.seller_email||'').toLowerCase()===email || products.some(p=>String(p.id)===String(i.id))))orders.push(o)});
-  const active=products.filter(p=>p.active!==false).length;
-  const stock=products.reduce((n,p)=>n+Number(p.stock||0),0);
-  c.innerHTML='<div class="premium-card"><span class="premium-level">ACTIVE SELLER</span><h3 style="margin-top:10px">'+escapeHtml(seller.name||email)+'</h3><p style="color:var(--muted)">'+escapeHtml(email)+'</p></div>'
-   +'<div class="analytics-grid" style="margin-top:12px"><div class="stat"><small>My Products</small><b>'+products.length+'</b></div><div class="stat"><small>Active</small><b>'+active+'</b></div><div class="stat"><small>Stock Units</small><b>'+stock+'</b></div><div class="stat"><small>Orders</small><b>'+orders.length+'</b></div></div>'
-   +'<div class="order-card" style="margin-top:14px"><h3>📦 My Products</h3>'+ (products.length?products.map(p=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)"><span>'+escapeHtml(p.name||'Product')+'</span><b>'+money(p.price||0)+'</b></div>').join(''):'<p style="color:var(--muted)">No products yet.</p>')+'</div>'
-   +'<div class="order-card" style="margin-top:14px"><h3>🛒 My Orders</h3><p style="color:var(--muted)">'+orders.length+' order(s) contain your products.</p></div>';
+  const products=pR.data||[]; const productIds=new Set(products.map(p=>String(p.id))); const orders=[];
+  (oR.data||[]).forEach(o=>{let items=o.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]};if(items.some(i=>String(i.seller_email||'').toLowerCase()===email||productIds.has(String(i.id))))orders.push({...o,_items:items.filter(i=>String(i.seller_email||'').toLowerCase()===email||productIds.has(String(i.id)))});});
+  const active=products.filter(p=>p.active!==false).length, out=products.filter(p=>Number(p.stock||0)<=0).length;
+  const statusCounts={Placed:0,Processing:0,Shipped:0,Delivered:0,Cancelled:0}; let sales=0,delivered=0,cancelled=0,itemsSold=0;
+  const productSales={};
+  orders.forEach(o=>{const st=o.status||'Placed'; if(statusCounts[st]!==undefined)statusCounts[st]++; (o._items||[]).forEach(i=>{const q=Number(i.qty||i.quantity||1),v=Number(i.price||0)*q;itemsSold+=q;if(st==='Delivered')delivered+=v;if(st==='Cancelled')cancelled+=v;if(st!=='Cancelled')sales+=v;const id=String(i.id||i.product_id||i.name);if(!productSales[id])productSales[id]={name:i.name||'Product',qty:0,sales:0};productSales[id].qty+=q;productSales[id].sales+=v;});});
+  const top=Object.values(productSales).sort((a,b)=>b.sales-a.sales).slice(0,5);
+  const moneySafe=v=>typeof money==='function'?money(v):'₹'+Number(v||0).toFixed(2);
+  c.innerHTML=`
+  <div class="premium-card"><span class="premium-level">UROVO SELLER</span><h3 style="margin-top:10px">${escapeHtml(seller.name||email)}</h3><p style="color:var(--muted)">${escapeHtml(email)}</p></div>
+  <div class="analytics-grid" style="margin-top:12px">
+   <div class="stat"><small>Total Products</small><b>${products.length}</b></div><div class="stat"><small>Active</small><b>${active}</b></div><div class="stat"><small>Out of Stock</small><b>${out}</b></div><div class="stat"><small>Orders</small><b>${orders.length}</b></div>
+   <div class="stat"><small>Total Sales</small><b>${moneySafe(sales)}</b></div><div class="stat"><small>Delivered Sales</small><b>${moneySafe(delivered)}</b></div><div class="stat"><small>Items Sold</small><b>${itemsSold}</b></div><div class="stat"><small>Cancelled Value</small><b>${moneySafe(cancelled)}</b></div>
+  </div>
+  <div class="order-card" style="margin-top:14px"><h3>📦 My Products</h3>${products.length?products.map(p=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)"><div><b>${escapeHtml(p.name||'Product')}</b><p style="margin:4px 0;color:var(--muted);font-size:12px">Stock: ${Number(p.stock||0)} · ${p.active===false?'Inactive':'Active'}</p></div><b>${moneySafe(p.price)}</b></div>`).join(''):'<p style="color:var(--muted)">No products yet.</p>'}</div>
+  <div class="order-card" style="margin-top:14px"><h3>📊 Order Status</h3><p>Placed: ${statusCounts.Placed} · Processing: ${statusCounts.Processing} · Shipped: ${statusCounts.Shipped} · Delivered: ${statusCounts.Delivered} · Cancelled: ${statusCounts.Cancelled}</p></div>
+  <div class="order-card" style="margin-top:14px"><h3>🏆 Best Selling Products</h3>${top.length?top.map(x=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)"><span>${escapeHtml(x.name)} · ${x.qty} sold</span><b>${moneySafe(x.sales)}</b></div>`).join(''):'<p style="color:var(--muted)">No sales yet.</p>'}</div>
+  <div class="order-card" style="margin-top:14px"><h3>🛒 My Orders</h3>${orders.length?orders.slice(0,20).map(o=>`<div style="padding:11px 0;border-bottom:1px solid var(--line)"><b>Order ${escapeHtml(String(o.id||'').slice(0,12))}</b><p style="margin:4px 0;color:var(--muted);font-size:12px">${escapeHtml(o.status||'Placed')} · ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):''}</p></div>`).join(''):'<p style="color:var(--muted)">No orders yet.</p>'}</div>`;
 }
 function closeAccountMenu(){document.getElementById('accountMenu')?.classList.remove('show')}
 function accountSection(type){closeAccountMenu();if(type==='orders'){closeAccountPage();openOrders();return}if(type==='wishlist'){closeAccountPage();openWishlist();return}renderAccountSection(type)}
