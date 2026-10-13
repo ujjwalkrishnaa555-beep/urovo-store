@@ -1085,11 +1085,22 @@ function openAccountPage(){
 }
 async function getMySellerRecord(){
   if(!user||isAdmin())return null;
+  const email=String(user.email||'').trim().toLowerCase();
+  if(!email)return null;
   try{
-    const {data,error}=await supabaseClient.rpc('urovo_get_my_seller');
-    if(error){console.warn('Seller status:',error.message);return null}
-    if(!data||data.active===false)return null;
-    return data;
+    // First try the seller table directly. This works when the seller has a
+    // SELECT policy for their own row.
+    const direct=await supabaseClient.from('urovo_sellers').select('email,name,active,granted_by,created_at').eq('email',email).maybeSingle();
+    if(!direct.error && direct.data){
+      if(direct.data.active===false)return null;
+      return direct.data;
+    }
+    // Fallback to the secure RPC so the dashboard still works when RLS
+    // blocks direct table reads.
+    const rpc=await supabaseClient.rpc('urovo_get_my_seller');
+    if(!rpc.error && rpc.data && rpc.data.active!==false)return rpc.data;
+    console.warn('Seller status:',direct.error?.message||rpc.error?.message||'seller record not found');
+    return null;
   }catch(e){console.warn('Seller status:',e);return null}
 }
 async function renderFullAccount(){
