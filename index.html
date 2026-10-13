@@ -481,7 +481,7 @@ function openAdmin(){if(!requireAdmin())return;$("adminModal").classList.add("sh
 async function renderCEOSellers(){
  if(!requireAdmin())return;
  const c=$("adminContent");
- c.innerHTML=`<div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Only a Gmail that is already registered in UROVO can receive a Seller Badge.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Registered seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
+ c.innerHTML=`<div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">CEO can grant a UROVO Seller Badge to a registered UROVO account.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
  const {data,error}=await supabaseClient.from("urovo_sellers").select("*").order("created_at",{ascending:false});
  if(error){$("ceoSellerList").innerHTML=`<div class="order-card"><p style="color:#ff5555">Seller table error: ${escapeHtml(error.message)}</p><p style="color:var(--muted);font-size:12px">Make sure the <b>urovo_sellers</b> table exists in Supabase.</p></div>`;return}
  renderCEOSellerList(data||[]);
@@ -496,12 +496,13 @@ async function ceoGrantSeller(){
  const name=$("ceoSellerName")?.value.trim();
  if(!email){toast("Enter seller Gmail");return}
  if(email===ADMIN_EMAIL.toLowerCase()){toast("CEO Gmail cannot be added as Seller");return}
- const {data:registered,error:regError}=await supabaseClient.from("urovo_user_activity").select("email,name").eq("email",email).maybeSingle();
- if(regError){toast("Could not verify account: "+regError.message);return}
- if(!registered){toast("This Gmail has not registered/sign-in to UROVO yet");return}
- const {error}=await supabaseClient.from("urovo_sellers").upsert({email,name:name||registered.name||email.split("@")[0],active:true,granted_by:ADMIN_EMAIL},{onConflict:"email"});
- if(error){toast("Seller save failed: "+error.message);return}
- toast("🏷️ Seller Badge granted");renderCEOSellers();
+ const sellerName=name||email.split("@")[0];
+ const {error}=await supabaseClient.from("urovo_sellers").upsert({email,name:sellerName,active:true,granted_by:ADMIN_EMAIL},{onConflict:"email"});
+ if(error){toast("Seller save failed: "+error.message);console.error(error);return}
+ toast("🏷️ Seller Badge granted to "+email);
+ if($("ceoSellerEmail"))$("ceoSellerEmail").value="";
+ if($("ceoSellerName"))$("ceoSellerName").value="";
+ renderCEOSellers();
 }
 async function ceoToggleSeller(email,active){
  if(!requireAdmin())return;
@@ -1082,15 +1083,25 @@ function openAccountPage(){
   if(!user){_legacyShowAccount?.();return;}
   renderFullAccount();document.getElementById('accountPage')?.classList.add('show');
 }
-function renderFullAccount(){
+async function getMySellerRecord(){
+  if(!user||isAdmin())return null;
+  try{
+    const {data,error}=await supabaseClient.rpc('urovo_get_my_seller');
+    if(error){console.warn('Seller status:',error.message);return null}
+    if(!data||data.active===false)return null;
+    return data;
+  }catch(e){console.warn('Seller status:',e);return null}
+}
+async function renderFullAccount(){
   const c=document.getElementById('fullAccountContent');if(!c||!user)return;
   const mine=orders.filter(o=>o.user===user.email);const count=mine.length;
-  const level=isAdmin()?'CEO':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
-  const initials=String(user.name||'U').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
   const admin=isAdmin();
+  const seller=await getMySellerRecord();
+  const level=admin?'CEO':seller?'UROVO SELLER':(count>=10?'ELITE':count>=5?'GOLD':count>=2?'SILVER':'MEMBER');
+  const initials=String(user.name||'U').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('accountPageTitle')?.replaceChildren(document.createTextNode(admin?'CEO':'My Account'));
   document.getElementById('accountMenuTitle')?.replaceChildren(document.createTextNode(admin?'CEO Menu':'Account Menu'));
-  c.innerHTML=`<div class="urovo-profile-hero"><div class="urovo-avatar">${escapeHtml(initials)}</div><div style="flex:1"><div class="premium-level">${isAdmin()?"CEO":level}${isAdmin()?"":" MEMBER"}</div><h3>${escapeHtml(user.name||'UROVO Customer')}</h3><p>${escapeHtml(user.email||'')}</p></div></div>
+  c.innerHTML=`<div class="urovo-profile-hero"><div class="urovo-avatar">${escapeHtml(initials)}</div><div style="flex:1"><div class="premium-level">${escapeHtml(level)}</div><h3>${escapeHtml(user.name||'UROVO Customer')}</h3><p>${escapeHtml(user.email||'')}</p></div></div>
   <div class="urovo-account-grid">
    <div class="urovo-account-card" onclick="accountSection('orders')"><div class="big">📦</div><h4>Order History</h4><p>${count} order${count===1?'':'s'} · Track, invoice and manage your orders.</p></div>
    <div class="urovo-account-card" onclick="accountSection('recent')"><div class="big">🕘</div><h4>Recently Viewed</h4><p>Your latest viewed UROVO products.</p></div>
@@ -1102,6 +1113,7 @@ function renderFullAccount(){
    <div class="urovo-account-card" onclick="accountSection('help')"><div class="big">💬</div><h4>Help & Support</h4><p>Order help, FAQ and WhatsApp support.</p></div>
    <div class="urovo-account-card" onclick="accountSection('policies')"><div class="big">📄</div><h4>Policies</h4><p>Shipping, returns, privacy and terms.</p></div>
    ${isAdmin()?'<div class="urovo-account-card" onclick="closeAccountPage();openAdmin()"><div class="big">👑</div><h4>CEO Dashboard</h4><p>Private UROVO admin controls.</p></div>':''}
+   ${seller?'<div class="urovo-account-card" onclick="closeAccountPage();openSellerDashboard()"><div class="big">🏪</div><h4>Seller Dashboard</h4><p>Manage your UROVO products and seller orders.</p></div>':''}
    <div class="urovo-account-card" onclick="logout()"><div class="big">🚪</div><h4>Logout</h4><p>Sign out of this account.</p></div>
   </div>`;
 }
@@ -1111,11 +1123,8 @@ async function openAccountMenu(){
   if(a)a.style.display=isAdmin()?'flex':'none';
   if(s)s.style.display='none';
   if(user && !isAdmin()){
-    try{
-      const email=String(user.email||'').trim().toLowerCase();
-      const {data,error}=await supabaseClient.from('urovo_sellers').select('active').eq('email',email).maybeSingle();
-      if(!error && data && data.active!==false && s)s.style.display='flex';
-    }catch(e){console.error('Seller menu check failed',e)}
+    const seller=await getMySellerRecord();
+    if(seller&&s)s.style.display='flex';
   }
   document.getElementById('accountMenu')?.classList.add('show');
 }
@@ -1131,8 +1140,8 @@ async function accountMenuAction(type){
 async function openSellerDashboard(){
   if(!user){showAccount();return}
   const email=String(user.email||'').trim().toLowerCase();
-  const {data:seller,error:sellerError}=await supabaseClient.from('urovo_sellers').select('*').eq('email',email).maybeSingle();
-  if(sellerError || !seller || seller.active===false){toast('Seller Dashboard is available only for active sellers.');return}
+  const seller=await getMySellerRecord();
+  if(!seller){toast('Seller Dashboard is available only for active UROVO Sellers.');return}
   let modal=document.getElementById('sellerDashboardModal');
   if(!modal){
     modal=document.createElement('div');
