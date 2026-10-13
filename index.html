@@ -312,39 +312,48 @@ function renderAccount(){
  }
 }
 function accountTab(type){
- $("loginTab").classList.toggle("active",type==="login");$("signupTab").classList.toggle("active",type==="signup");
- $("authArea").innerHTML=type==="login"?`<form class="form" onsubmit="sendLoginOtp(event)"><input id="loginEmail" type="email" required placeholder="Email address"><button class="primary" type="submit">Send OTP →</button></form><p style="color:var(--muted);font-size:12px;margin-top:8px">We’ll send a one-time verification code to your email.</p>`:`<form class="form" onsubmit="sendSignupOtp(event)"><input id="signupName" required placeholder="Full name"><input id="signupEmail" type="email" required placeholder="Email address"><button class="primary" type="submit">Send OTP & Create Account →</button></form><p style="color:var(--muted);font-size:12px;margin-top:8px">No admin permission is required. Verify your email with the OTP.</p>`
+ $("loginTab").classList.toggle("active",type==="login");
+ $("signupTab").classList.toggle("active",type==="signup");
+ $("authArea").innerHTML=type==="login"?`<form class="form" onsubmit="login(event)"><input id="loginEmail" type="email" required autocomplete="email" placeholder="Email address"><input id="loginPassword" type="password" required autocomplete="current-password" placeholder="Password"><button class="primary" type="submit">Login →</button></form><button class="secondary" style="width:100%;margin-top:10px" onclick="forgotPassword()">Forgot Password?</button>`:`<form class="form" onsubmit="signup(event)"><input id="signupName" required autocomplete="name" placeholder="Full name"><input id="signupEmail" type="email" required autocomplete="email" placeholder="Email address"><input id="signupPassword" type="password" required autocomplete="new-password" minlength="6" placeholder="Password (minimum 6 characters)"><input id="signupPassword2" type="password" required autocomplete="new-password" minlength="6" placeholder="Confirm password"><button class="primary" type="submit">Create Account →</button></form><p style="color:var(--muted);font-size:12px;margin-top:8px">Use your Gmail/email and password. No OTP is required.</p>`;
 }
-function renderOtpStep(mode,email,name=""){
- const area=$("authArea");
- area.innerHTML=`<form class="form" onsubmit="verifyEmailOtp(event,'${mode}')"><input id="otpEmail" type="email" value="${escapeHtml(email)}" readonly><input id="emailOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required placeholder="Enter 6-digit OTP"><button class="primary" type="submit">Verify OTP ✓</button></form><button class="secondary" style="width:100%;margin-top:10px" onclick="${mode==='signup'?`accountTab('signup')`:`accountTab('login')`}">← Change Email</button><p style="color:var(--muted);font-size:12px;margin-top:8px">Check your email for the 6-digit code. The code expires after a short time.</p>`;
- window.__urovoOtp={mode,email,name};
- setTimeout(()=>$("emailOtp")?.focus(),50);
-}
-async function sendLoginOtp(e){
- e.preventDefault();const email=$("loginEmail").value.trim().toLowerCase();
- const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
+async function signup(e){
+ e.preventDefault();
+ const name=$("signupName").value.trim();
+ const email=$("signupEmail").value.trim().toLowerCase();
+ const password=$("signupPassword").value;
+ const password2=$("signupPassword2").value;
+ if(password.length<6){toast('Password must be at least 6 characters');return}
+ if(password!==password2){toast('Passwords do not match');return}
+ const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name}}});
  if(error){toast(error.message);return}
- renderOtpStep('login',email);toast('📩 OTP sent to your email');
+ if(data.user){
+   user={name:name||email.split('@')[0],email:data.user.email||email};
+   save();
+   await recordUserActivity('signup');
+   toast(data.session?'Account created ❤️':'Account created. Please check email confirmation if enabled.');
+   renderAccount();
+ }
 }
-async function sendSignupOtp(e){
- e.preventDefault();const name=$("signupName").value.trim(),email=$("signupEmail").value.trim().toLowerCase();
- const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:true,data:{name}}});
+async function login(e){
+ e.preventDefault();
+ const email=$("loginEmail").value.trim().toLowerCase();
+ const password=$("loginPassword").value;
+ const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
  if(error){toast(error.message);return}
- renderOtpStep('signup',email,name);toast('📩 OTP sent to your email');
+ const u=data.user;
+ user={name:u.user_metadata?.name||u.email?.split('@')[0]||'UROVO Customer',email:u.email||email};
+ save();
+ await recordUserActivity('login');
+ toast('Welcome back 👋');
+ renderAccount();
 }
-async function verifyEmailOtp(e,mode){
- e.preventDefault();const email=$("otpEmail").value.trim().toLowerCase(),token=$("emailOtp").value.trim(),name=window.__urovoOtp?.name||email.split('@')[0];
- if(!/^\d{6}$/.test(token)){toast('Enter the 6-digit OTP');return}
- const {data,error}=await supabaseClient.auth.verifyOtp({email,token,type:'email'});
+async function forgotPassword(){
+ const email=$("loginEmail")?.value.trim().toLowerCase();
+ if(!email){toast('Enter your email address first');return}
+ const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});
  if(error){toast(error.message);return}
- if(data.user && mode==='signup' && name){await supabaseClient.auth.updateUser({data:{name}})}
- const finalName=data.user?.user_metadata?.name||name||email.split('@')[0];
- user={name:finalName,email:data.user.email||email};save();await recordUserActivity(mode==='signup'?'signup':'login');
- toast(mode==='signup'?'Account created ❤️':'Welcome back 👋');renderAccount();
+ toast('Password reset email sent 📩');
 }
-async function signup(e){e.preventDefault();return sendSignupOtp(e)}
-async function login(e){e.preventDefault();return sendLoginOtp(e)}
 async function logout(){const {error}=await supabaseClient.auth.signOut();if(error){toast(error.message);return}user=null;save();toast("Logged out");renderAccount()}
 
 async function loadSupabaseSession(){
@@ -1106,7 +1115,7 @@ function renderAccountSection(type){
  if(type==='recent'){const items=getRecent();html+=items.length?`<div class="full-search-results">${items.map(p=>{const img=p.image?`<img src="${escapeHtml(p.image)}">`:`<div style="height:170px;display:flex;align-items:center;justify-content:center;font-size:60px;background:var(--surface2)">${p.icon||'📦'}</div>`;return `<div class="full-search-result" onclick="closeAccountPage();openProduct('${String(p.id)}')">${img}<div class="rs-info"><h4>${escapeHtml(p.name)}</h4><p>${money(p.price)}</p></div></div>`}).join('')}</div>`:'<div class="search-empty">🕘<h3 style="color:var(--text);margin:10px">No recently viewed products</h3><p>Products you open will appear here.</p></div>'}
  else if(type==='addresses') html+=`<div class="order-card"><h3>📍 Delivery Addresses</h3><p>Addresses can be added during checkout. A dedicated saved-address database can be connected later without changing the Account UI.</p></div>`;
  else if(type==='payments') html+=`<div class="order-card"><h3>💳 Payment Preferences</h3><p>Cash on Delivery and online payment options are shown at checkout. No card details are stored in this frontend.</p></div>`;
- else if(type==='security') html+=`<div class="order-card"><h3>🔐 Account Security</h3><p>Use Forgot Password / password reset from Login. Keep your email verified and never share OTPs.</p><button class="secondary" style="width:100%;margin-top:12px" onclick="logout()">Logout</button></div>`;
+ else if(type==='security') html+=`<div class="order-card"><h3>🔐 Account Security</h3><p>Use Forgot Password / password reset from Login. Keep your password private and never share it.</p><button class="secondary" style="width:100%;margin-top:12px" onclick="logout()">Logout</button></div>`;
  else if(type==='notifications') html+=`<div class="order-card"><h3>🔔 Notifications</h3><p>Order updates and account messages can be shown here. Browser notification permissions can be added later.</p></div>`;
  else if(type==='help') html+=`<div class="order-card"><h3>💬 UROVO Support</h3><p>For order help, open Order History. You can also contact UROVO through WhatsApp.</p><button class="primary" style="width:100%;margin-top:12px" onclick="window.open('https://wa.me/918590921747?text='+encodeURIComponent('Hello UROVO CEO 👋, I need help with my order.'),'_blank')">💬 WhatsApp Help</button></div>`;
  else if(type==='policies') html+=`<div class="order-card"><button class="secondary" style="width:100%;margin-bottom:8px" onclick="urovoInfo('shipping')">Shipping Policy</button><button class="secondary" style="width:100%;margin-bottom:8px" onclick="urovoInfo('returns')">Returns & Refunds</button><button class="secondary" style="width:100%;margin-bottom:8px" onclick="urovoInfo('privacy')">Privacy Policy</button><button class="secondary" style="width:100%" onclick="urovoInfo('terms')">Terms & Conditions</button></div>`;
