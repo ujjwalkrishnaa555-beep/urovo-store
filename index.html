@@ -79,7 +79,17 @@ function save(){localStorage.setItem(CART,JSON.stringify(cart));localStorage.set
 function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2400)}
 function closeModal(id){$(id).classList.remove("show")}
 function isAdmin(){return !!user&&String(user.email||"").toLowerCase()===ADMIN_EMAIL.toLowerCase()}
-async function recordUserActivity(event){if(!user?.email)return;try{const now=new Date().toISOString();const payload={email:user.email.toLowerCase(),name:user.name||user.email.split("@")[0],last_seen:now};if(event==="login"||event==="signup")payload.last_login=now;const {error}=await supabaseClient.from("urovo_user_activity").upsert(payload,{onConflict:"email"});if(error)console.warn("User activity:",error.message)}catch(e){console.warn("User activity:",e.message)}}
+async function recordUserActivity(event){
+  if(!user?.email||!supabaseClient)return;
+  try{
+    const now=new Date().toISOString();
+    const email=String(user.email).trim().toLowerCase();
+    const payload={email,name:user.name||email.split("@")[0],last_seen:now};
+    if(event==="login"||event==="signup")payload.last_login=now;
+    const {error}=await supabaseClient.from("urovo_user_activity").upsert(payload,{onConflict:"email"});
+    if(error)console.warn("User activity:",error.message);
+  }catch(e){console.warn("User activity:",e.message)}
+}
 function requireAdmin(){if(!isAdmin()){toast("Admin access only");return false}return true}
 
 function renderProducts(){
@@ -207,12 +217,28 @@ function accountTab(type){
  $("loginTab").classList.toggle("active",type==="login");$("signupTab").classList.toggle("active",type==="signup");
  $("authArea").innerHTML=type==="login"?`<form class="form" onsubmit="login(event)"><input id="loginEmail" type="email" required placeholder="Email"><input id="loginPassword" type="password" required placeholder="Password"><button class="primary" type="submit">Login →</button></form>`:`<form class="form" onsubmit="signup(event)"><input id="signupName" required placeholder="Full name"><input id="signupEmail" type="email" required placeholder="Email"><input id="signupPassword" type="password" minlength="6" required placeholder="Password"><button class="primary" type="submit">Create Account →</button></form>`
 }
-async function signup(e){e.preventDefault();const name=$("signupName").value.trim(),email=$("signupEmail").value.trim().toLowerCase(),password=$("signupPassword").value;const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name}}});if(error){toast(error.message);return}if(data.session){user={name,email};save();recordUserActivity("signup");toast("Account created ❤️");renderAccount()}else{toast("Account created. Check your email to verify.");accountTab("login")}}
-async function login(e){e.preventDefault();const email=$("loginEmail").value.trim().toLowerCase(),password=$("loginPassword").value;const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){toast(error.message);return}user={name:data.user.user_metadata?.name||email.split("@")[0],email:data.user.email};save();recordUserActivity("login");toast("Welcome back 👋");renderAccount()}
+async function signup(e){e.preventDefault();const name=$("signupName").value.trim(),email=$("signupEmail").value.trim().toLowerCase(),password=$("signupPassword").value;const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name}}});if(error){toast(error.message);return}if(data.session){user={name,email};save();await recordUserActivity("signup");toast("Account created ❤️");renderAccount()}else{toast("Account created. Check your email to verify.");accountTab("login")}}
+async function login(e){e.preventDefault();const email=$("loginEmail").value.trim().toLowerCase(),password=$("loginPassword").value;const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){toast(error.message);return}user={name:data.user.user_metadata?.name||email.split("@")[0],email:data.user.email};save();await recordUserActivity("login");toast("Welcome back 👋");renderAccount()}
 async function logout(){const {error}=await supabaseClient.auth.signOut();if(error){toast(error.message);return}user=null;save();toast("Logged out");renderAccount()}
 
-async function loadSupabaseSession(){const {data,error}=await supabaseClient.auth.getSession();if(error){console.error(error);return}if(data.session?.user){const u=data.session.user;user={name:u.user_metadata?.name||u.email?.split("@")[0]||"UROVO Customer",email:u.email};save();}}
-supabaseClient.auth.onAuthStateChange((event,session)=>{if(session?.user){user={name:session.user.user_metadata?.name||session.user.email?.split("@")[0]||"UROVO Customer",email:session.user.email};save()}else if(event==="SIGNED_OUT"){user=null;save()}});
+async function loadSupabaseSession(){
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error){console.error(error);return}
+  if(data.session?.user){
+    const u=data.session.user;
+    user={name:u.user_metadata?.name||u.email?.split("@")[0]||"UROVO Customer",email:u.email};
+    save();
+    await recordUserActivity("session");
+  }
+}
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+  if(session?.user){
+    user={name:session.user.user_metadata?.name||session.user.email?.split("@")[0]||"UROVO Customer",email:session.user.email};
+    save();
+    setTimeout(()=>recordUserActivity(event==="SIGNED_IN"?"login":"session"),0);
+  }else if(event==="SIGNED_OUT"){user=null;save();}
+});
+setInterval(()=>{if(user?.email)recordUserActivity("heartbeat")},60000);
 
 function productImagesFromRow(p){
   let imgs=[];
