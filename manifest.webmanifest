@@ -1,0 +1,11 @@
+{
+  "name": "UROVO Store",
+  "short_name": "UROVO",
+  "description": "UROVO — Upgrade Your Everyday",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#070707",
+  "theme_color": "#c8ff00"
+}
