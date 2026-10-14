@@ -452,7 +452,11 @@ supabaseClient.auth.onAuthStateChange((event,session)=>{
   if(session?.user){
     user={name:session.user.user_metadata?.name||session.user.email?.split("@")[0]||"UROVO Customer",email:session.user.email};
     save();
-    setTimeout(()=>recordUserActivity(event==="SIGNED_IN"?"login":"session"),0);
+    setTimeout(async()=>{
+      await recordUserActivity(event==="SIGNED_IN"?"login":"session");
+      await loadNotifications();
+      startNotificationPolling();
+    },0);
   }else if(event==="SIGNED_OUT"){user=null;save();clearInterval(notificationTimer);urovoNotifications=[];updateNotificationBadge();}
 });
 setInterval(()=>{if(user?.email)recordUserActivity("heartbeat")},60000);
@@ -620,10 +624,19 @@ async function saveCEOHomepage(){
 /* UROVO NOTIFICATIONS / CEO BROADCAST CHAT */
 let urovoNotifications=[];
 let notificationTimer=null;
-async function loadNotifications(){
-  if(!user?.email)return;
+async function getNotificationUserEmail(){
   try{
-    const {data,error}=await supabaseClient.from('urovo_notifications').select('*').eq('recipient_email',String(user.email).trim().toLowerCase()).order('created_at',{ascending:false}).limit(100);
+    const {data,error}=await supabaseClient.auth.getUser();
+    if(error||!data?.user?.email)return null;
+    return String(data.user.email).trim().toLowerCase();
+  }catch(e){return null}
+}
+async function loadNotifications(){
+  const authEmail=await getNotificationUserEmail();
+  if(authEmail) user={...(user||{}),email:authEmail};
+  if(!authEmail)return;
+  try{
+    const {data,error}=await supabaseClient.from('urovo_notifications').select('*').eq('recipient_email',authEmail).order('created_at',{ascending:false}).limit(100);
     if(error){console.warn('Notifications:',error.message);return}
     urovoNotifications=data||[]; updateNotificationBadge();
     if($('notificationsModal')?.classList.contains('show'))renderNotifications();
@@ -650,13 +663,15 @@ function renderNotifications(){
 }
 
 async function markNotificationRead(id){
-  if(!user)return;
-  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('recipient_email',String(user.email).trim().toLowerCase());
+  const email=await getNotificationUserEmail();
+  if(!email)return;
+  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('recipient_email',email);
   if(error){toast(error.message);return} await loadNotifications(); renderNotifications();
 }
 async function markAllNotificationsRead(){
-  if(!user)return;
-  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('recipient_email',String(user.email).trim().toLowerCase()).is('read_at',null);
+  const email=await getNotificationUserEmail();
+  if(!email)return;
+  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('recipient_email',email).is('read_at',null);
   if(error){toast(error.message);return} await loadNotifications(); renderNotifications(); toast('All notifications marked as read');
 }
 
@@ -686,23 +701,20 @@ async function ceoBroadcastNotification(){
     image_url=pub?.data?.publicUrl||null;
   }
 
-  const {data:users,error:userError}=await supabaseClient.from('urovo_user_activity').select('email,name');
-  if(userError){toast('Could not load users: '+userError.message);return}
-  const recipients=[...(new Map((users||[]).filter(u=>u.email).map(u=>[String(u.email).trim().toLowerCase(),u]))).values()];
-  if(!recipients.length){toast('No registered users found');return}
-  const rows=recipients.map(u=>({
-    recipient_email:String(u.email).trim().toLowerCase(),
-    recipient_name:u.name||String(u.email).split('@')[0],
-    title,message,image_url,sent_by:ADMIN_EMAIL
-  }));
-  const {error}=await supabaseClient.from('urovo_notifications').insert(rows);
-  if(error){toast('Notification send failed: '+error.message);return}
+  const {data:sendResult,error:sendError}=await supabaseClient.rpc('urovo_send_notification_to_all',{
+    p_title:title,
+    p_message:message,
+    p_image_url:image_url
+  });
+  if(sendError){toast('Notification send failed: '+sendError.message);return}
+  const sentCount=Number(sendResult?.sent_count||0);
+  if(!sentCount){toast('No registered users found');return}
   $('ceoNotifyTitle').value='';
   $('ceoNotifyMessage').value='';
   if($('ceoNotifyImage'))$('ceoNotifyImage').value='';
   if($('ceoNotifyImageName'))$('ceoNotifyImageName').textContent='No image selected';
   if($('ceoNotifyPreview')){$('ceoNotifyPreview').src='';$('ceoNotifyPreview').classList.remove('show')}
-  toast('🔔 Notification sent to '+recipients.length+' users');
+  toast('🔔 Notification sent to '+sentCount+' users');
   renderCEONotifications();
 }
 function previewNotificationImage(input){
@@ -728,7 +740,7 @@ async function renderCEONotifications(){
   const c=$('adminContent');
   c.innerHTML=`<div class="order-card">
     <h3>🔔 Notification & Chat</h3>
-    <p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Send a premium notification to every user who has logged in to UROVO.</p>
+    <p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Send a premium notification to every registered UROVO account, including active sellers.</p>
     <div class="ceo-notification-compose">
       <input id="ceoNotifyTitle" class="input" placeholder="Notification title">
       <textarea id="ceoNotifyMessage" class="input" rows="5" placeholder="Write your message..."></textarea>
