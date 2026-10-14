@@ -452,15 +452,18 @@ supabaseClient.auth.onAuthStateChange((event,session)=>{
   if(session?.user){
     user={name:session.user.user_metadata?.name||session.user.email?.split("@")[0]||"UROVO Customer",email:session.user.email};
     save();
-    setTimeout(async()=>{
+    setTimeout(async ()=>{
       await recordUserActivity(event==="SIGNED_IN"?"login":"session");
-      await loadNotifications();
-      startNotificationPolling();
+      if(event==="SIGNED_IN"){
+        await loadNotifications();
+        startNotificationPolling();
+      }
     },0);
   }else if(event==="SIGNED_OUT"){user=null;save();clearInterval(notificationTimer);urovoNotifications=[];updateNotificationBadge();}
 });
 setInterval(()=>{if(user?.email)recordUserActivity("heartbeat")},60000);
 loadHomeSettings();
+setTimeout(()=>{if(user?.email){loadNotifications();startNotificationPolling()}},1200);
 
 function productImagesFromRow(p){
   let imgs=[];
@@ -624,19 +627,10 @@ async function saveCEOHomepage(){
 /* UROVO NOTIFICATIONS / CEO BROADCAST CHAT */
 let urovoNotifications=[];
 let notificationTimer=null;
-async function getNotificationUserEmail(){
-  try{
-    const {data,error}=await supabaseClient.auth.getUser();
-    if(error||!data?.user?.email)return null;
-    return String(data.user.email).trim().toLowerCase();
-  }catch(e){return null}
-}
 async function loadNotifications(){
-  const authEmail=await getNotificationUserEmail();
-  if(authEmail) user={...(user||{}),email:authEmail};
-  if(!authEmail)return;
+  if(!user?.email)return;
   try{
-    const {data,error}=await supabaseClient.from('urovo_notifications').select('*').eq('recipient_email',authEmail).order('created_at',{ascending:false}).limit(100);
+    const {data,error}=await supabaseClient.from('urovo_notifications').select('*').eq('recipient_email',String(user.email).trim().toLowerCase()).order('created_at',{ascending:false}).limit(100);
     if(error){console.warn('Notifications:',error.message);return}
     urovoNotifications=data||[]; updateNotificationBadge();
     if($('notificationsModal')?.classList.contains('show'))renderNotifications();
@@ -663,15 +657,13 @@ function renderNotifications(){
 }
 
 async function markNotificationRead(id){
-  const email=await getNotificationUserEmail();
-  if(!email)return;
-  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('recipient_email',email);
+  if(!user)return;
+  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('recipient_email',String(user.email).trim().toLowerCase());
   if(error){toast(error.message);return} await loadNotifications(); renderNotifications();
 }
 async function markAllNotificationsRead(){
-  const email=await getNotificationUserEmail();
-  if(!email)return;
-  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('recipient_email',email).is('read_at',null);
+  if(!user)return;
+  const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('recipient_email',String(user.email).trim().toLowerCase()).is('read_at',null);
   if(error){toast(error.message);return} await loadNotifications(); renderNotifications(); toast('All notifications marked as read');
 }
 
@@ -701,14 +693,20 @@ async function ceoBroadcastNotification(){
     image_url=pub?.data?.publicUrl||null;
   }
 
-  const {data:sendResult,error:sendError}=await supabaseClient.rpc('urovo_send_notification_to_all',{
-    p_title:title,
-    p_message:message,
-    p_image_url:image_url
-  });
-  if(sendError){toast('Notification send failed: '+sendError.message);return}
-  const sentCount=Number(sendResult?.sent_count||0);
-  if(!sentCount){toast('No registered users found');return}
+  const {data:result,error:sendError}=await supabaseClient.rpc(
+    'urovo_send_notification_to_all',
+    {p_title:title,p_message:message,p_image_url:image_url}
+  );
+  if(sendError){
+    toast('Notification send failed: '+sendError.message);
+    console.error('urovo_send_notification_to_all:',sendError);
+    return;
+  }
+  const sentCount=Number(result?.sent_count||0);
+  if(!sentCount){
+    toast('No registered users found');
+    return;
+  }
   $('ceoNotifyTitle').value='';
   $('ceoNotifyMessage').value='';
   if($('ceoNotifyImage'))$('ceoNotifyImage').value='';
@@ -740,7 +738,7 @@ async function renderCEONotifications(){
   const c=$('adminContent');
   c.innerHTML=`<div class="order-card">
     <h3>🔔 Notification & Chat</h3>
-    <p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Send a premium notification to every registered UROVO account, including active sellers.</p>
+    <p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Send a premium notification to every user who has logged in to UROVO.</p>
     <div class="ceo-notification-compose">
       <input id="ceoNotifyTitle" class="input" placeholder="Notification title">
       <textarea id="ceoNotifyMessage" class="input" rows="5" placeholder="Write your message..."></textarea>
@@ -788,14 +786,38 @@ async function renderAdminUsers(){
   if(!requireAdmin())return;
   const c=$('adminContent');
   c.innerHTML='<div class="ceo-user-count"><div class="stat"><small>Total Signed-in Users</small><b id="ceoUserCount">—</b></div><div class="stat"><small>Active Now</small><b id="ceoActiveUserCount">—</b></div><div class="stat"><small>Recent Logins</small><b id="ceoRecentLoginCount">—</b></div></div><div class="order-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3>👥 User Accounts</h3><button class="secondary" onclick="renderAdminUsers()">↻ Refresh</button></div><div id="adminUsersList"><p style="color:var(--muted);margin-top:10px">Loading users...</p></div></div>';
-  const {data,error}=await supabaseClient.from('urovo_user_activity').select('*').order('last_seen',{ascending:false});
-  if(error){$('adminUsersList').innerHTML=`<p style="color:var(--red)">${escapeHtml(error.message)}</p>`;return}
-  const rows=data||[], now=Date.now(), active=rows.filter(u=>u.last_seen&&(now-new Date(u.last_seen).getTime()<5*60*1000)).length, recent=rows.filter(u=>u.last_login&&(now-new Date(u.last_login).getTime()<24*60*60*1000)).length;
-  $('ceoUserCount').textContent=rows.length;$('ceoActiveUserCount').textContent=active;$('ceoRecentLoginCount').textContent=recent;
-  $('adminUsersList').innerHTML=!rows.length?'<div class="notification-empty">No signed-in users recorded yet.</div>':rows.map(u=>{
-    const seen=u.last_seen?new Date(u.last_seen):null, isActive=seen&&(now-seen.getTime()<5*60*1000);
-    return `<div class="ceo-notification-item"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h3>${escapeHtml(u.name||'UROVO User')}</h3><p style="color:var(--muted);margin-top:4px">${escapeHtml(u.email||'')}</p></div><span class="order-status-pill" style="color:${isActive?'var(--lime)':'var(--muted)'}">● ${isActive?'Active':'Offline'}</span></div><div class="ceo-user-detail"><span><b>Joined</b><br>${u.created_at?new Date(u.created_at).toLocaleString('en-IN'):'Not recorded'}</span><span><b>Last Login</b><br>${u.last_login?new Date(u.last_login).toLocaleString('en-IN'):'Not recorded'}</span><span><b>Last Seen</b><br>${u.last_seen?new Date(u.last_seen).toLocaleString('en-IN'):'Not recorded'}</span><span><b>Email</b><br>${escapeHtml(u.email||'')}</span></div></div>`;
-  }).join('');
+  const {data,error}=await supabaseClient.rpc('urovo_get_ceo_users');
+  if(error){
+    $('adminUsersList').innerHTML=`<p style="color:var(--red)">${escapeHtml(error.message)}</p>`;
+    return;
+  }
+  const rows=data||[], now=Date.now();
+  const active=rows.filter(u=>u.last_seen&&(now-new Date(u.last_seen).getTime()<5*60*1000)).length;
+  const recent=rows.filter(u=>u.last_login&&(now-new Date(u.last_login).getTime()<24*60*60*1000)).length;
+  $('ceoUserCount').textContent=rows.length;
+  $('ceoActiveUserCount').textContent=active;
+  $('ceoRecentLoginCount').textContent=recent;
+  $('adminUsersList').innerHTML=!rows.length
+    ? '<div class="notification-empty">No registered users found.</div>'
+    : rows.map(u=>{
+      const seen=u.last_seen?new Date(u.last_seen):null;
+      const isActive=seen&&(now-seen.getTime()<5*60*1000);
+      return `<div class="ceo-notification-item">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+          <div>
+            <h3>${escapeHtml(u.name||'UROVO User')}</h3>
+            <p style="color:var(--muted);margin-top:4px">${escapeHtml(u.email||'')}</p>
+          </div>
+          <span class="order-status-pill" style="color:${isActive?'var(--lime)':'var(--muted)'}">● ${isActive?'Active':'Offline'}</span>
+        </div>
+        <div class="ceo-user-detail">
+          <span><b>Joined</b><br>${u.created_at?new Date(u.created_at).toLocaleString('en-IN'):'Not recorded'}</span>
+          <span><b>Last Login</b><br>${u.last_login?new Date(u.last_login).toLocaleString('en-IN'):'Not recorded'}</span>
+          <span><b>Last Seen</b><br>${u.last_seen?new Date(u.last_seen).toLocaleString('en-IN'):'Not recorded'}</span>
+          <span><b>Email</b><br>${escapeHtml(u.email||'')}</span>
+        </div>
+      </div>`;
+    }).join('');
 }
 function adminTab(tab){
   if(!requireAdmin())return;
