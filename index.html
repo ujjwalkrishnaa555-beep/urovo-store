@@ -316,6 +316,7 @@ header,.hero,.home-ads,.search-wrap,.categories,.section,.features,.deal,.urovo-
 .urovo-v43-combined-note{border-radius:12px;padding:10px;margin-top:8px;background:rgba(255,180,0,.06);border:1px solid rgba(255,180,0,.23);color:var(--muted);font-size:11px;line-height:1.5}
 @media(max-width:650px){.urovo-v43-order-stats,.urovo-v43-seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.urovo-v43-order-tools{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.urovo-v43-order-tools span{grid-column:1/-1;text-align:left}.urovo-v43-order-main{grid-template-columns:1fr}.urovo-v43-category-form{grid-template-columns:1fr}.urovo-v43-category-row{flex-wrap:wrap}.urovo-v43-category-row>div{flex-basis:100%}.urovo-v43-order-card{padding:12px;border-radius:17px}.urovo-v43-order-value{min-width:92px}.urovo-v43-order-value>b{font-size:18px}.urovo-v43-order-actions{align-items:stretch}.urovo-v43-order-actions .urovo-v43-delete{width:100%}}
 </style>
+<!-- UROVO V48 CEO APPROVAL GATE: only CEO-approved seller products are visible on Home/Search -->
 </head>
 <body>
 <!-- UROVO UPDATE GATE v38 -->
@@ -448,8 +449,8 @@ const UROVO_PUSH_PUBLIC_KEY = "BC34XVJSdJs-VwNuE7S4sVTc7dSsbReShRw_MC_1tIzt8gmts
 let urovoPushRegistration = null;
 function urovoUrlBase64ToUint8Array(base64String){const padding="=".repeat((4-base64String.length%4)%4);const base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");const rawData=atob(base64);return Uint8Array.from([...rawData].map(char=>char.charCodeAt(0)));}
 async function registerUrovoPushServiceWorker(){if(!("serviceWorker" in navigator))throw new Error("Service Worker is not supported on this device/browser.");urovoPushRegistration=await navigator.serviceWorker.register("./sw.js",{scope:"./"});await navigator.serviceWorker.ready;return urovoPushRegistration;}
-async function syncExistingUrovoPushSubscription(){if(!user?.email||!("Notification" in window)||Notification.permission!=="granted")return;try{const reg=await registerUrovoPushServiceWorker();const sub=await reg.pushManager.getSubscription();if(!sub)return;const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)return;const json=sub.toJSON();if(!json.endpoint||!json.keys?.p256dh||!json.keys?.auth)return;const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,user_email:String(user.email).trim().toLowerCase(),endpoint:json.endpoint,p256dh:json.keys.p256dh,auth:json.keys.auth,expiration_time:json.expirationTime||null,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)console.warn("Push subscription sync:",error.message);}catch(e){console.warn("Push sync:",e.message);}}
-async function enableUrovoPushNotifications(){if(!user){showAccount();toast("Please login first");return;}if(!("Notification" in window)||!("PushManager" in window)){toast("Phone notifications are not supported in this browser.");return;}try{const permission=await Notification.requestPermission();if(permission!=="granted"){toast("Notification permission was not allowed.");renderFullAccount();return;}const reg=await registerUrovoPushServiceWorker();let sub=await reg.pushManager.getSubscription();if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urovoUrlBase64ToUint8Array(UROVO_PUSH_PUBLIC_KEY)});}const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)throw new Error("Login session not found. Please login again.");const json=sub.toJSON();const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,user_email:String(user.email).trim().toLowerCase(),endpoint:json.endpoint,p256dh:json.keys?.p256dh,auth:json.keys?.auth,expiration_time:json.expirationTime||null,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)throw error;toast("🔔 Phone notifications enabled");renderFullAccount();}catch(e){console.error("UROVO push enable:",e);toast("Push setup failed: "+(e?.message||"Please try again"));}}
+async function syncExistingUrovoPushSubscription(){if(!user?.email||!("Notification" in window)||Notification.permission!=="granted")return;try{const reg=await registerUrovoPushServiceWorker();const sub=await reg.pushManager.getSubscription();if(!sub)return;const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)return;const json=sub.toJSON();if(!json.endpoint||!json.keys?.p256dh||!json.keys?.auth)return;const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)console.warn("Push subscription sync:",error.message);}catch(e){console.warn("Push sync:",e.message);}}
+async function enableUrovoPushNotifications(){if(!user){showAccount();toast("Please login first");return;}if(!("Notification" in window)||!("PushManager" in window)){toast("Phone notifications are not supported in this browser.");return;}try{const permission=await Notification.requestPermission();if(permission!=="granted"){toast("Notification permission was not allowed.");renderFullAccount();return;}const reg=await registerUrovoPushServiceWorker();let sub=await reg.pushManager.getSubscription();if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urovoUrlBase64ToUint8Array(UROVO_PUSH_PUBLIC_KEY)});}const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)throw new Error("Login session not found. Please login again.");const json=sub.toJSON();const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)throw error;toast("🔔 Phone notifications enabled");renderFullAccount();}catch(e){console.error("UROVO push enable:",e);toast("Push setup failed: "+(e?.message||"Please try again"));}}
 function urovoPushStatusText(){if(!("Notification" in window))return "This browser does not support phone notifications.";if(Notification.permission==="granted")return "Phone notifications are enabled on this device.";if(Notification.permission==="denied")return "Notifications are blocked. Allow them in your browser/site settings.";return "Get order, chat and UROVO updates even when the app is closed.";}
 
 const ADMIN_EMAIL="ujjwalkrishna0555@gmail.com";
@@ -1707,6 +1708,19 @@ function generateInvoice(order){
 })();
 <\/script>
 
+<script id="urovo-v49-subscription-schema-fix">
+(function(){
+  // V49 logic, kept in the V48 filename at the user's request.
+  // The Supabase table created for UROVO uses: user_id, endpoint (UNIQUE), subscription, updated_at.
+  const original=window.enableUrovoPushNotifications;
+  if(typeof original==='function'){
+    window.enableUrovoPushNotifications=async function(options){
+      const result=await original(options||{});
+      return result;
+    };
+  }
+})();
+</script>
 </body></html>`;
   w.document.open();w.document.write(html);w.document.close();
 }
@@ -1779,7 +1793,7 @@ async function renderAuditLogs(){if(!requireAdmin())return;const {data,error}=aw
 async function renderAdvancedAnalytics(){if(!requireAdmin())return;const {data,error}=await supabaseClient.rpc('urovo_ceo_advanced_analytics');if(error){featureModal('📊 Advanced Analytics',`<div class="order-card"><p style="color:var(--red)">${escapeHtml(error.message)}</p></div>`);return}const x=data||{};featureModal('📊 Advanced Analytics',`<div class="admin-stats"><div class="stat"><small>Revenue</small><b>${money(x.revenue)}</b></div><div class="stat"><small>Orders</small><b>${x.orders||0}</b></div><div class="stat"><small>Delivered</small><b>${x.delivered||0}</b></div><div class="stat"><small>Cancelled</small><b>${x.cancelled||0}</b></div><div class="stat"><small>Items Sold</small><b>${x.items_sold||0}</b></div><div class="stat"><small>Avg Order</small><b>${money(x.average_order_value)}</b></div><div class="stat"><small>Users</small><b>${x.users||0}</b></div><div class="stat"><small>Sellers</small><b>${x.sellers||0}</b></div></div><div class="order-card"><h3>📈 Revenue by Month</h3><div style="margin-top:10px">${(x.monthly||[]).map(m=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)"><span>${escapeHtml(m.month)}</span><b>${money(m.revenue)}</b></div>`).join('')||'<p style="color:var(--muted)">No data yet.</p>'}</div></div>`)}
 
 /* ---------- BROWSER PUSH / NOTIFICATION OPT-IN ---------- */
-async function enableUrovoPush(){if(!('Notification' in window)){toast('Browser notifications are not supported');return}const permission=await Notification.requestPermission();if(permission!=='granted'){toast('Notification permission not granted');return}if(user)await supabaseClient.from('urovo_push_subscriptions').upsert({user_email:user.email,endpoint:'browser-notification',subscription_json:{permission:'granted',userAgent:navigator.userAgent}},{onConflict:'user_email,endpoint'});toast('🔔 Notifications enabled');new Notification('UROVO',{body:'Notifications are now enabled.'})}
+async function enableUrovoPush(){if(!('Notification' in window)){toast('Browser notifications are not supported');return}const permission=await Notification.requestPermission();if(permission!=='granted'){toast('Notification permission not granted');return}if(typeof window.enableUrovoPushNotifications==='function'){await window.enableUrovoPushNotifications({requestPermission:true});return;}toast('Push notification setup is unavailable.');}
 function showLocalPush(title,message){if('Notification' in window&&Notification.permission==='granted')try{new Notification(title,{body:message,icon:'icons/icon-192.png'})}catch{}}
 
 /* ---------- CEO TOOLS ---------- */
@@ -2869,6 +2883,7 @@ window.urovoNotifyAndPush=async function(recipient,title,message,event='notifica
 };
 function b64ToUint8ArrayV37(base64){const padding='='.repeat((4-base64.length%4)%4);const raw=atob((base64+padding).replace(/-/g,'+').replace(/_/g,'/'));const out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out}
 window.enableUrovoPush=async function(){
+  if(typeof window.enableUrovoPushNotifications==='function'){return await window.enableUrovoPushNotifications({requestPermission:true});}
   if(!currentEmail()){tell('Please login first');return}
   if(!('serviceWorker' in navigator)||!('PushManager' in window)){tell('Background push is not supported in this browser. Use account Notifications instead.');return}
   if(!/^https:$/.test(location.protocol)){tell('Push notifications need the HTTPS hosted UROVO app, not a content:// HTML file.');return}
@@ -2876,7 +2891,7 @@ window.enableUrovoPush=async function(){
   try{
     const permission=await Notification.requestPermission();if(permission!=='granted'){tell('Notification permission not granted');return}
     const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToUint8ArrayV37(VAPID_PUBLIC_KEY)});
-    const obj=sub.toJSON();const r=await db().from('urovo_push_subscriptions').upsert({user_email:currentEmail(),endpoint:sub.endpoint,subscription_json:obj,updated_at:new Date().toISOString()},{onConflict:'user_email,endpoint'});
+    const obj=sub.toJSON();const session=await db().auth.getSession();const uid=session?.data?.session?.user?.id;if(!uid)throw new Error('Login session not found. Please login again.');const r=await db().from('urovo_push_subscriptions').upsert({user_id:uid,endpoint:sub.endpoint,subscription:obj,updated_at:new Date().toISOString()},{onConflict:'endpoint'});
     if(r.error)throw r.error;tell('🔔 Push notifications enabled for this device');
     try{new Notification('UROVO',{body:'This device is ready for UROVO updates.'})}catch{}
   }catch(e){console.error(e);tell('Push setup failed: '+(e?.message||'Check SQL, RLS, HTTPS and VAPID keys.'))}
@@ -3204,7 +3219,15 @@ window.addEventListener('load',normalizeHelpSurface);
     const {error}=await db().rpc('urovo_review_product',{p_product_id:id,p_status:'rejected',p_notes:note});
     if(error)return say(error.message);
     try{await db().rpc('urovo_write_audit',{p_action:'product_rejected',p_details:{product_id:id,reason:note}})}catch{}
-    say('Product rejected');
+    // Immediately remove rejected product from the current Home/Search state, then reload from Supabase.
+    try{
+      if(Array.isArray(window.products))window.products=window.products.filter(p=>String(p.id)!==String(id));
+      if(Array.isArray(products))products=products.filter(p=>String(p.id)!==String(id));
+      if(typeof window.renderProducts==='function')window.renderProducts();
+      if(typeof window.save==='function')window.save();
+      if(typeof window.loadStoreProducts==='function')await window.loadStoreProducts();
+    }catch(refreshError){console.warn('UROVO rejected product storefront refresh:',refreshError)}
+    say('Product rejected and removed from the storefront');
     await refreshApprovalQueue();
   };
 
@@ -3295,12 +3318,24 @@ window.addEventListener('load',normalizeHelpSurface);
     dl.innerHTML=categories.map(c=>`<option value="${esc(c)}"></option>`).join('');
     ['adminCategory','editCategory','svCategory'].forEach(id=>{const input=document.getElementById(id);if(input)input.setAttribute('list','urovoV43CategoryOptions')});
   }
-  // Replace the active storefront loader so inactive, deleted, or unapproved seller listings never appear on Home/Search.
+  // A product is public only when it is active and, for seller submissions or explicitly reviewed items,
+  // the CEO approval status is exactly approved. Pending/rejected/unknown seller submissions stay hidden.
+  function urovoV48IsStorefrontApproved(p){
+    if(!p || p.active===false) return false;
+    const status=String(p.approval_status??'').trim().toLowerCase();
+    const sellerEmail=String(p.seller_email??'').trim();
+    if(sellerEmail) return status==='approved';
+    if(status) return status==='approved';
+    // Legacy official-store products without a seller or review status remain available.
+    return true;
+  }
+  window.urovoV48IsStorefrontApproved=urovoV48IsStorefrontApproved;
+  // Replace the active storefront loader so rejected, pending, inactive or deleted seller listings never appear on Home/Search.
   window.loadStoreProducts=async function(){
     const client=db(); if(!client){say('Store connection is unavailable');return}
     const result=await client.from('products').select('*').eq('active',true).order('created_at',{ascending:false});
     if(result.error){console.error('UROVO products loading error:',result.error);const p=document.getElementById('products');if(p)p.innerHTML=`<div class="empty" style="grid-column:1/-1"><div>⚠️</div><h3>Could not load products</h3><p>${esc(result.error.message)}</p></div>`;await refreshCategories();return}
-    const source=(result.data||[]).filter(p=>p.active!==false && (p.approval_status?String(p.approval_status).toLowerCase()==='approved':!p.seller_email));
+    const source=(result.data||[]).filter(urovoV48IsStorefrontApproved);
     products=source.map(p=>({id:String(p.id),name:p.name||'',category:p.category||'All',price:Number(p.price||0),old:Number(p.old_price||0),icon:p.icon||'📦',tag:p.tag||'NEW',desc:p.description||'',image:p.image_url||'',images:typeof productImagesFromRow==='function'?productImagesFromRow(p):(p.image_url?[p.image_url]:[]),stock:p.stock===null||p.stock===undefined?null:Number(p.stock),created_at:p.created_at||null,rating:Number(p.rating||p.average_rating||4.8),sales:Number(p.sales||p.sold_count||0),seller_email:p.seller_email||null,seller_name:p.seller_name||null,approval_status:p.approval_status||'approved'}));window.products=products;
     try{wishlist=wishlist.filter(id=>window.products.some(p=>String(p.id)===String(id)))}catch(e){}
     try{cart=cart.filter(i=>window.products.some(p=>String(p.id)===String(i.id)))}catch(e){}
@@ -3531,6 +3566,8 @@ window.addEventListener('load',normalizeHelpSurface);
   try{
     const client=db();if(client){client.channel('urovo-v43-product-refresh').on('postgres_changes',{event:'*',schema:'public',table:'products'},()=>{window.loadStoreProducts?.().catch(e=>console.warn(e))}).subscribe()}
   }catch(e){console.warn('Product refresh subscription unavailable',e)}
+  // Run one final approved-catalogue refresh after all scripts have installed their overrides.
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{window.loadStoreProducts?.().catch(e=>console.warn('Initial approved catalogue refresh:',e))},0),{once:true});
 })();
 
 </script>
@@ -3655,7 +3692,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     const json=sub?.toJSON?.()||{};
     if(!json.endpoint)throw new Error('Push subscription endpoint is missing.');
     if(!json.keys?.p256dh||!json.keys?.auth)throw new Error('Push subscription keys are missing.');
-    const payload={user_id:uid,user_email:em,endpoint:json.endpoint,p256dh:json.keys.p256dh,auth:json.keys.auth,expiration_time:json.expirationTime||null,updated_at:new Date().toISOString()};
+    const payload={user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()};
     const {error}=await client.from('urovo_push_subscriptions').upsert(payload,{onConflict:'endpoint'});
     if(error)throw new Error('Supabase subscription save failed: '+error.message);
     return payload;
