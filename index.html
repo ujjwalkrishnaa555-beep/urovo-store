@@ -317,6 +317,9 @@ header,.hero,.home-ads,.search-wrap,.categories,.section,.features,.deal,.urovo-
 @media(max-width:650px){.urovo-v43-order-stats,.urovo-v43-seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.urovo-v43-order-tools{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.urovo-v43-order-tools span{grid-column:1/-1;text-align:left}.urovo-v43-order-main{grid-template-columns:1fr}.urovo-v43-category-form{grid-template-columns:1fr}.urovo-v43-category-row{flex-wrap:wrap}.urovo-v43-category-row>div{flex-basis:100%}.urovo-v43-order-card{padding:12px;border-radius:17px}.urovo-v43-order-value{min-width:92px}.urovo-v43-order-value>b{font-size:18px}.urovo-v43-order-actions{align-items:stretch}.urovo-v43-order-actions .urovo-v43-delete{width:100%}}
 </style>
 <!-- UROVO V48 CEO APPROVAL GATE: only CEO-approved seller products are visible on Home/Search -->
+<style id="urovo-v49-premium-payment-style">
+.urovo-premium-payment{display:grid;grid-template-columns:1fr 1fr;gap:10px}.urovo-premium-payment>label{padding:15px;border:1px solid var(--line);border-radius:15px;background:var(--surface);font-weight:800;cursor:pointer;transition:.2s}.urovo-premium-payment>label:has(input:checked){border-color:var(--lime);box-shadow:0 0 0 1px var(--lime);background:rgba(200,255,0,.05)}.urovo-premium-payment input{accent-color:var(--lime)}.urovo-payment-summary{grid-column:1/-1;padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,var(--surface2),var(--surface));display:grid;gap:7px}.urovo-payment-summary .row{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}.urovo-payment-summary .row strong{color:var(--text)}.urovo-payment-summary .row.total{padding-top:8px;border-top:1px solid var(--line);font-size:15px}.urovo-payment-summary .row.total strong{color:var(--lime)}.urovo-ceo-payment-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.urovo-ceo-payment-tabs button{border:1px solid var(--line);background:var(--surface2);color:var(--text);padding:9px 12px;border-radius:999px;font-weight:800}.urovo-ceo-payment-tabs button.active{background:var(--lime);color:#000;border-color:var(--lime)}.urovo-ceo-payment-badge{display:inline-flex;gap:6px;align-items:center;padding:6px 9px;border-radius:999px;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.25);font-size:10px;font-weight:900}.urovo-ceo-payment-badge.cod{color:#ffd166}.urovo-ceo-payment-badge.online{color:var(--lime)}.urovo-ceo-pay-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.urovo-ceo-pay-breakdown>div{padding:9px;border-radius:11px;background:var(--surface2);border:1px solid var(--line)}.urovo-ceo-pay-breakdown small{display:block;color:var(--muted);font-size:9px}.urovo-ceo-pay-breakdown b{display:block;margin-top:3px;font-size:13px}@media(max-width:650px){.urovo-premium-payment{grid-template-columns:1fr}.urovo-ceo-pay-breakdown{grid-template-columns:1fr 1fr}.urovo-ceo-payment-tabs{overflow:auto;flex-wrap:nowrap}}
+</style>
 </head>
 <body>
 <!-- UROVO UPDATE GATE v38 -->
@@ -426,16 +429,16 @@ header,.hero,.home-ads,.search-wrap,.categories,.section,.features,.deal,.urovo-
 
 <div class="modal" id="productModal"><div class="box"><div class="detail-grid"><div class="detail-image" id="detailImage" onclick="openImageLightbox()">📦</div><div class="detail-content"><button class="close" onclick="closeProductModal()">✕</button><small id="detailCategory">GADGETS</small><h2 id="detailTitle">Product</h2><div class="detail-price" id="detailPrice">₹499</div><p class="detail-desc" id="detailDescription"></p><p style="color:#aaa;margin-bottom:18px">⭐ 4.8 · 100+ reviews</p><div class="detail-actions"><button class="secondary" id="detailWish">♡ Wishlist</button><button class="primary" id="detailBuy">Buy Now</button></div><button class="checkout" style="margin-top:10px" id="detailAdd">Add to Cart</button><button type="button" class="secondary" id="urovoProductShareBtn" style="width:100%;margin-top:10px">↗ Share Product Link</button></div></div></div></div>
 
-<div class="modal" id="checkoutModal"><div class="box" style="max-width:520px"><button class="close" onclick="closeCheckout()">✕</button><h2 style="font-family:'Space Grotesk';margin-top:15px">Checkout</h2><p style="color:var(--muted);margin-top:7px">Enter your delivery details.</p><form class="form" id="checkoutForm"><input id="cName" required placeholder="Full name"><input id="cEmail" type="email" placeholder="Email for order confirmation"><input id="cPhone" required type="tel" placeholder="Phone number"><input id="cHouse" required placeholder="House / Street"><input id="cCity" required placeholder="City"><input id="cPin" required pattern="[0-9]{6}" placeholder="Pincode"><textarea id="cAddress" required placeholder="Delivery address"></textarea><div class="payment"><label><input type="radio" name="payment" value="cod" checked> 💵 Cash on Delivery</label><p style="font-size:12px;color:var(--muted);margin-top:7px">Online payments are not active yet. No payment gateway is connected.</p></div><button class="primary" type="submit">Place Order →</button></form></div></div>
+<div class="modal" id="checkoutModal"><div class="box" style="max-width:520px"><button class="close" onclick="closeCheckout()">✕</button><h2 style="font-family:'Space Grotesk';margin-top:15px">Checkout</h2><p style="color:var(--muted);margin-top:7px">Enter your delivery details.</p><form class="form" id="checkoutForm"><input id="cName" required placeholder="Full name"><input id="cEmail" type="email" placeholder="Email for order confirmation"><input id="cPhone" required type="tel" placeholder="Phone number"><input id="cHouse" required placeholder="House / Street"><input id="cCity" required placeholder="City"><input id="cPin" required pattern="[0-9]{6}" placeholder="Pincode"><textarea id="cAddress" required placeholder="Delivery address"></textarea><div class="payment urovo-premium-payment"><label><input type="radio" name="payment" value="cod" checked> 💵 COD · 20% + Shipping Online</label><label><input type="radio" name="payment" value="online"> 💳 Online · Full Payment</label><div id="urovoPaymentSummary" class="urovo-payment-summary"></div><div id="urovoPaymentNotice" style="grid-column:1/-1;margin-top:2px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.5">COD selected — 20% of the payable product amount + shipping charge will be paid online. Remaining product balance is collected on delivery.</div></div><button class="primary" id="urovoPlaceOrderBtn" type="submit">Continue to Payment →</button></form></div></div>
 
-<div class="modal" id="successModal"><div class="box"><div class="success"><div class="check">✓</div><h2 style="font-family:'Space Grotesk';margin-bottom:10px">Order Created!</h2><p style="color:var(--muted);line-height:1.6">Your COD order has been saved successfully.</p><p style="margin:18px 0;color:var(--lime);font-weight:800" id="orderId"></p><button class="primary" id="successTrack">Track Order</button><button class="secondary" id="successInvoice" style="margin-left:8px">🧾 Invoice</button><button class="secondary" id="successEmail" style="margin-top:8px">✉️ Email Confirmation</button><button class="secondary" style="margin-top:8px" onclick="finishOrder()">Continue Shopping</button></div></div></div>
+<div class="modal" id="successModal"><div class="box"><div class="success"><div class="check">✓</div><h2 style="font-family:'Space Grotesk';margin-bottom:10px">Order Created!</h2><p style="color:var(--muted);line-height:1.6">Your order has been created and your required online payment is ready to complete.</p><p style="margin:18px 0;color:var(--lime);font-weight:800" id="orderId"></p><button class="primary" id="successTrack">Track Order</button><button class="secondary" id="successInvoice" style="margin-left:8px">🧾 Invoice</button><button class="secondary" id="successEmail" style="margin-top:8px">✉️ Email Confirmation</button><button class="secondary" style="margin-top:8px" onclick="finishOrder()">Continue Shopping</button></div></div></div>
 
 <div class="modal" id="accountModal"><div class="box" style="max-width:520px"><button class="close" onclick="closeAccount()">✕</button><div id="accountContent"></div></div></div>
 <div class="modal" id="wishlistModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('wishlistModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">❤️ Wishlist</h2><div id="wishlistList"></div></div></div>
 <div class="modal" id="notificationsModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('notificationsModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">🔔 Notifications</h2><div id="notificationsList"></div></div></div>
 <div class="modal" id="ordersModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('ordersModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">📦 My Orders</h2><div id="ordersList"></div></div></div>
 <div class="modal" id="trackModal"><div class="box" style="max-width:600px"><button class="close" onclick="closeModal('trackModal')">✕</button><div id="trackingContent"></div></div></div>
-<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO CEO Dashboard</h2><p style="color:var(--muted)">Each management function opens as its own CEO page. CEO access only.</p><div class="ceo-layout"><aside class="ceo-sidebar"><button id="adminProductsTab" class="active" onclick="adminTab('products')">📦 Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">🧾 Orders</button><button id="adminUsersTab" onclick="adminTab('users')">👥 Users</button><button id="adminSellersTab" onclick="adminTab('sellers')">🏪 Sellers</button><button id="adminAnalyticsTab" onclick="adminTab('analytics')">📊 Analytics</button><button id="adminAdsTab" onclick="adminTab('ads')">📢 Ads & Banners</button><button id="adminHomeTab" onclick="adminTab('home')">🏠 Homepage</button><button id="adminNotificationsTab" onclick="adminTab('notifications')">🔔 Notifications</button><button id="adminChatTab" onclick="adminTab('chat')">💬 Customer Chats <span id="adminChatTabBadge" class="chat-badge" style="display:none">0</span></button><button id="adminToolsTab" onclick="adminTab('tools')">🧰 Tools & Reports</button></aside><main class="ceo-main"><div id="adminContent"></div></main></div></div></div>
+<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO CEO Dashboard</h2><p style="color:var(--muted)">Each management function opens as its own CEO page. CEO access only.</p><div class="ceo-layout"><aside class="ceo-sidebar"><button id="adminProductsTab" class="active" onclick="adminTab('products')">📦 Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">🧾 Orders</button><button id="adminUsersTab" onclick="adminTab('users')">👥 Users</button><button id="adminSellersTab" onclick="adminTab('sellers')">🏪 Sellers</button><button id="adminAnalyticsTab" onclick="adminTab('analytics')">📊 Analytics</button><button id="adminAdsTab" onclick="adminTab('ads')">📢 Ads & Banners</button><button id="adminHomeTab" onclick="adminTab('home')">🏠 Homepage</button><button id="adminNotificationsTab" onclick="adminTab('notifications')">🔔 Notifications <span id="adminNotificationsBadge" class="chat-badge" style="display:none">0</span></button><button id="adminChatTab" onclick="adminTab('chat')">💬 Customer Chats <span id="adminChatTabBadge" class="chat-badge" style="display:none">0</span></button><button id="adminToolsTab" onclick="adminTab('tools')">🧰 Tools & Reports</button></aside><main class="ceo-main"><div id="adminContent"></div></main></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -842,7 +845,7 @@ async function loadNotifications(){
   try{
     const {data,error}=await supabaseClient.from('urovo_notifications').select('*').eq('recipient_email',String(user.email).trim().toLowerCase()).order('created_at',{ascending:false}).limit(100);
     if(error){console.warn('Notifications:',error.message);return}
-    urovoNotifications=data||[]; updateNotificationBadge();
+    urovoNotifications=data||[]; updateNotificationBadge(); updateCEOMessageNotificationBadge();
     if($('notificationsModal')?.classList.contains('show'))renderNotifications();
   }catch(e){console.warn('Notifications:',e.message)}
 }
@@ -850,6 +853,7 @@ function updateNotificationBadge(){
   const n=urovoNotifications.filter(x=>x.read_at==null).length;
   const b=$('notifyBadge'); if(!b)return; b.textContent=n; b.classList.toggle('hidden',n===0);
 }
+function updateCEOMessageNotificationBadge(){const b=$('adminNotificationsBadge');if(!b)return;const n=(urovoNotifications||[]).filter(x=>!x.read_at).length;b.textContent=n;b.style.display=n?'inline-flex':'none';}
 function renderNotifications(){
   const box=$('notificationsList');if(!box)return;
   if(!user){box.innerHTML='<div class="notification-empty">🔐 Please login to view notifications.</div>';return}
@@ -857,7 +861,7 @@ function renderNotifications(){
   box.innerHTML=urovoNotifications.map(n=>`<div class="ceo-notification-item ${n.read_at?'':'unread'}">
     <div class="notification-meta">
       <div><b>${escapeHtml(n.title||'UROVO Notification')}</b><small style="color:var(--muted);display:block;margin-top:4px">${n.created_at?new Date(n.created_at).toLocaleString('en-IN'):''}</small></div>
-      ${n.read_at?'<span style="font-size:10px;color:var(--lime);font-weight:800">READ</span>':'<span style="font-size:10px;color:#f7d47a;font-weight:800">NEW</span>'}
+      
     </div>
     ${n.image_url?`<img class="notification-image" src="${escapeHtml(n.image_url)}" alt="Notification image" loading="lazy">`:''}
     <p style="color:var(--muted);line-height:1.6;margin-top:10px;white-space:pre-wrap">${escapeHtml(n.message||'')}</p>
@@ -882,6 +886,12 @@ async function openNotifications(){
   await loadNotifications();
   $('notificationsModal')?.classList.add('show');
   renderNotifications();
+  /* Opening Notifications is the read action. No manual Read button is needed. */
+  const unread=(urovoNotifications||[]).filter(n=>!n.read_at);
+  if(unread.length){
+    const {error}=await supabaseClient.from('urovo_notifications').update({read_at:new Date().toISOString()}).eq('recipient_email',String(user.email).trim().toLowerCase()).is('read_at',null);
+    if(!error){urovoNotifications=(urovoNotifications||[]).map(n=>({...n,read_at:n.read_at||new Date().toISOString()}));updateNotificationBadge();renderNotifications();}
+  }
 }
 function startNotificationPolling(){clearInterval(notificationTimer);if(user)notificationTimer=setInterval(loadNotifications,15000)}
 async function ceoBroadcastNotification(){
@@ -1215,7 +1225,7 @@ function renderCart(){
 
 function openCheckout(){
   if(!cart.length){toast("Your cart is empty");return;}
-  checkoutItems=cart.map(x=>({...x}));checkoutMode="cart";closeCart();$("checkoutModal").classList.add("show");
+  checkoutItems=cart.map(x=>({...x}));checkoutMode="cart";closeCart();$("checkoutModal").classList.add("show");setTimeout(urovoBindCheckoutPaymentUI,20);
 }
 
 async function saveOrderToSupabase(order){
@@ -1721,6 +1731,39 @@ function generateInvoice(order){
   }
 })();
 </script>
+
+<script id="urovo-v49-cod-online-ceo-patch">
+(function(){
+  const CEO='ujjwalkrishna0555@gmail.com';
+  const db=()=>window.supabaseClient;
+  const moneySafe=n=>typeof window.money==='function'?window.money(n):'₹'+Number(n||0).toFixed(2);
+  const esc=v=>typeof window.escapeHtml==='function'?window.escapeHtml(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  window.urovoPaymentType=function(o){const s=String(o?.payment_type||o?.payment_method||o?.payment||'').toLowerCase();return s.includes('cod')?'cod':'online'};
+  window.urovoPaymentDisplay=function(o){const t=window.urovoPaymentType(o);return t==='cod'?'💵 COD · 20% + Shipping Online':'💳 Online · Full Payment'};
+  const oldRender=window.renderAdminOrders;
+  window.renderAdminOrders=async function(){
+    const r=await oldRender?.apply(this,arguments);
+    setTimeout(()=>{
+      const host=document.getElementById('adminOrderList');if(!host)return;
+      const cards=host.querySelector('#urovoV43OrderCards');
+      if(!cards)return;
+      let bar=document.getElementById('urovoCEOOrderPaymentFilter');
+      if(!bar){
+        bar=document.createElement('div');bar.id='urovoCEOOrderPaymentFilter';bar.className='urovo-ceo-payment-tabs';
+        bar.innerHTML='<button class="active" data-pay="all">All Orders</button><button data-pay="cod">💵 COD</button><button data-pay="online">💳 Online Full</button>';
+        const tools=host.querySelector('.urovo-v43-order-tools');tools?.insertAdjacentElement('afterend',bar);
+        bar.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{bar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const type=btn.dataset.pay;cards.querySelectorAll('.urovo-v43-order-card').forEach(card=>{const text=card.textContent.toLowerCase();const isCod=text.includes('cod');card.style.display=type==='all'||(type==='cod'&&isCod)||(type==='online'&&!isCod)?'':'none'})}));
+      }
+      cards.querySelectorAll('.urovo-v43-order-card').forEach(card=>{
+        if(card.querySelector('.urovo-v49-pay-badge'))return;
+        const payment=card.querySelector('.urovo-v43-payment-row');
+        if(payment){const txt=payment.textContent.toLowerCase();const cod=txt.includes('cod');payment.insertAdjacentHTML('afterbegin',`<span class="urovo-ceo-payment-badge ${cod?'cod':'online'} urovo-v49-pay-badge">${cod?'💵 COD':'💳 ONLINE'}</span>`)}
+      });
+    },80);
+    return r;
+  };
+})();
+</script>
 </body></html>`;
   w.document.open();w.document.write(html);w.document.close();
 }
@@ -2083,24 +2126,24 @@ async function urovoClearAllNotifications(){
   const ids=(urovoNotifications||[]).map(n=>String(n.id));
   const deleted=urovoDeletedIds();ids.forEach(id=>deleted.add(id));urovoSetJSON(UROVO_DELETED_NOTIFICATIONS_KEY,[...deleted]);
   try{const r=await supabaseClient.from('urovo_notifications').delete().eq('recipient_email',String(user.email).trim().toLowerCase());if(r.error)console.warn('Clear notifications DB:',r.error.message)}catch(e){console.warn(e.message)}
-  urovoNotifications=[];updateNotificationBadge();renderNotifications();
+  urovoNotifications=[];updateNotificationBadge();updateCEOMessageNotificationBadge();renderNotifications();
   const box=document.getElementById('accountNotificationsList');if(box)box.innerHTML='<div class="notification-empty">🔔 No notifications yet.</div>';
   toast('All notifications deleted');
 }
 function urovoNotificationHTML(n){
-  const id=String(n.id),unread=!n.read_at;
+  const unread=!n.read_at;
   return `<div class="ceo-notification-item ${unread?'unread':''}">
-    <div class="notification-meta"><div><b>${escapeHtml(n.title||'UROVO Notification')}</b><small style="color:var(--muted);display:block;margin-top:4px">${n.created_at?new Date(n.created_at).toLocaleString('en-IN'):''}</small></div>${unread?'<span style="font-size:10px;color:#f7d47a;font-weight:800">NEW</span>':'<span style="font-size:10px;color:var(--lime);font-weight:800">READ</span>'}</div>
+    <div class="notification-meta"><div><b>${escapeHtml(n.title||'UROVO Notification')}</b><small style="color:var(--muted);display:block;margin-top:4px">${n.created_at?new Date(n.created_at).toLocaleString('en-IN'):''}</small></div></div>
     ${n.image_url?`<img class="notification-image" src="${escapeHtml(n.image_url)}" alt="Notification image" loading="lazy">`:''}
     <p style="color:var(--muted);line-height:1.6;margin-top:10px;white-space:pre-wrap">${escapeHtml(n.message||'')}</p>
     <div class="notification-days">Available for 30 days</div>
-    <div class="urovo-notification-actions">${unread?`<button class="secondary" onclick="markNotificationRead('${escapeHtml(id)}')">✓ Mark as read</button>`:''}<button class="secondary" onclick="urovoDeleteNotification('${escapeHtml(id)}')">🗑️ Delete</button></div>
+    <div class="urovo-notification-actions"><button class="secondary" onclick="urovoDeleteNotification('${escapeHtml(String(n.id))}')">🗑️ Delete</button></div>
   </div>`;
 }
 const _v5LoadNotifications=window.loadNotifications||loadNotifications;
 window.loadNotifications=async function(){
   await _v5LoadNotifications();
-  const deleted=urovoDeletedIds();urovoNotifications=(urovoNotifications||[]).filter(n=>!deleted.has(String(n.id)));updateNotificationBadge();
+  const deleted=urovoDeletedIds();urovoNotifications=(urovoNotifications||[]).filter(n=>!deleted.has(String(n.id)));updateNotificationBadge();updateCEOMessageNotificationBadge();
   if(document.getElementById('notificationsModal')?.classList.contains('show'))renderNotifications();
 };
 window.renderNotifications=function(){
@@ -2246,8 +2289,25 @@ function urovoEnsurePaymentNotice(){
   const form=document.getElementById('checkoutForm'); if(!form||document.getElementById('urovoPaymentNotice'))return;
   const payment=form.querySelector('.payment'); if(!payment)return;
   const n=document.createElement('div');n.id='urovoPaymentNotice';n.style.cssText='margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.5';
-  n.textContent='Cash on Delivery selected — payment is collected at delivery.';payment.insertAdjacentElement('afterend',n);
-  form.querySelectorAll('input[name="payment"]').forEach(x=>x.addEventListener('change',()=>{n.textContent=x.value==='online'?'Online Payment selected — payment status will remain Pending until a gateway confirms it.':'Cash on Delivery selected — payment is collected at delivery.'}));
+  n.textContent='COD selected — 20% of the payable product amount + shipping is paid online.';payment.insertAdjacentElement('afterend',n);
+  form.querySelectorAll('input[name="payment"]').forEach(x=>x.addEventListener('change',urovoUpdateCheckoutPaymentSummary));
+  urovoUpdateCheckoutPaymentSummary();
+}
+function urovoUpdateCheckoutPaymentSummary(){
+  const box=document.getElementById('urovoPaymentSummary');if(!box)return;
+  const selected=document.querySelector('input[name="payment"]:checked')?.value||'cod';
+  const subtotal=(Array.isArray(checkoutItems)?checkoutItems:[]).reduce((sum,i)=>sum+Number(product(i.id)?.price||0)*Number(i.qty||1),0);
+  const discount=typeof appliedCoupon!=='undefined'&&appliedCoupon?Math.round(subtotal*Number(appliedCoupon.percent||0)/100):0;
+  const payable=Math.max(0,subtotal-discount),deposit=Math.round(payable*.20),shipping=Number(window.__urovoCheckoutShipping||0);
+  const online=selected==='cod'?deposit+shipping:payable+shipping;
+  const due=selected==='cod'?Math.max(0,payable-deposit):0;
+  box.innerHTML=`<div class="row"><span>Products</span><strong>${money(payable)}</strong></div><div class="row"><span>Shipping</span><strong>${money(shipping)}</strong></div>${selected==='cod'?`<div class="row"><span>COD deposit · 20%</span><strong>${money(deposit)}</strong></div><div class="row"><span>Pay on delivery</span><strong>${money(due)}</strong></div>`:`<div class="row"><span>Online full payment</span><strong>${money(online)}</strong></div>`}<div class="row total"><span>Pay online now</span><strong>${money(online)}</strong></div>`;
+  const note=document.getElementById('urovoPaymentNotice');if(note)note.textContent=selected==='cod'?`COD selected — pay ${money(online)} online now (20% product deposit + shipping). Remaining ${money(due)} will be collected on delivery.`:`Online full payment selected — pay ${money(online)} online now. Nothing is collected on delivery.`;
+  const btn=document.getElementById('urovoPlaceOrderBtn');if(btn)btn.textContent=selected==='cod'?'Pay COD Deposit →':'Pay Full Amount →';
+}
+function urovoBindCheckoutPaymentUI(){
+  document.querySelectorAll('input[name="payment"]').forEach(x=>x.addEventListener('change',urovoUpdateCheckoutPaymentSummary));
+  urovoUpdateCheckoutPaymentSummary();
 }
 function urovoRenderPaymentInOrderModal(){
   const box=document.getElementById('trackingContent'); if(!box)return;
@@ -2838,34 +2898,45 @@ async function configureUpdateGate(){
     unlock();btn.disabled=false;btn.textContent='Update UROVO';window.scrollTo({top:0,behavior:'smooth'});tell(needsFetch?'New build could not be downloaded. Open the latest hosted page.':'UROVO updated successfully ✓');
   };
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{normalizeHelpSurface();configureUpdateGate()},{once:true});else{normalizeHelpSurface();configureUpdateGate()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{normalizeHelpSurface();configureUpdateGate();setTimeout(()=>{try{urovoEnsurePaymentNotice();urovoBindCheckoutPaymentUI()}catch(e){}},100)},{once:true});else{normalizeHelpSurface();configureUpdateGate();setTimeout(()=>{try{urovoEnsurePaymentNotice();urovoBindCheckoutPaymentUI()}catch(e){}},100)}
 
 // Add server-side atomic checkout. No browser-supplied product price or stock decrement is trusted.
 async function placeSecureOrderV37(){
   if(!currentUser()||!currentEmail()){tell('Please login before placing an order');if(typeof closeCheckout==='function')closeCheckout();if(typeof showAccount==='function')showAccount();return;}
   if(!Array.isArray(checkoutItems)||!checkoutItems.length){tell('No products selected');return;}
   const selected=document.querySelector('input[name="payment"]:checked')?.value||'cod';
-  if(selected!=='cod'){tell('Online payment is not active yet. Please choose Cash on Delivery.');return;}
   const n=$v('cName')?.value.trim()||currentUser().name||currentEmail().split('@')[0];
   const phone=$v('cPhone')?.value.trim()||'',house=$v('cHouse')?.value.trim()||'',city=$v('cCity')?.value.trim()||'',pin=$v('cPin')?.value.trim()||'',address=$v('cAddress')?.value.trim()||'';
-  if(!n||!phone||!house||!city||!/^\d{6}$/.test(pin)||!address){tell('Complete all delivery fields with a valid 6-digit pincode');return;}
-  const form=$v('checkoutForm');const btn=form?.querySelector('button[type="submit"]');if(btn){btn.disabled=true;btn.textContent='Processing securely…'}
+  if(!n||!phone||!house||!city||!/^[0-9]{6}$/.test(pin)||!address){tell('Complete all delivery fields with a valid 6-digit pincode');return;}
+  const form=$v('checkoutForm'),btn=form?.querySelector('button[type="submit"]');if(btn){btn.disabled=true;btn.textContent='Preparing secure payment…'}
   try{
     const itemPayload=checkoutItems.map(x=>({id:String(x.id),qty:Math.max(1,Math.floor(Number(x.qty||1)))}));
     if(itemPayload.some(x=>!x.id||!Number.isFinite(x.qty)||x.qty<1||x.qty>99))throw new Error('Invalid quantity selected');
     const wanted=$v('urovoCoupon')?.value.trim().toUpperCase()||'';
     const orderNumber=typeof makeOrderNumber==='function'?makeOrderNumber():`UROVO-${Date.now()}`;
-    const result=await db().rpc('urovo_place_order',{p_order_number:orderNumber,p_items:itemPayload,p_customer_name:n,p_phone:phone,p_house:house,p_city:city,p_pincode:pin,p_address:address,p_payment_method:'Cash on Delivery',p_coupon_code:wanted||null});
+    const paymentMethod=selected==='cod'?'COD - 20% + Shipping Online':'Online Payment - Full';
+    const result=await db().rpc('urovo_place_order',{p_order_number:orderNumber,p_items:itemPayload,p_customer_name:n,p_phone:phone,p_house:house,p_city:city,p_pincode:pin,p_address:address,p_payment_method:paymentMethod,p_coupon_code:wanted||null});
     if(result.error)throw result.error;
     const saved=result.data||{};if(!saved.id)throw new Error('The secure order service returned no order ID');
-    const requestedOrder={id:String(saved.id),order_number:saved.order_number||orderNumber,created_at:saved.created_at||new Date().toISOString(),createdAt:saved.created_at||new Date().toISOString(),user:currentEmail(),user_email:currentEmail(),email:$v('cEmail')?.value.trim()||currentEmail(),items:Array.isArray(saved.items)?saved.items:itemPayload,customer:{name:n,phone,house,city,pincode:pin,address},address:[house,address,city,pin].filter(Boolean).join(', '),payment:'Cash on Delivery',payment_method:'Cash on Delivery',paymentStatus:'Pending',payment_status:'Pending',subtotal:Number(saved.subtotal||0),discount:Number(saved.discount||0),delivery:Number(saved.delivery||0),total:Number(saved.total||0),status:saved.status||'Placed',coupon_code:saved.coupon_code||wanted||null};
+    const subtotal=Number(saved.subtotal||0),discount=Number(saved.discount||0),delivery=Number(saved.delivery||0),payableProducts=Math.max(0,subtotal-discount);
+    const deposit=Math.max(0,Math.round(payableProducts*0.20));
+    const onlineAmount=selected==='cod'?deposit+delivery:Math.max(0,Number(saved.total??(payableProducts+delivery)));
+    const dueOnDelivery=selected==='cod'?Math.max(0,payableProducts-deposit):0;
+    const paymentStatus=selected==='cod'?'Pending Deposit':'Pending Payment';
+    const orderId=String(saved.id);
+    const paymentPayload={payment_method:paymentMethod,payment_status:paymentStatus,payment_amount_paid:0,payment_amount_due:dueOnDelivery,payment_online_amount:onlineAmount,cod_deposit_amount:selected==='cod'?deposit:0,shipping_charge:delivery,payment_type:selected==='cod'?'cod_deposit':'online_full'};
+    const upd=await db().from('orders').update(paymentPayload).eq('id',orderId);
+    if(upd.error)console.warn('Payment metadata update:',upd.error.message);
+    const requestedOrder={id:orderId,order_number:saved.order_number||orderNumber,created_at:saved.created_at||new Date().toISOString(),createdAt:saved.created_at||new Date().toISOString(),user:currentEmail(),user_email:currentEmail(),email:$v('cEmail')?.value.trim()||currentEmail(),items:Array.isArray(saved.items)?saved.items:itemPayload,customer:{name:n,phone,house,city,pincode:pin,address},address:[house,address,city,pin].filter(Boolean).join(', '),payment:paymentMethod,payment_method:paymentMethod,paymentStatus,payment_status:paymentStatus,subtotal,discount,delivery,total:Number(saved.total??(payableProducts+delivery)),payment_amount_paid:0,payment_amount_due:dueOnDelivery,payment_online_amount:onlineAmount,cod_deposit_amount:selected==='cod'?deposit:0,shipping_charge:delivery,payment_type:selected==='cod'?'cod_deposit':'online_full',status:selected==='cod'?'Payment Pending':'Payment Pending',coupon_code:saved.coupon_code||wanted||null};
     orders.unshift(requestedOrder);if(checkoutMode==='cart')cart=[];if(typeof appliedCoupon!=='undefined')appliedCoupon=null;if(typeof urovoAppliedCoupon!=='undefined')urovoAppliedCoupon=null;localStorage.removeItem('urovo_coupon');save();
-    try{await db().rpc('urovo_write_audit',{p_action:'order_created',p_details:{order_id:requestedOrder.id,order_number:requestedOrder.order_number,total:requestedOrder.total}})}catch{}
-    try{await db().functions.invoke('urovo-send-push',{body:{event:'order-placed',order_id:requestedOrder.id,title:'New UROVO order',message:`${n} placed ${requestedOrder.order_number} · ₹${requestedOrder.total}`}})}catch(e){console.warn('New-order push:',e?.message||e)}
-    form?.reset();if($v('orderId'))$v('orderId').textContent=requestedOrder.order_number;$v('checkoutModal')?.classList.remove('show');$v('successModal')?.classList.add('show');if($v('successTrack'))$v('successTrack').onclick=()=>{closeModal('successModal');openTracking(requestedOrder.id)};
-    if(typeof loadStoreProducts==='function')await loadStoreProducts();if(typeof renderCart==='function')renderCart();if(typeof updateBadges==='function')updateBadges();if(typeof loadNotifications==='function')await loadNotifications();tell('Order placed securely ✓');
-  }catch(e){console.error('Secure checkout:',e);tell('Order was not placed: '+(e?.message||'Please check your connection and try again.'));}
-  finally{if(btn){btn.disabled=false;btn.textContent='Place Order →'}}
+    try{await db().rpc('urovo_write_audit',{p_action:'order_created',p_details:{order_id:requestedOrder.id,order_number:requestedOrder.order_number,total:requestedOrder.total,payment_method:paymentMethod,online_amount:onlineAmount}})}catch{}
+    try{await db().functions.invoke('urovo-send-push',{body:{event:'order-placed',order_id:requestedOrder.id,title:'New UROVO order',message:`${n} placed ${requestedOrder.order_number} · ₹${requestedOrder.total} · ${paymentMethod}`}})}catch(e){console.warn('New-order push:',e?.message||e)}
+    const gateway=window.UROVO_PAYMENT_GATEWAY_URL||'';
+    if(!gateway)throw new Error(`Payment gateway is not configured. Required online amount: ₹${onlineAmount}. Configure UROVO_PAYMENT_GATEWAY_URL before accepting this order.`);
+    const params=new URLSearchParams({amount:String(onlineAmount),order_id:requestedOrder.order_number,email:$v('cEmail')?.value.trim()||currentEmail(),phone,description:selected==='cod'?'UROVO COD deposit (20% + shipping)':'UROVO full online payment',payment_type:selected==='cod'?'cod_deposit':'online_full'});
+    window.location.href=gateway+(gateway.includes('?')?'&':'?')+params.toString();
+  }catch(e){console.error('Secure checkout:',e);tell('Payment could not be started: '+(e?.message||'Please check your payment gateway configuration.'));}
+  finally{if(btn){btn.disabled=false;btn.textContent='Continue to Payment →'}}
 }
 document.addEventListener('submit',function(e){if(e.target?.id!=='checkoutForm')return;e.preventDefault();e.stopImmediatePropagation();placeSecureOrderV37();},true);
 
