@@ -12,7 +12,7 @@
 <meta property="og:description" content="Premium picks for your everyday. Discover gadgets, home essentials and lifestyle products at UROVO.">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json" id="urovoOrganizationSchema">{"@context":"https://schema.org","@type":"Organization","name":"UROVO","description":"Curated gadgets, home essentials and lifestyle picks."}</script>
-<script type="application/ld+json" id="urovoWebsiteSchema">{"@context":"https://schema.org","@type":"WebSite","name":"UROVO Store","description":"Upgrade Your Everyday",}</script>
+<script type="application/ld+json" id="urovoWebsiteSchema">{"@context":"https://schema.org","@type":"WebSite","name":"UROVO Store","description":"Upgrade Your Everyday"}</script>
 <link rel="manifest" href="./manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -328,14 +328,14 @@ header,.hero,.home-ads,.search-wrap,.categories,.section,.features,.deal,.urovo-
     <h3 id="urovoUpdateTitle">🔄 UROVO Update Available</h3>
     <p>A new UROVO version is ready. Tap Update to activate this version. Until you update, the rest of the store will stay locked.</p>
     <button id="urovoUpdateBtn" type="button">Update UROVO</button>
-    <div id="urovoUpdateGateHint">UROVO build 49</div>
+    <div id="urovoUpdateGateHint">UROVO build 50</div>
   </div>
 </div>
 <script id="urovo-update-gate-js">
 (function(){
   'use strict';
   /* PERMANENT RULE: whenever this HTML is changed, increment UROVO_BUILD_VERSION. */
-  const UROVO_BUILD_VERSION='46';
+  const UROVO_BUILD_VERSION='50';
   const UROVO_ACTIVE_BUILD_KEY='urovo_active_build_version_v1';
   const gate=()=>document.getElementById('urovoUpdateGate');
   const unlock=()=>{
@@ -368,7 +368,7 @@ header,.hero,.home-ads,.search-wrap,.categories,.section,.features,.deal,.urovo-
 <section id="homeAdsSection" class="section" style="padding-top:0;display:none"><div id="homeAds" class="home-ads"></div></section>
 <section class="search-wrap"><div class="search">🔎<input id="search" placeholder="Search UROVO products..." autocomplete="off"></div><div id="searchResults" class="search-results hidden"></div><div class="suggestions"><button class="suggestion" onclick="quickSearch('gadget')">Gadgets</button><button class="suggestion" onclick="quickSearch('stand')">Phone Stand</button><button class="suggestion" onclick="quickSearch('home')">Home</button><button class="suggestion" onclick="quickSearch('cleaning')">Cleaning</button></div></section>
 <div class="categories"><button class="cat active" data-cat="All">All</button><button class="cat" data-cat="Gadgets">Gadgets</button><button class="cat" data-cat="Home">Home</button><button class="cat" data-cat="Lifestyle">Lifestyle</button></div>
-<section class="urovo-discovery"><div class="discovery-left"><span>Sort & Filter</span><button class="sort-trigger" onclick="openSortSheet()" aria-label="Choose product sorting"><span id="sortLabel">Featured</span><small>⌄</small></button></div><div class="discovery-right"><button class="filter-chip active" data-filter="all" onclick="setProductFilter('all',this)">All</button><button class="filter-chip" data-filter="best" onclick="setProductFilter('best',this)">🔥 Best Seller</button><button class="filter-chip" data-filter="new" onclick="setProductFilter('new',this)">✨ New</button><button class="filter-chip" data-filter="sale" onclick="setProductFilter('sale',this)">💸 Deals</button></div>
+<section class="urovo-discovery"><div class="discovery-left"><span>Sort & Filter</span><button class="sort-trigger" onclick="openSortSheet()" aria-label="Choose product sorting"><span id="sortLabel">Featured</span><small>⌄</small></button></div><div class="discovery-right"><span class="filter-chip active" data-filter="new" style="cursor:default">✨ New</span></div>
 </section>
 <div class="sort-sheet" id="sortSheet" onclick="if(event.target===this)closeSortSheet()">
   <div class="sort-sheet-box">
@@ -437,7 +437,7 @@ header,.hero,.home-ads,.search-wrap,.categories,.section,.features,.deal,.urovo-
 <div class="modal" id="notificationsModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('notificationsModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">🔔 Notifications</h2><div id="notificationsList"></div></div></div>
 <div class="modal" id="ordersModal"><div class="box" style="max-width:650px"><button class="close" onclick="closeModal('ordersModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">📦 My Orders</h2><div id="ordersList"></div></div></div>
 <div class="modal" id="trackModal"><div class="box" style="max-width:600px"><button class="close" onclick="closeModal('trackModal')">✕</button><div id="trackingContent"></div></div></div>
-<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO CEO Dashboard</h2><p style="color:var(--muted)">Each management function opens as its own CEO page. CEO access only.</p><div class="ceo-layout"><aside class="ceo-sidebar"><button id="adminProductsTab" class="active" onclick="adminTab('products')">📦 Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">🧾 Orders</button><button id="adminUsersTab" onclick="adminTab('users')">👥 Users</button><button id="adminSellersTab" onclick="adminTab('sellers')">🏪 Sellers</button><button id="adminAnalyticsTab" onclick="adminTab('analytics')">📊 Analytics</button><button id="adminAdsTab" onclick="adminTab('ads')">📢 Ads & Banners</button><button id="adminHomeTab" onclick="adminTab('home')">🏠 Homepage</button><button id="adminNotificationsTab" onclick="adminTab('notifications')">🔔 Notifications <span id="adminNotificationsBadge" class="chat-badge" style="display:none">0</span></button><button id="adminChatTab" onclick="adminTab('chat')">💬 Customer Chats <span id="adminChatTabBadge" class="chat-badge" style="display:none">0</span></button><button id="adminToolsTab" onclick="adminTab('tools')">🧰 Tools & Reports</button></aside><main class="ceo-main"><div id="adminContent"></div></main></div></div></div>
+<div class="modal" id="adminModal"><div class="box" style="max-width:950px"><button class="close" onclick="closeModal('adminModal')">✕</button><h2 style="font-family:'Space Grotesk';margin:15px 0">👑 UROVO CEO Dashboard</h2><p style="color:var(--muted)">Each management function opens as its own CEO page. CEO access only.</p><div class="ceo-layout"><aside class="ceo-sidebar"><button id="adminProductsTab" class="active" onclick="adminTab('products')">📦 Products</button><button id="adminNewProductsTab" onclick="adminTab('newproducts')">✨ New Badge Products</button><button id="adminOrdersTab" onclick="adminTab('orders')">🧾 Orders</button><button id="adminUsersTab" onclick="adminTab('users')">👥 Users</button><button id="adminSellersTab" onclick="adminTab('sellers')">🏪 Sellers</button><button id="adminAnalyticsTab" onclick="adminTab('analytics')">📊 Analytics</button><button id="adminAdsTab" onclick="adminTab('ads')">📢 Ads & Banners</button><button id="adminHomeTab" onclick="adminTab('home')">🏠 Homepage</button><button id="adminNotificationsTab" onclick="adminTab('notifications')">🔔 Notifications <span id="adminNotificationsBadge" class="chat-badge" style="display:none">0</span></button><button id="adminChatTab" onclick="adminTab('chat')">💬 Customer Chats <span id="adminChatTabBadge" class="chat-badge" style="display:none">0</span></button><button id="adminToolsTab" onclick="adminTab('tools')">🧰 Tools & Reports</button></aside><main class="ceo-main"><div id="adminContent"></div></main></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1038,10 +1038,52 @@ async function renderAdminUsers(){
       </div>`;
     }).join('');
 }
+async function renderCEONewBadgeProducts(){
+  if(!requireAdmin())return;
+  const host=$("adminContent");
+  if(!host)return;
+  host.innerHTML=`<div class="order-card">
+    <h3>✨ New Badge Products</h3>
+    <p style="color:var(--muted);font-size:12px;line-height:1.5">Products shown in the Home Trending section with the NEW badge.</p>
+    <input id="urovoNewProductCodeSearch" class="input" style="margin-top:10px" placeholder="Search by Product Code (e.g. UROVO123) or product name" autocomplete="off">
+    <div id="urovoNewProductRows" style="margin-top:10px"><p style="color:var(--muted)">Loading products...</p></div>
+  </div>`;
+  try{
+    const listing=await supabaseClient.from('products').select('id,name,category,price,stock,image_url,tag,active,created_at').order('created_at',{ascending:false}).limit(1000);
+    if(listing.error)throw listing.error;
+    const all=listing.data||[];
+    const codeResult=all.length?await supabaseClient.rpc('urovo_get_product_codes',{p_product_ids:all.map(p=>p.id)}):{data:[],error:null};
+    if(codeResult.error)throw codeResult.error;
+    const codes=new Map((codeResult.data||[]).map(x=>[String(x.product_id),String(x.product_code||'')]));
+    const render=()=>{
+      const q=String($("urovoNewProductCodeSearch")?.value||'').trim().toLowerCase();
+      const filtered=all.filter(p=>{
+        const code=String(codes.get(String(p.id))||'').toLowerCase();
+        const isNew=productIsNew({tag:p.tag,created_at:p.created_at});
+        if(!q)return isNew;
+        return code.includes(q)||String(p.name||'').toLowerCase().includes(q)||String(p.category||'').toLowerCase().includes(q);
+      });
+      const rows=$("urovoNewProductRows");
+      if(!rows)return;
+      rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:11px;align-items:center;margin:9px 0;padding:11px">
+        <img src="${esc(p.image_url||'')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'">
+        <div style="flex:1;min-width:0"><b>${esc(p.name||'Product')}</b><p style="font-size:11px;color:var(--muted);margin-top:3px">${esc(p.category||'All')} · ${money(p.price||0)}</p><p style="font-size:12px;margin-top:4px">Code: <strong>${esc(codes.get(String(p.id))||'Not assigned')}</strong></p></div>
+        <button class="secondary" onclick="openProduct('${String(p.id)}');closeModal('adminModal')">Open</button>
+      </div>`).join(''):'<p style="color:var(--muted);padding:14px 0">No matching products found.</p>';
+    };
+    $("urovoNewProductCodeSearch").addEventListener('input',render);
+    render();
+  }catch(e){
+    const rows=$("urovoNewProductRows");
+    if(rows)rows.innerHTML=`<p style="color:var(--red)">${esc(e.message||'Could not load products')}</p>`;
+  }
+}
+
 function adminTab(tab){
   if(!requireAdmin())return;
-  ['products','orders','users','sellers','analytics','ads','home','notifications','chat'].forEach(t=>{const id='admin'+t.charAt(0).toUpperCase()+t.slice(1)+'Tab';document.getElementById(id)?.classList.toggle('active',tab===t)});
+  ['products','newproducts','orders','users','sellers','analytics','ads','home','notifications','chat'].forEach(t=>{const id='admin'+t.charAt(0).toUpperCase()+t.slice(1)+'Tab';document.getElementById(id)?.classList.toggle('active',tab===t)});
   if(tab==='products')renderAdminProducts();
+  else if(tab==='newproducts')renderCEONewBadgeProducts();
   else if(tab==='orders')renderAdminOrders();
   else if(tab==='users')renderAdminUsers();
   else if(tab==='sellers')renderCEOSellers();
@@ -1305,7 +1347,7 @@ async function openTracking(id){
 
   const status=String(o.status||"Placed");
   const step=orderStep(status);
-  const cancelled=false;
+  const cancelled=status==='Cancelled';
   const currentLabel=cancelled?"Order Cancelled":status;
 
   const stages=[
@@ -1611,8 +1653,11 @@ function applyDiscovery(){
     const cat=category==='All'||String(p.category).toLowerCase()===String(category).toLowerCase();
     const search=!q||[p.name,p.category,p.desc].some(v=>String(v||'').toLowerCase().includes(q));
     const d=discountInfo(p);
-    const f=discoveryFilter==='all'||(discoveryFilter==='best'&&productIsBest(p))||(discoveryFilter==='new'&&productIsNew(p))||(discoveryFilter==='sale'&&d.percent>0);
-    return cat&&search&&f&&p.active!==false;
+    // Home/All is the Trending section: only manually enabled NEW products appear there.
+    // A selected category must show every active product assigned to that category.
+    const f=productIsNew(p);
+    const showForCurrentView = category === 'All' ? f : true;
+    return cat&&search&&showForCurrentView&&p.active!==false;
   });
   if(sort==='priceLow')list.sort((a,b)=>a.price-b.price);else if(sort==='priceHigh')list.sort((a,b)=>b.price-a.price);else if(sort==='rating')list.sort((a,b)=>productRating(b)-productRating(a));else if(sort==='stock')list.sort((a,b)=>(stockOf(b)??999999)-(stockOf(a)??999999));else if(sort==='newest')list.sort((a,b)=>String(b.created_at||b.id).localeCompare(String(a.created_at||a.id)));else list.sort((a,b)=>(productIsBest(b)?1:0)-(productIsBest(a)?1:0));
   renderProductList(list);
@@ -2039,7 +2084,7 @@ function renderAccountSection(type){
  else if(type==='security') html+=`<div class="order-card"><h3>🔐 Account Security</h3><p>Use Forgot Password / password reset from Login. Keep your password private and never share it.</p><button class="secondary" style="width:100%;margin-top:12px" onclick="logout()">Logout</button></div>`;
  else if(type==='notifications'){ html+=`<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h3>🔔 Notifications</h3><button class="secondary" onclick="markAllNotificationsRead()">Mark all read</button></div><div id="accountNotificationsList" style="margin-top:10px"></div></div>`; loadNotifications().then(()=>{const box=document.getElementById('accountNotificationsList');if(box){box.innerHTML=urovoNotifications.length?urovoNotifications.map(n=>`<div class="ceo-notification-item ${n.read_at?'':'unread'}"><b>${escapeHtml(n.title||'UROVO Notification')}</b><p style="color:var(--muted);white-space:pre-wrap;margin-top:7px">${escapeHtml(n.message||'')}</p><small style="color:var(--muted)">${n.created_at?new Date(n.created_at).toLocaleString('en-IN'):''}</small></div>`).join(''):'<div class="notification-empty">No notifications yet.</div>';}}); }
  else if(type==='help') html+=`<div class="order-card"><h3>💬 UROVO Support</h3><p>Start with the UROVO Assistant for step-by-step help. If the Assistant offers WhatsApp support, the WhatsApp option will appear inside the chat.</p><button class="primary" style="width:100%;margin-top:12px" onclick="openUrovoDedicatedChat('ai')">🤖 Chat with UROVO Assistant</button></div>`;
- else if(type==='policies') html+=`<div class="order-card" style="line-height:1.7"><div style="font-weight:900;font-size:16px;margin-bottom:12px">UROVO Policies</div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>🚚 Shipping Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Delivery time depends on the seller and product. Estimated delivery information shown during checkout should be considered before placing an order.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>↩️ No Return Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">UROVO does not offer product returns after an order is delivered, unless a specific product or seller listing explicitly states otherwise.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>✕ No Order Cancellation</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Once an order has been placed and confirmed, it cannot be cancelled through UROVO. Please check the product, address, payment and order details carefully before confirming.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>💳 No Refund / Payment Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Payments made for confirmed orders are non-refundable. UROVO does not provide refunds for order cancellation, return requests or change-of-mind requests, except where required by applicable law or where UROVO expressly approves an exception.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>🔐 Privacy Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Customer information is used to provide account, order, delivery and support services and is handled according to UROVO's privacy practices.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px"><b>📄 Terms & Conditions</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">By using UROVO, you agree to the applicable product, payment, shipping and account terms shown on the website.</p></div></div>`;
+ else if(type==='policies') html+=`<div class="order-card" style="line-height:1.7"><div style="font-weight:900;font-size:16px;margin-bottom:12px">UROVO Policies</div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>🚚 Shipping Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Delivery time depends on the seller and product. Estimated delivery information shown during checkout should be considered before placing an order.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>↩️ No Return Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">UROVO does not offer product returns after an order is delivered, unless a specific product or seller listing explicitly states otherwise.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>✕ Order Cancellation</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Cancellation is available only while an order is in Placed status. Once it moves to Processing, the cancel option is removed. Please check product, address and payment details before confirming.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>💳 No Refund / Payment Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Payments made for confirmed orders are non-refundable. UROVO does not provide refunds for order cancellation, return requests or change-of-mind requests, except where required by applicable law or where UROVO expressly approves an exception.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px"><b>🔐 Privacy Policy</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">Customer information is used to provide account, order, delivery and support services and is handled according to UROVO's privacy practices.</p></div><div style="padding:12px;border:1px solid var(--line);border-radius:14px"><b>📄 Terms & Conditions</b><p style="margin:6px 0 0;color:var(--muted);font-size:12px">By using UROVO, you agree to the applicable product, payment, shipping and account terms shown on the website.</p></div></div>`;
  c.innerHTML=html;
 }
 window.showAccount=function(){openAccountPage()};
@@ -2060,11 +2105,32 @@ function openSearchPage(){
 }
 function closeSearchPage(){document.getElementById('searchPage')?.classList.remove('show');document.body.style.overflow='';}
 function clearFullSearch(){const i=document.getElementById('fullSearchInput');if(i){i.value='';i.focus()}renderFullSearch('')}
+function urovoSearchCategories(){
+  const seen=new Map();
+  (products||[]).forEach(p=>{
+    const c=String(p.category||'').trim();
+    if(c && c.toLowerCase()!=='all' && !seen.has(c.toLowerCase())) seen.set(c.toLowerCase(),c);
+  });
+  return Array.from(seen.values()).sort((a,b)=>a.localeCompare(b));
+}
+function urovoSearchCategoryChips(){
+  const cats=urovoSearchCategories();
+  if(!cats.length)return '<div class="search-empty" style="padding:20px 0">No categories added yet.</div>';
+  return cats.map((c,i)=>`<button class="search-chip" onclick="useFullSearch(${JSON.stringify(c)})">${i===0?'🏷️':'📂'} ${escapeHtml(c)}</button>`).join('');
+}
 function renderFullSearch(q){
  const body=document.getElementById('fullSearchBody');if(!body)return; q=String(q||'').trim().toLowerCase();
- if(!q){body.innerHTML=`<div class="search-section-title">Trending Searches</div><div class="search-chips"><button class="search-chip" onclick="useFullSearch('gadgets')">Gadgets</button><button class="search-chip" onclick="useFullSearch('phone stand')">Phone Stand</button><button class="search-chip" onclick="useFullSearch('home')">Home</button><button class="search-chip" onclick="useFullSearch('cleaning')">Cleaning</button></div><div class="search-section-title">Popular Categories</div><div class="search-chips"><button class="search-chip" onclick="useFullSearch('Gadgets')">⚡ Gadgets</button><button class="search-chip" onclick="useFullSearch('Home')">🏠 Home</button><button class="search-chip" onclick="useFullSearch('Lifestyle')">✨ Lifestyle</button></div><div class="search-section-title">Quick Links</div><div class="search-chips"><button class="search-chip" onclick="closeSearchPage();openWishlist()">❤️ Wishlist</button><button class="search-chip" onclick="closeSearchPage();openCart()">🛒 Cart</button></div>`;return}
- const matches=(products||[]).filter(p=>`${p.name} ${p.category} ${p.desc||''}`.toLowerCase().includes(q)).slice(0,40);
- body.innerHTML=matches.length?`<div class="search-section-title">${matches.length} result${matches.length===1?'':'s'}</div><div class="full-search-results">${matches.map(p=>{const img=p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<div style="height:170px;display:flex;align-items:center;justify-content:center;font-size:60px;background:var(--surface2)">${p.icon||'📦'}</div>`;return `<div class="full-search-result" onclick="closeSearchPage();openProduct('${String(p.id)}')">${img}<div class="rs-info"><h4>${escapeHtml(p.name)}</h4><p>${money(p.price)}</p></div></div>`}).join('')}</div>`:`<div class="search-empty"><div style="font-size:55px">🔎</div><h3 style="color:var(--text);margin:10px">No products found</h3><p>Try another keyword or browse a category.</p></div>`;
+ if(!q){
+   body.innerHTML=`<div class="search-section-title">Trending Searches</div><div class="search-chips"><button class="search-chip" onclick="useFullSearch('gadgets')">Gadgets</button><button class="search-chip" onclick="useFullSearch('phone stand')">Phone Stand</button><button class="search-chip" onclick="useFullSearch('home')">Home</button><button class="search-chip" onclick="useFullSearch('cleaning')">Cleaning</button></div><div class="search-section-title">Categories</div><div class="search-chips">${urovoSearchCategoryChips()}</div><div class="search-section-title">Quick Links</div><div class="search-chips"><button class="search-chip" onclick="closeSearchPage();openWishlist()">❤️ Wishlist</button><button class="search-chip" onclick="closeSearchPage();openCart()">🛒 Cart</button></div>`;
+   return;
+ }
+ const exactCategory=(products||[]).find(p=>String(p.category||'').trim().toLowerCase()===q)?.category;
+ const matches=(products||[]).filter(p=>{
+   if(exactCategory) return String(p.category||'').trim().toLowerCase()===String(exactCategory).trim().toLowerCase() && p.active!==false;
+   return `${p.name} ${p.category} ${p.desc||''}`.toLowerCase().includes(q) && p.active!==false;
+ }).slice(0,40);
+ const heading=exactCategory?`${matches.length} products in ${escapeHtml(exactCategory)}`:`${matches.length} result${matches.length===1?'':'s'}`;
+ body.innerHTML=matches.length?`<div class="search-section-title">${heading}</div><div class="full-search-results">${matches.map(p=>{const img=p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<div style="height:170px;display:flex;align-items:center;justify-content:center;font-size:60px;background:var(--surface2)">${p.icon||'📦'}</div>`;return `<div class="full-search-result" onclick="closeSearchPage();openProduct('${String(p.id)}')">${img}<div class="rs-info"><h4>${escapeHtml(p.name)}</h4><p>${money(p.price)}</p><small style="color:var(--muted)">${escapeHtml(p.category||'')}</small></div></div>`}).join('')}</div>`:`<div class="search-empty"><div style="font-size:55px">🔎</div><h3 style="color:var(--text);margin:10px">No products found</h3><p>Try another keyword or browse a category.</p></div>`;
 }
 function useFullSearch(q){const i=document.getElementById('fullSearchInput');if(i)i.value=q;renderFullSearch(q)}
 document.getElementById('fullSearchInput')?.addEventListener('input',e=>renderFullSearch(e.target.value));
@@ -3424,7 +3490,7 @@ window.addEventListener('load',normalizeHelpSurface);
     const result=await client.from('products').select('*').eq('active',true).order('created_at',{ascending:false});
     if(result.error){console.error('UROVO products loading error:',result.error);const p=document.getElementById('products');if(p)p.innerHTML=`<div class="empty" style="grid-column:1/-1"><div>⚠️</div><h3>Could not load products</h3><p>${esc(result.error.message)}</p></div>`;await refreshCategories();return}
     const source=(result.data||[]).filter(urovoV48IsStorefrontApproved);
-    products=source.map(p=>({id:String(p.id),name:p.name||'',category:p.category||'All',price:Number(p.price||0),old:Number(p.old_price||0),icon:p.icon||'📦',tag:p.tag||'NEW',desc:p.description||'',image:p.image_url||'',images:typeof productImagesFromRow==='function'?productImagesFromRow(p):(p.image_url?[p.image_url]:[]),stock:p.stock===null||p.stock===undefined?null:Number(p.stock),created_at:p.created_at||null,rating:Number(p.rating||p.average_rating||4.8),sales:Number(p.sales||p.sold_count||0),seller_email:p.seller_email||null,seller_name:p.seller_name||null,approval_status:p.approval_status||'approved'}));window.products=products;
+    products=source.map(p=>({id:String(p.id),name:p.name||'',category:String(p.category||'All').trim()||'All',price:Number(p.price||0),old:Number(p.old_price||0),icon:p.icon||'📦',tag:p.tag||'NEW',desc:p.description||'',image:p.image_url||'',images:typeof productImagesFromRow==='function'?productImagesFromRow(p):(p.image_url?[p.image_url]:[]),stock:p.stock===null||p.stock===undefined?null:Number(p.stock),created_at:p.created_at||null,rating:Number(p.rating||p.average_rating||4.8),sales:Number(p.sales||p.sold_count||0),seller_email:p.seller_email||null,seller_name:p.seller_name||null,approval_status:p.approval_status||'approved',product_code:p.product_code||''}));window.products=products;
     try{wishlist=wishlist.filter(id=>window.products.some(p=>String(p.id)===String(id)))}catch(e){}
     try{cart=cart.filter(i=>window.products.some(p=>String(p.id)===String(i.id)))}catch(e){}
     try{if(typeof save==='function')save();if(typeof renderProducts==='function')renderProducts();if(typeof renderCart==='function')renderCart();if(typeof updateBadges==='function')updateBadges()}catch(e){console.warn('Store refresh:',e)}
@@ -4189,10 +4255,10 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     try{
       const list=storeProducts();const ids=list.map(p=>p.id).filter(Boolean);
       if(ids.length){const client=db();const [pr,cr]=await Promise.all([
-        client.from('products').select('id,shipping_charge,free_shipping,cod_advance_amount,seller_email,old_price,stock').in('id',ids),
+        client.from('products').select('id,shipping_charge,free_shipping,cod_advance_amount,seller_email,old_price,stock,is_new').in('id',ids),
         client.rpc('urovo_get_product_codes',{p_product_ids:ids})
       ]);
-      if(!pr.error){const map=new Map((pr.data||[]).map(x=>[String(x.id),x]));list.forEach(p=>{const q=map.get(String(p.id));if(q)Object.assign(p,{shipping_charge:Number(q.shipping_charge||0),free_shipping:q.free_shipping!==false,cod_advance_amount:Number(q.cod_advance_amount||0),seller_email:q.seller_email||null,old:Number(q.old_price||p.old||0),stock:q.stock===null?null:Number(q.stock)});})}
+      if(!pr.error){const map=new Map((pr.data||[]).map(x=>[String(x.id),x]));list.forEach(p=>{const q=map.get(String(p.id));if(q)Object.assign(p,{shipping_charge:Number(q.shipping_charge||0),free_shipping:q.free_shipping!==false,cod_advance_amount:Number(q.cod_advance_amount||0),seller_email:q.seller_email||null,old:Number(q.old_price||p.old||0),stock:q.stock===null?null:Number(q.stock),is_new:q.is_new===true});})}
       if(!cr.error){const codes=new Map((cr.data||[]).map(x=>[String(x.product_id),String(x.product_code||'')]));list.forEach(p=>p.product_code=codes.get(String(p.id))||p.product_code||'')}
       setTimeout(()=>{enhanceProductCards();maybeOpenProductCodeLink()},80);
       }
@@ -4405,4 +4471,657 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 
 })();
 </script>
+<style id="urovo-v52-restored-controls-style">
+#urovoCropModalV52{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100000;display:none;align-items:center;justify-content:center;padding:14px;overflow:auto}
+#urovoCropModalV52.show{display:flex}
+#urovoCropModalV52 .crop-card{width:min(720px,100%);max-height:94vh;overflow:auto;background:#101010;border:1px solid #2a2a2a;border-radius:20px;padding:16px;color:#fff;box-shadow:0 30px 100px #000}
+#urovoCropModalV52 .crop-stage{width:100%;height:min(54vh,430px);min-height:220px;background:#070707;border:1px solid #303030;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:12px 0}
+#urovoCropModalV52 img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;transition:transform .12s}
+#urovoCropModalV52 .crop-row{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}
+#urovoCropModalV52 button{cursor:pointer;border-radius:11px;min-height:39px;padding:8px 12px;border:1px solid #323232;background:#191919;color:#fff;font-weight:800}
+#urovoCropModalV52 button.active{border-color:#c8ff00;color:#c8ff00;background:#202500}
+#urovoCropModalV52 .crop-primary{background:#c8ff00;border-color:#c8ff00;color:#050505;flex:1}
+#urovoCropModalV52 .crop-cancel{color:#ff3655;border-color:#64202d}
+.urovo-v52-option-card{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--surface2)}
+.urovo-v52-option-card label{font-weight:800;display:block;margin-bottom:6px}
+.urovo-v52-option-card small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:5px}
+.urovo-v52-image-edit{display:block!important;width:100%;margin:8px 0 4px!important;border:1px solid var(--lime)!important;min-height:42px}
+.urovo-v52-new-toggle{white-space:nowrap;min-width:112px}
+.wish.active,.wish[aria-pressed="true"]{color:#ff3655!important;border-color:rgba(255,54,85,.55)!important;background:rgba(255,54,85,.13)!important}
+#detailWish.active{color:#ff3655!important}
+</style>
+<div id="urovoCropModalV52" aria-hidden="true">
+  <div class="crop-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><b style="font-size:19px">🖼️ Edit Product Image</b><p id="urovoCropCountV52" style="font-size:12px;color:#aaa;margin-top:4px">Crop, resize, zoom or rotate</p></div><button type="button" class="crop-cancel" onclick="urovoCropCancelV52()">✕ Close</button></div>
+    <div class="crop-stage" id="urovoCropStageV52"><img id="urovoCropImageV52" alt="Crop preview"></div>
+    <div style="font-size:11px;color:#aaa;margin-top:4px">Aspect ratio</div>
+    <div class="crop-row" id="urovoCropRatiosV52"><button type="button" data-ratio="1">1:1</button><button type="button" data-ratio="0.8">4:5</button><button type="button" data-ratio="0.75">3:4</button><button type="button" data-ratio="1.7777778">16:9</button><button type="button" data-ratio="1.5">3:2</button><button type="button" class="active" data-ratio="0">Original</button></div>
+    <div class="crop-row"><button type="button" onclick="urovoCropZoomV52(-.1)">− Zoom</button><button type="button" onclick="urovoCropZoomV52(.1)">+ Zoom</button><button type="button" onclick="urovoCropRotateV52(-90)">↶ Rotate</button><button type="button" onclick="urovoCropRotateV52(90)">↷ Rotate</button></div>
+    <div class="crop-row"><button type="button" class="crop-cancel" onclick="urovoCropCancelV52()">Cancel</button><button type="button" class="crop-primary" onclick="urovoCropApplyV52()">✓ Apply Crop</button></div>
+  </div>
+</div>
+<script id="urovo-v52-restored-controls-script">
+(function(){
+ 'use strict';
+ const $id=id=>document.getElementById(id);
+ const db=()=>window.supabaseClient||(typeof supabaseClient!=='undefined'?supabaseClient:null);
+ const safeText=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const say=m=>{try{if(typeof toast==='function')toast(m);else console.log(m)}catch(e){console.log(m)}};
+ const codePattern=/^[A-Za-z0-9][A-Za-z0-9_-]{1,59}$/;
+
+ // NEW is now manual only. Tag text/date never enables the badge by itself.
+ try{window.productIsNew=function(p){return p?.is_new===true};productIsNew=window.productIsNew}catch(e){window.productIsNew=function(p){return p?.is_new===true}}
+
+ // Product image cropper. Every Add/Edit image input routes through this cropper before upload.
+ let cropFiles=[],cropIndex=0,cropRatio=0,cropScale=1,cropRotation=0,cropUrl='',cropInput=null;
+ function cropDraw(){const img=$id('urovoCropImageV52'),stage=$id('urovoCropStageV52');if(!img||!stage)return;img.style.transform=`rotate(${cropRotation}deg) scale(${cropScale})`;stage.style.height='min(54vh,430px)'}
+ function openCrop(i){cropIndex=i;if(cropUrl)URL.revokeObjectURL(cropUrl);cropUrl=URL.createObjectURL(cropFiles[cropIndex]);cropScale=1;cropRotation=0;cropRatio=0;const img=$id('urovoCropImageV52');img.onload=()=>cropDraw();img.src=cropUrl;document.querySelectorAll('#urovoCropRatiosV52 button').forEach(b=>b.classList.toggle('active',Number(b.dataset.ratio||0)===0));$id('urovoCropCountV52').textContent=`Image ${cropIndex+1} of ${cropFiles.length} · Select ratio, zoom or rotate`;const modal=$id('urovoCropModalV52');modal.classList.add('show');modal.setAttribute('aria-hidden','false');setTimeout(cropDraw,20)}
+ window.urovoPrepareProductImages=function(input){if(!input?.files?.length)return;cropInput=input;cropFiles=Array.from(input.files);cropIndex=0;openCrop(0)};
+ window.urovoEditSelectedProductImages=function(id){const input=$id(id);if(!input)return;if(!input.files?.length){input.click();return}window.urovoPrepareProductImages(input)};
+ window.urovoCropZoomV52=function(v){cropScale=Math.max(.5,Math.min(3,cropScale+Number(v||0)));cropDraw()};
+ window.urovoCropRotateV52=function(v){cropRotation=(cropRotation+Number(v||0))%360;cropDraw()};
+ function closeCrop(){const modal=$id('urovoCropModalV52');if(modal){modal.classList.remove('show');modal.setAttribute('aria-hidden','true')}if(cropUrl)URL.revokeObjectURL(cropUrl);cropUrl=''}
+ window.urovoCropCancelV52=function(){closeCrop();if(typeof window.__urovoCropResolveV52==='function'){const r=window.__urovoCropResolveV52;window.__urovoCropResolveV52=null;r(null)}};
+ async function cropCurrentFile(){const img=$id('urovoCropImageV52');if(!img?.naturalWidth)throw new Error('Image did not load');let sw=img.naturalWidth,sh=img.naturalHeight;let targetW=sw,targetH=sh;if(cropRatio){if(sw/sh>cropRatio)targetW=Math.round(sh*cropRatio);else targetH=Math.round(sw/cropRatio)}const canvas=document.createElement('canvas');canvas.width=Math.max(1,targetW);canvas.height=Math.max(1,targetH);const ctx=canvas.getContext('2d');ctx.save();ctx.translate(canvas.width/2,canvas.height/2);ctx.rotate(cropRotation*Math.PI/180);const fit=Math.max(canvas.width/sw,canvas.height/sh)*cropScale;ctx.drawImage(img,-sw*fit/2,-sh*fit/2,sw*fit,sh*fit);ctx.restore();return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Image crop failed')),'image/jpeg',.92))}
+ window.urovoCropApplyV52=async function(){try{const blob=await cropCurrentFile();const old=cropFiles[cropIndex];cropFiles[cropIndex]=new File([blob],String(old.name||'product').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'});if(cropIndex<cropFiles.length-1){openCrop(cropIndex+1);return}const dt=new DataTransfer();cropFiles.forEach(f=>dt.items.add(f));cropInput.files=dt.files;const result=Array.from(cropInput.files);closeCrop();if(typeof window.__urovoCropResolveV52==='function'){const r=window.__urovoCropResolveV52;window.__urovoCropResolveV52=null;r(result)}say('Product images edited successfully')}catch(e){console.error(e);say(e?.message||'Could not crop image')}};
+ document.addEventListener('click',e=>{const b=e.target.closest('#urovoCropRatiosV52 button');if(!b)return;cropRatio=Number(b.dataset.ratio||0);document.querySelectorAll('#urovoCropRatiosV52 button').forEach(x=>x.classList.toggle('active',x===b));cropDraw()});
+ window.addEventListener('resize',cropDraw);
+ function bindImageInput(id){const input=$id(id);if(!input||input.dataset.urovoCropBoundV52==='1')return;input.dataset.urovoCropBoundV52='1';input.onchange=()=>{if(input.files?.length)window.urovoPrepareProductImages(input)};const next=input.nextElementSibling;if(!next||!next.matches('[data-urovo-v52-image-button]')){const b=document.createElement('button');b.type='button';b.className='secondary urovo-v52-image-edit';b.dataset.urovoV52ImageButton='1';b.textContent='🖼️ Edit Image';b.addEventListener('click',()=>window.urovoEditSelectedProductImages(id));input.insertAdjacentElement('afterend',b)}}
+ function bindAvailableImageInputs(){['adminImage','editImage','svImages'].forEach(bindImageInput)}
+
+ // Rebind forms after the underlying UROVO renderer creates the form. Existing shipping/COD fields are retained.
+ const originalShowAdd=window.showAddProductForm;
+ if(typeof originalShowAdd==='function')window.showAddProductForm=function(...args){const r=originalShowAdd.apply(this,args);setTimeout(()=>{const root=$id('adminContent'),desc=$id('adminDescription');if(root&&desc){if(!$id('adminProductCode'))desc.insertAdjacentHTML('beforebegin',`<div class="urovo-v52-option-card"><label for="adminProductCode">🔖 Product Code (optional)</label><input id="adminProductCode" class="input" maxlength="60" autocomplete="off" placeholder="Leave blank to auto-generate"><small>Enter a unique code, such as UROVO123. Leave blank to keep the automatic code.</small></div>`);if(!$id('adminIsNewBadge'))desc.insertAdjacentHTML('beforebegin',`<label class="urovo-v52-option-card" style="display:flex;align-items:center;gap:10px"><input id="adminIsNewBadge" type="checkbox" style="width:20px;height:20px;accent-color:var(--lime)"><span><b>✨ NEW Badge</b><small>Enable this manually to show the product in Home → Trending Products.</small></span></label>`);const oldHint=Array.from(root.querySelectorAll('small')).find(x=>/unique private product code is generated automatically/i.test(x.textContent||''));if(oldHint)oldHint.textContent='Optional custom Product Code is available above; otherwise UROVO generates one automatically.'}bindAvailableImageInputs()},0);return r};
+
+ const originalEdit=window.editProduct;
+ if(typeof originalEdit==='function')window.editProduct=async function(id,...args){const r=await originalEdit.apply(this,[id,...args]);try{const client=db();const pRes=await client.from('products').select('id,is_new').eq('id',id).maybeSingle();const desc=$id('editDescription');if(desc&&!$id('editProductCode')){desc.insertAdjacentHTML('beforebegin',`<div class="urovo-v52-option-card"><label for="editProductCode">🔖 Product Code</label><input id="editProductCode" class="input" maxlength="60" autocomplete="off" placeholder="Loading Product Code..."><small>Edit the unique code here. This is also used by Product Code Search and Share Product Link.</small></div>`);desc.insertAdjacentHTML('beforebegin',`<label class="urovo-v52-option-card" style="display:flex;align-items:center;gap:10px"><input id="editIsNewBadge" type="checkbox" style="width:20px;height:20px;accent-color:var(--lime)"><span><b>✨ NEW Badge</b><small>Enable to show in Home → Trending Products. This is manual, not date-based.</small></span></label>`)}if($id('editIsNewBadge'))$id('editIsNewBadge').checked=pRes.data?.is_new===true;const cr=await client.rpc('urovo_get_product_codes',{p_product_ids:[id]});const code=(cr.data||[]).find(x=>String(x.product_id)===String(id))?.product_code||'';if($id('editProductCode'))$id('editProductCode').value=code;if(!$id('editImage')){}bindAvailableImageInputs()}catch(e){console.warn('Product edit controls:',e?.message||e)}return r};
+
+ async function duplicateCode(code,exceptId){const client=db();if(!client)throw new Error('Supabase is not connected');const listing=await client.from('products').select('id').order('created_at',{ascending:false}).limit(5000);if(listing.error)throw listing.error;const ids=(listing.data||[]).map(x=>x.id);if(!ids.length)return false;const r=await client.rpc('urovo_get_product_codes',{p_product_ids:ids});if(r.error)throw r.error;return (r.data||[]).some(x=>String(x.product_id)!==String(exceptId||'')&&String(x.product_code||'').trim().toLowerCase()===String(code||'').trim().toLowerCase())}
+ async function findNewCEOProduct(name,beforeIds){const client=db();const q=await client.from('products').select('id,created_at').eq('name',name).is('seller_email',null).order('created_at',{ascending:false}).limit(50);if(q.error)throw q.error;return (q.data||[]).find(x=>!beforeIds.has(String(x.id)))||(q.data||[])[0]||null}
+ // Seller Edit Product also uses the same cropper before replacing images.
+ window.urovoSellerEditProductV40=async function(id){
+   const client=db();const email=String((typeof user!=='undefined'&&user?.email)||(window.user?.email)||'').trim().toLowerCase();if(!client||!email){say('Please sign in first');return}
+   try{
+     const seller=await client.from('urovo_sellers').select('active').eq('email',email).maybeSingle();if(seller.error)throw seller.error;if(!seller.data||seller.data.active===false){say('Active Seller permission required');return}
+     const found=await client.from('products').select('*').eq('id',id).eq('seller_email',email).single();if(found.error)throw found.error;const p=found.data;
+     const name=prompt('Product name',p.name||'');if(name===null)return;const category=prompt('Category',p.category||'All');if(category===null)return;
+     const price=Number(prompt('Selling price (₹)',String(p.price||0)));if(!Number.isFinite(price)||price<=0){say('Enter a valid positive price');return}
+     const old_price=Number(prompt('Old price (₹)',String(p.old_price||0))||0);const stock=Number(prompt('Stock quantity',String(p.stock||0)));if(!Number.isInteger(stock)||stock<0){say('Stock must be zero or more');return}
+     const shipping_charge=Number(prompt('Shipping charge (₹)',String(p.shipping_charge||0))||0);if(!Number.isFinite(shipping_charge)||shipping_charge<0){say('Shipping charge must be zero or more');return}
+     const tag=prompt('Product tag (optional)',p.tag||'');if(tag===null)return;const description=prompt('Description',p.description||'');if(description===null)return;
+     const update={name:name.trim(),category:category.trim()||'All',price,old_price,stock,shipping_charge,free_shipping:shipping_charge<=0,tag:tag.trim(),description:description.trim()};
+     if(confirm('Replace product images? Choose OK to select images, then crop each one. Cancel keeps existing images.')){
+       const input=document.createElement('input');input.type='file';input.accept='image/*';input.multiple=true;
+       const chosen=await new Promise(resolve=>{let settled=false;const done=v=>{if(settled)return;settled=true;if(window.__urovoCropResolveV52===done)window.__urovoCropResolveV52=null;resolve(v)};input.addEventListener('change',()=>{if(!input.files?.length){done(null);return}window.__urovoCropResolveV52=done;window.urovoPrepareProductImages(input)},{once:true});input.addEventListener('cancel',()=>done(null),{once:true});window.addEventListener('focus',()=>setTimeout(()=>{if(!settled&&!input.files?.length)done(null)},500),{once:true});input.click()});
+       if(chosen?.length){const urls=[];for(const file of chosen){const path=`seller/${email}/${Date.now()}-${Math.random().toString(36).slice(2)}-${String(file.name||'product.jpg').replace(/[^a-zA-Z0-9._-]/g,'-')}`;const up=await client.storage.from('product-images').upload(path,file,{upsert:false});if(up.error)throw up.error;urls.push(client.storage.from('product-images').getPublicUrl(path).data.publicUrl)}update.image_url=urls[0]||null;update.image_urls=urls}
+     }
+     const upd=await client.from('products').update(update).eq('id',id).eq('seller_email',email);if(upd.error)throw upd.error;say('Product details saved');await window.openSellerDashboard?.();
+   }catch(e){console.error('Seller edit:',e);say(e?.message||'Product update failed')}
+ };
+
+ const originalAdd=window.addProduct;
+ if(typeof originalAdd==='function')window.addProduct=async function(...args){const code=String($id('adminProductCode')?.value||'').trim(),isNew=$id('adminIsNewBadge')?.checked===true,name=String($id('adminName')?.value||'').trim();if(code&&!codePattern.test(code)){say('Product Code must use 2–60 letters, numbers, dash or underscore.');return}const client=db();let beforeIds=new Set();try{if(code){if(await duplicateCode(code,'')){say('This Product Code is already used. Enter a unique code.');return}}const before=await client.from('products').select('id').eq('name',name).is('seller_email',null).limit(1000);if(!before.error)beforeIds=new Set((before.data||[]).map(x=>String(x.id)))}catch(e){if(code){say('Could not verify Product Code uniqueness: '+(e?.message||'try again'));return}}await originalAdd.apply(this,args);try{const created=await findNewCEOProduct(name,beforeIds);if(!created){say('Product save could not be verified. Check the Products list.');return}const up=await client.from('products').update({is_new:isNew}).eq('id',created.id);if(up.error)throw up.error;if(code){const cr=await client.rpc('urovo_save_product_code',{p_product_id:created.id,p_code:code});if(cr.error)throw cr.error;say('Product saved · Product Code: '+code)}await window.loadStoreProducts?.();if(typeof window.renderAdminProducts==='function')window.renderAdminProducts()}catch(e){console.error('Product Code / NEW badge save:',e);say('Product may have been added, but the Product Code/NEW Badge update failed: '+(e?.message||'check the database migration'))}};
+
+ const originalSave=window.saveEditedProduct;
+ if(typeof originalSave==='function')window.saveEditedProduct=async function(id,...args){const code=String($id('editProductCode')?.value||'').trim(),isNew=$id('editIsNewBadge')?.checked===true;if(!codePattern.test(code)){say('Enter a valid Product Code (2–60 letters, numbers, dash or underscore).');return}try{if(await duplicateCode(code,id)){say('This Product Code belongs to another product. Choose a unique code.');return}}catch(e){say('Could not verify Product Code uniqueness: '+(e?.message||'try again'));return}await originalSave.apply(this,[id,...args]);try{const client=db();const up=await client.from('products').update({is_new:isNew}).eq('id',id);if(up.error)throw up.error;const cr=await client.rpc('urovo_save_product_code',{p_product_id:id,p_code:code});if(cr.error)throw cr.error;await window.loadStoreProducts?.();say('Product details, Product Code and NEW Badge saved')}catch(e){console.error('Edit Product metadata:',e);say('Product details may be saved, but Product Code/NEW Badge failed: '+(e?.message||'check database migration'))}};
+
+ // Dedicated CEO New Badge page with live search, manual enable/disable and Product Code display.
+ window.renderCEONewBadgeProducts=async function(){if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;const host=$id('adminContent');if(!host)return;host.innerHTML=`<div class="order-card"><h3>✨ New Badge Products</h3><p style="color:var(--muted);font-size:12px;line-height:1.5">Turn NEW on or off manually. Home → Trending Products shows only enabled products.</p><input id="urovoNewProductCodeSearch" class="input" style="margin-top:10px" placeholder="Search by Product Code or product name" autocomplete="off"><div id="urovoNewProductRows" style="margin-top:10px"><p style="color:var(--muted)">Loading products...</p></div></div>`;const client=db();try{const list=await client.from('products').select('id,name,category,price,stock,image_url,tag,active,created_at,is_new').order('created_at',{ascending:false}).limit(1000);if(list.error)throw list.error;const all=list.data||[];const cc=all.length?await client.rpc('urovo_get_product_codes',{p_product_ids:all.map(p=>p.id)}):{data:[],error:null};if(cc.error)throw cc.error;const codes=new Map((cc.data||[]).map(x=>[String(x.product_id),String(x.product_code||'')]));const render=()=>{const q=String($id('urovoNewProductCodeSearch')?.value||'').trim().toLowerCase();const filtered=all.filter(p=>!q?p.is_new===true:(String(codes.get(String(p.id))||'').toLowerCase().includes(q)||String(p.name||'').toLowerCase().includes(q)||String(p.category||'').toLowerCase().includes(q)));const rows=$id('urovoNewProductRows');if(!rows)return;rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:10px;align-items:center;margin:9px 0;padding:11px"><img src="${safeText(p.image_url||'')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'"><div style="flex:1;min-width:0"><b>${safeText(p.name||'Product')}</b><p style="font-size:11px;color:var(--muted);margin-top:3px">${safeText(p.category||'All')} · ${typeof money==='function'?money(p.price||0):'₹'+Number(p.price||0)}</p><p style="font-size:12px;margin-top:4px">Code: <strong>${safeText(codes.get(String(p.id))||'Not assigned')}</strong></p><span class="order-status-pill">${p.is_new===true?'NEW ENABLED':'NEW DISABLED'}</span></div><div style="display:grid;gap:6px"><button class="secondary urovo-v52-new-toggle" onclick="urovoV52ToggleNewBadge('${safeText(p.id)}',${p.is_new===true?'false':'true'})">${p.is_new===true?'Disable NEW':'Enable NEW'}</button><button class="secondary" onclick="openProduct('${safeText(p.id)}')">Open</button></div></div>`).join(''):'<p style="color:var(--muted);padding:14px 0">No matching products found.</p>'};$id('urovoNewProductCodeSearch').addEventListener('input',render);render()}catch(e){const rows=$id('urovoNewProductRows');if(rows)rows.innerHTML=`<p style="color:var(--red)">${safeText(e?.message||'Could not load products. Run the V52 migration if is_new is missing.')}</p>`}};
+ window.urovoV52ToggleNewBadge=async function(id,enabled){if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;const client=db();const r=await client.from('products').update({is_new:enabled===true}).eq('id',id);if(r.error){say(r.error.message);return}const arr=Array.isArray(window.products)?window.products:[];const p=arr.find(x=>String(x.id)===String(id));if(p)p.is_new=enabled===true;if(typeof window.loadStoreProducts==='function')await window.loadStoreProducts();await window.renderCEONewBadgeProducts();say(enabled?'NEW badge enabled':'NEW badge disabled')};
+
+ // Keep account Orders inside Account when tracking; show Cancel only for Placed, never Processing.
+ const originalOpenTracking=window.openTracking;
+ function inAccountOrders(){const page=$id('accountPage'),c=$id('fullAccountContent');if(!page||!page.classList.contains('show')||!c)return false;const h=c.querySelector('h2');return !!h&&/my orders/i.test(h.textContent||'')}
+ function orderItems(o){let a=o?.items||[];if(typeof a==='string')try{a=JSON.parse(a)}catch(e){a=[]}return Array.isArray(a)?a:[]}
+ async function fetchCustomerOrder(id){const client=db();if(typeof user!=='undefined'&&user?.email){const r=await client.from('orders').select('*').eq('id',id).eq('user_email',user.email).maybeSingle();if(!r.error&&r.data)return r.data}try{const a=typeof orders!=='undefined'?orders:[];return a.find(x=>String(x.id)===String(id))||null}catch(e){return null}}
+ function trackStatusBody(o){const status=String(o.status||'Placed'),names=['Placed','Processing','Shipped','Out for Delivery','Delivered'],idx=Math.max(0,names.indexOf(status)),cancelled=status==='Cancelled';const items=orderItems(o);const timeline=cancelled?`<div class="tracking-stage completed cancelled-stage"><div class="tracking-dot">✕</div><div class="tracking-stage-body"><b>Cancelled</b><small>Your order was cancelled.</small></div></div>`:names.map((s,i)=>`<div class="tracking-stage ${i<idx?'completed':''} ${i===idx?'current':''}"><div class="tracking-dot">${i<idx?'✓':['🧾','⚙️','📦','🚚','✅'][i]}</div><div class="tracking-stage-body"><b>${s}</b><small>${i===idx?status+' · ':''}${['Order received','Being prepared','Handed to courier','Out for delivery','Delivered'][i]}</small></div></div>`).join('');return `<button class="secondary" style="width:100%;margin:0 0 12px" onclick="accountSection('orders')">← Back to My Orders</button><h2 style="font-family:'Space Grotesk';margin:16px 0">🚚 Track Order</h2><div class="tracking-status-card"><div style="display:flex;justify-content:space-between;gap:9px;align-items:center"><b>Order status</b><span class="order-status-pill">${safeText(status)}</span></div><p style="color:var(--lime);font-weight:900;margin-top:8px">${safeText(o.order_number||o.id)}</p></div><div class="tracking-info-card"><b>🛍️ Items</b>${items.map(i=>`<div style="padding:10px 0;border-bottom:1px solid var(--line)">${safeText(i.name||i.product_name||'Product')} × ${Number(i.qty||i.quantity||1)} <b style="float:right">${typeof money==='function'?money(Number(i.price||i.unit_price||0)*Number(i.qty||i.quantity||1)):'₹'+Number(i.price||0).toFixed(2)}</b></div>`).join('')}</div><div class="tracking-timeline">${timeline}</div>${o.tracking_number?`<div class="tracking-info-card"><b>🚚 Shipment Details</b><p style="color:var(--muted);margin-top:7px">${safeText(o.courier||'Courier')} · ${safeText(o.tracking_number)}</p>${o.tracking_url?`<a href="${safeText(o.tracking_url)}" target="_blank" rel="noopener" style="color:var(--lime);display:inline-block;margin-top:8px">Track on courier →</a>`:''}</div>`:''}<div class="tracking-info-card"><b>📍 Delivery Address</b><p style="color:var(--muted);margin-top:7px">${safeText(o.address||'Not provided')}</p></div><div class="tracking-info-card"><b>Total</b><h3 style="margin-top:6px">${typeof money==='function'?money(o.total):'₹'+Number(o.total||0).toFixed(2)}</h3><p style="color:var(--muted);font-size:12px;margin-top:6px">Payment: ${safeText(o.payment_method||o.payment||'Not specified')}</p></div>${status==='Placed'?`<button class="secondary" style="width:100%;margin-top:8px;border-color:var(--red)!important;color:var(--red)!important" onclick="urovoV52CancelOrder('${safeText(o.id)}')">✕ Cancel Order</button><small style="display:block;color:var(--muted);text-align:center;margin-top:7px">Cancellation is available only while order status is Placed.</small>`:''}${status==='Processing'?'<p style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px">Order is Processing. The cancel option is no longer available.</p>':''}`}
+ window.openTracking=async function(id,...args){if(inAccountOrders()){const o=await fetchCustomerOrder(id);if(!o){say('Order not found');return}const c=$id('fullAccountContent');c.innerHTML=trackStatusBody(o);return}if(typeof originalOpenTracking==='function')return originalOpenTracking.apply(this,[id,...args])};
+ window.urovoV52CancelOrder=async function(id){if(typeof user==='undefined'||!user?.email){say('Please sign in first');return}if(!confirm('Cancel this order? Cancellation is allowed only while status is Placed.'))return;const client=db();let data=null,err=null;try{const direct=await client.from('orders').update({status:'Cancelled'}).eq('id',id).eq('user_email',user.email).eq('status','Placed').select('*').maybeSingle();data=direct.data;err=direct.error}catch(e){err=e}if(err||!data){try{const rpc=await client.rpc('urovo_cancel_customer_order',{p_order_id:String(id)});if(!rpc.error){data=rpc.data;err=null}else if(!err)err=rpc.error}catch(e){if(!err)err=e}}if(err||!data){say(err?.message||'Order could not be cancelled. Run the V52 SQL migration and try again.');return}try{if(typeof data==='string')data=JSON.parse(data)}catch(e){}if(typeof orders!=='undefined'){const old=orders.find(x=>String(x.id)===String(id));if(old)old.status='Cancelled'}const c=$id('fullAccountContent');if(c){const fresh=await fetchCustomerOrder(id);c.innerHTML=trackStatusBody(fresh||data)}say('Order cancelled successfully')};
+
+ // Attach cropper to forms created later and add the Edit Image control to seller Add Product.
+ const observer=new MutationObserver(()=>{bindAvailableImageInputs();const si=$id('svImages');if(si)bindImageInput('svImages')});observer.observe(document.body,{childList:true,subtree:true});
+ document.addEventListener('DOMContentLoaded',bindAvailableImageInputs);setTimeout(bindAvailableImageInputs,100);
+})();
+</script>
+
+<script id="urovo-v52-product-code-final-fix">
+(function(){
+  const $f=id=>document.getElementById(id);
+  const client=()=>window.supabaseClient||window.supabase||null;
+  const msg=t=>{try{if(typeof window.say==='function')window.say(t);else if(typeof window.toast==='function')window.toast(t)}catch(e){}};
+  const escCode=v=>String(v??'').trim();
+  const valid=/^[A-Za-z0-9_-]{2,60}$/;
+
+  async function directCode(id){
+    const c=client(); if(!c||!id)return '';
+    const r=await c.from('products').select('product_code').eq('id',id).maybeSingle();
+    if(r.error) throw r.error;
+    return escCode(r.data?.product_code);
+  }
+  async function directSetCode(id,code){
+    const c=client(); if(!c)throw new Error('Supabase is not connected');
+    const q=await c.from('products').select('id').eq('product_code',code).neq('id',id||'').limit(1);
+    if(q.error)throw q.error;
+    if((q.data||[]).length)throw new Error('This Product Code is already used.');
+    const r=await c.from('products').update({product_code:code}).eq('id',id);
+    if(r.error)throw r.error;
+  }
+
+  // Make the existing product loader read product_code directly from products.
+  const prevLoad=window.loadStoreProducts;
+  if(typeof prevLoad==='function'){
+    window.loadStoreProducts=async function(...args){
+      const r=await prevLoad.apply(this,args);
+      try{
+        const list=typeof window.storeProducts==='function'?window.storeProducts():[];
+        const ids=list.map(x=>x.id).filter(Boolean);
+        if(ids.length){
+          const c=client();
+          const q=await c.from('products')
+            .select('id,product_code,is_new,shipping_charge,free_shipping,cod_advance_amount,seller_email,old_price,stock')
+            .in('id',ids);
+          if(!q.error){
+            const m=new Map((q.data||[]).map(x=>[String(x.id),x]));
+            list.forEach(x=>{
+              const z=m.get(String(x.id));
+              if(z){
+                x.product_code=escCode(z.product_code)||x.product_code||'';
+                x.is_new=z.is_new===true;
+                if(z.shipping_charge!==undefined)x.shipping_charge=Number(z.shipping_charge||0);
+                if(z.free_shipping!==undefined)x.free_shipping=z.free_shipping!==false;
+                if(z.cod_advance_amount!==undefined)x.cod_advance_amount=Number(z.cod_advance_amount||0);
+                if(z.seller_email!==undefined)x.seller_email=z.seller_email||null;
+                if(z.old_price!==undefined)x.old=Number(z.old_price||0);
+                if(z.stock!==undefined)x.stock=z.stock===null?null:Number(z.stock);
+              }
+            });
+          }
+        }
+      }catch(e){console.warn('V52 direct product metadata:',e?.message||e)}
+      return r;
+    };
+  }
+
+  // Direct product-code sharing. No RPC dependency.
+  window.urovoShareProduct=async function(id){
+    const getP=window.getProduct;
+    const p=typeof getP==='function'?getP(id):null;
+    if(!p){msg('Open a product first');return}
+    let code=escCode(p.product_code);
+    try{if(!code)code=await directCode(p.id)}catch(e){}
+    if(!code){msg('Product Code is not assigned yet.');return}
+    const url=new URL(location.href);
+    url.searchParams.set('product_code',code);
+    try{if(navigator.share){await navigator.share({title:p.name||'UROVO Product',text:`${p.name||'Product'} · UROVO`,url:url.href});return}}catch(e){if(e?.name==='AbortError')return}
+    try{await navigator.clipboard.writeText(url.href);msg('🔗 Product Link copied')}catch(e){window.prompt('Copy Product Link:',url.href)}
+  };
+
+  // Direct Product Code URL opening without RPC.
+  window.urovoOpenProductByCode=async function(code){
+    code=escCode(code); if(!code)return;
+    try{
+      const c=client();
+      const q=await c.from('products').select('*').eq('product_code',code).maybeSingle();
+      if(q.data&&typeof window.openProduct==='function'){window.openProduct(q.data.id);return true}
+    }catch(e){console.warn('Product code lookup:',e?.message||e)}
+    return false;
+  };
+
+  // Final CEO Add Product wrapper: keeps the existing form/features, but saves
+  // custom Product Code + manual NEW Badge directly to products.
+  const prevAdd=window.addProduct;
+  if(typeof prevAdd==='function'){
+    window.addProduct=async function(...args){
+      const code=escCode($f('adminProductCode')?.value);
+      const isNew=$f('adminIsNewBadge')?.checked===true;
+      if(code&&!valid.test(code)){msg('Product Code must use 2–60 letters, numbers, dash or underscore.');return}
+      if(code){
+        try{
+          const c=client();
+          const q=await c.from('products').select('id').eq('product_code',code).limit(1);
+          if(q.error)throw q.error;
+          if((q.data||[]).length){msg('This Product Code is already used. Enter a unique code.');return}
+        }catch(e){msg(e?.message||'Could not check Product Code');return}
+      }
+      const name=String($f('adminName')?.value||'').trim();
+      const before=new Set();
+      try{
+        const c=client();
+        const q=await c.from('products').select('id').eq('name',name).is('seller_email',null).limit(1000);
+        (q.data||[]).forEach(x=>before.add(String(x.id)));
+      }catch(e){}
+      await prevAdd.apply(this,args);
+      try{
+        const c=client();
+        const q=await c.from('products').select('id,created_at').eq('name',name).is('seller_email',null).order('created_at',{ascending:false}).limit(50);
+        const created=(q.data||[]).find(x=>!before.has(String(x.id)))||(q.data||[])[0];
+        if(!created)return;
+        if(code)await directSetCode(created.id,code);
+        const n=await c.from('products').update({is_new:isNew}).eq('id',created.id);
+        if(n.error)throw n.error;
+        msg(code?`Product saved · Code: ${code}`:'Product added successfully');
+        await window.loadStoreProducts?.();
+        window.renderAdminProducts?.();
+      }catch(e){console.warn('V52 Add metadata:',e?.message||e);msg('Product was added, but Product Code/NEW Badge could not be saved.')}
+    };
+  }
+
+  // Final CEO Edit Product wrapper: direct product_code + is_new save.
+  const prevEdit=window.editProduct;
+  if(typeof prevEdit==='function'){
+    window.editProduct=async function(id,...args){
+      const r=await prevEdit.apply(this,[id,...args]);
+      try{
+        const c=client();
+        const q=await c.from('products').select('id,product_code,is_new').eq('id',id).maybeSingle();
+        if($f('editProductCode'))$f('editProductCode').value=escCode(q.data?.product_code);
+        if($f('editIsNewBadge'))$f('editIsNewBadge').checked=q.data?.is_new===true;
+      }catch(e){}
+      return r;
+    };
+  }
+
+  const prevSave=window.saveEditedProduct;
+  if(typeof prevSave==='function'){
+    window.saveEditedProduct=async function(id,...args){
+      const code=escCode($f('editProductCode')?.value);
+      const isNew=$f('editIsNewBadge')?.checked===true;
+      if(!valid.test(code)){msg('Enter a valid Product Code (2–60 letters, numbers, dash or underscore).');return}
+      try{
+        const c=client();
+        const q=await c.from('products').select('id').eq('product_code',code).neq('id',id).limit(1);
+        if(q.error)throw q.error;
+        if((q.data||[]).length){msg('This Product Code belongs to another product.');return}
+      }catch(e){msg(e?.message||'Could not check Product Code');return}
+      await prevSave.apply(this,[id,...args]);
+      try{
+        await directSetCode(id,code);
+        const c=client();
+        const n=await c.from('products').update({is_new:isNew}).eq('id',id);
+        if(n.error)throw n.error;
+        await window.loadStoreProducts?.();
+        msg('Product Code and NEW Badge saved');
+      }catch(e){console.warn('V52 Edit metadata:',e?.message||e);msg('Product details may be saved, but Product Code/NEW Badge could not be saved.')}
+    };
+  }
+
+  // Replace the NEW Badge page's code lookup with the actual products.product_code column.
+  const oldNewPage=window.renderCEONewBadgeProducts;
+  if(typeof oldNewPage==='function'){
+    window.renderCEONewBadgeProducts=async function(){
+      if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;
+      const host=$f('adminContent'); if(!host)return;
+      host.innerHTML=`<div class="order-card"><h3>✨ New Badge Products</h3>
+        <p style="color:var(--muted);font-size:12px;line-height:1.5">Turn NEW on or off manually. Home → Trending Products shows only enabled products.</p>
+        <input id="urovoNewProductCodeSearch" class="input" style="margin-top:10px" placeholder="Search by Product Code or product name" autocomplete="off">
+        <div id="urovoNewProductRows" style="margin-top:10px"><p style="color:var(--muted)">Loading products...</p></div></div>`;
+      try{
+        const c=client();
+        const q=await c.from('products').select('id,name,category,price,stock,image_url,tag,active,created_at,is_new,product_code').order('created_at',{ascending:false}).limit(1000);
+        if(q.error)throw q.error;
+        const all=q.data||[];
+        const render=()=>{
+          const term=String($f('urovoNewProductCodeSearch')?.value||'').trim().toLowerCase();
+          const rows=$f('urovoNewProductRows');
+          const filtered=all.filter(p=>!term ? p.is_new===true :
+            String(p.product_code||'').toLowerCase().includes(term) ||
+            String(p.name||'').toLowerCase().includes(term) ||
+            String(p.category||'').toLowerCase().includes(term));
+          rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:10px;align-items:center;margin:9px 0;padding:11px">
+            <img src="${String(p.image_url||'').replace(/"/g,'&quot;')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'">
+            <div style="flex:1;min-width:0"><b>${String(p.name||'Product').replace(/</g,'&lt;')}</b>
+            <p style="font-size:11px;color:var(--muted);margin-top:3px">${String(p.category||'All').replace(/</g,'&lt;')}</p>
+            <p style="font-size:12px;margin-top:4px">Code: <strong>${String(p.product_code||'Not assigned').replace(/</g,'&lt;')}</strong></p>
+            <span class="order-status-pill">${p.is_new===true?'NEW ENABLED':'NEW DISABLED'}</span></div>
+            <div style="display:grid;gap:6px"><button class="secondary" onclick="urovoV52ToggleNewBadge('${p.id}',${p.is_new===true?'false':'true'})">${p.is_new===true?'Disable NEW':'Enable NEW'}</button>
+            <button class="secondary" onclick="openProduct('${p.id}')">Open</button></div></div>`).join(''):'<p style="color:var(--muted);padding:14px 0">No matching products found.</p>';
+        };
+        $f('urovoNewProductCodeSearch').addEventListener('input',render);render();
+      }catch(e){$f('urovoNewProductRows').innerHTML=`<p style="color:var(--red)">${String(e?.message||'Could not load products.')}</p>`}
+    };
+  }
+
+  // Direct NEW toggle.
+  window.urovoV52ToggleNewBadge=async function(id,enabled){
+    if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;
+    const c=client();
+    const r=await c.from('products').update({is_new:enabled===true}).eq('id',id);
+    if(r.error){msg(r.error.message);return}
+    await window.loadStoreProducts?.();
+    await window.renderCEONewBadgeProducts?.();
+    msg(enabled?'NEW badge enabled':'NEW badge disabled');
+  };
+
+  // Direct product-code deep link after catalog load.
+  const prevMaybe=window.maybeOpenProductCodeLink;
+  window.maybeOpenProductCodeLink=async function(){
+    let code='';try{const u=new URL(location.href);code=u.searchParams.get('product_code')||u.searchParams.get('code')||''}catch(e){}
+    if(!code||window.__urovoV52DirectOpened===code)return;
+    const ok=await window.urovoOpenProductByCode(code);
+    if(ok)window.__urovoV52DirectOpened=code;
+    else if(typeof prevMaybe==='function')return prevMaybe();
+  };
+})();
+</script>
+
+<style id="urovo-v53-category-suite-css">
+.urovo-v53-featured-home{padding:16px 5% 7px;margin:0;overflow:hidden}.urovo-v53-featured-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:11px}.urovo-v53-featured-heading small{font-size:9px;letter-spacing:1.5px;color:var(--lime);font-weight:900}.urovo-v53-featured-heading h3{font:700 20px 'Space Grotesk';margin-top:3px}.urovo-v53-featured-heading button{background:none;color:var(--lime);font-size:11px;font-weight:800}.urovo-v53-featured-track{display:flex;gap:10px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.urovo-v53-featured-track::-webkit-scrollbar{display:none}.urovo-v53-featured-card{position:relative;display:flex;flex:0 0 190px;align-items:center;gap:10px;text-align:left;padding:9px;border:1px solid var(--line);border-radius:17px;background:var(--surface);min-width:0}.urovo-v53-featured-card .urovo-v53-category-image{width:58px;height:58px;object-fit:cover;border-radius:12px;display:block}.urovo-v53-featured-card .urovo-v53-category-image-fallback{display:grid;place-items:center;width:58px;height:58px;border-radius:12px;background:var(--surface2)}.urovo-v53-featured-copy{display:grid;gap:5px;min-width:0}.urovo-v53-featured-copy b{font-size:12px;overflow-wrap:anywhere}.urovo-v53-featured-copy small{font-size:10px;color:var(--muted)}.urovo-v53-featured-card>i{position:absolute;top:7px;right:8px;color:var(--lime);font-style:normal;font-size:12px}
+.urovo-v53-search-categories-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.urovo-v53-search-categories-head p{color:var(--muted);font-size:12px;margin:5px 0 14px}.urovo-v53-search-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-bottom:20px}.urovo-v53-search-category{display:flex;align-items:center;gap:12px;text-align:left;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:11px;color:var(--text);overflow:hidden}.urovo-v53-search-category .urovo-v53-category-image{width:74px;height:74px;flex:0 0 74px;object-fit:cover;border-radius:12px;background:var(--surface2)}.urovo-v53-search-category .urovo-v53-category-image-fallback{display:grid;place-items:center;width:74px;height:74px;flex:0 0 74px;border-radius:12px;background:var(--surface2);font-size:25px}.urovo-v53-search-category-copy{flex:1;min-width:0;display:grid;gap:5px}.urovo-v53-search-category-copy b{font-size:13px;overflow-wrap:anywhere}.urovo-v53-search-category-copy small{font-size:10px;color:var(--lime)}.urovo-v53-search-category-copy>span{font-size:10px;line-height:1.4;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.urovo-v53-category-arrow{color:var(--lime);font-size:18px;flex:0 0 auto}.urovo-v53-search-category.compact{padding:8px;border-radius:14px}.urovo-v53-search-category.compact .urovo-v53-category-thumb{width:46px;height:46px;object-fit:cover;border-radius:10px;flex:0 0 46px}.urovo-v53-search-category.compact .urovo-v53-category-thumb-fallback{display:grid;place-items:center;width:46px;height:46px;flex:0 0 46px;border-radius:10px;background:var(--surface2)}.urovo-v53-search-category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}.urovo-v53-category-hero{display:grid;grid-template-columns:minmax(120px,.8fr) minmax(0,1.2fr);gap:16px;padding:14px;margin:9px 0 20px;border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at top right,rgba(200,255,0,.10),transparent 45%),var(--surface);overflow:hidden}.urovo-v53-category-hero>img{width:100%;height:100%;min-height:205px;max-height:300px;object-fit:cover;border-radius:15px;background:var(--surface2)}.urovo-v53-category-hero-fallback{min-height:205px;display:grid;place-items:center;background:var(--surface2);border-radius:15px;font-size:55px}.urovo-v53-category-hero-copy{min-width:0;display:flex;align-items:flex-start;flex-direction:column;justify-content:center;gap:8px}.urovo-v53-category-hero-copy>button:first-child{font-size:11px;padding:8px 10px}.urovo-v53-category-hero-copy>small{font-size:9px;letter-spacing:1.3px;color:var(--lime);font-weight:900}.urovo-v53-category-hero-copy h2{font:700 clamp(23px,4vw,34px) 'Space Grotesk';overflow-wrap:anywhere}.urovo-v53-category-hero-copy p{font-size:12px;line-height:1.6;color:var(--muted)}.urovo-v53-category-stats{display:flex;flex-wrap:wrap;gap:7px}.urovo-v53-category-stats>span{font-size:10px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);padding:6px 9px;border-radius:999px}.urovo-v53-featured-pill{font-size:9px;font-weight:900;color:var(--lime);border:1px solid rgba(200,255,0,.3);background:rgba(200,255,0,.08);padding:5px 7px;border-radius:99px}.urovo-v53-category-products-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-end;margin:10px 0}.urovo-v53-category-products-head .search-section-title{margin-bottom:3px}.urovo-v53-category-products-head small{color:var(--muted);font-size:11px}.urovo-v53-category-products-head button{font-size:10px;padding:8px 10px}.urovo-v53-category-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px;background:var(--surface);border:1px solid var(--line);border-radius:15px;margin:10px 0 14px}.urovo-v53-category-filters .input{min-width:0;width:100%;height:42px}.urovo-v53-category-filters label{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);padding:8px}.urovo-v53-category-filters label input{accent-color:var(--lime)}
+.urovo-v53-category-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.urovo-v53-category-form>label{display:grid;gap:6px;font-size:11px;font-weight:800;color:var(--muted);min-width:0}.urovo-v53-category-form .input{width:100%;min-width:0}.urovo-v53-category-wide,.urovo-v53-category-form-actions,.urovo-v53-category-form #urovoV53CategoryMessage{grid-column:1/-1}.urovo-v53-category-check{display:flex}.urovo-v53-check{display:flex!important;align-items:flex-start;gap:9px!important;border:1px solid var(--line);border-radius:13px;padding:11px;background:var(--surface2)}.urovo-v53-check input{accent-color:var(--lime);margin-top:3px}.urovo-v53-check span{display:grid;gap:4px}.urovo-v53-check b{font-size:12px;color:var(--text)}.urovo-v53-check small{font-size:10px;font-weight:400;line-height:1.4}.urovo-v53-category-form-actions{display:flex;gap:8px;flex-wrap:wrap}.urovo-v53-category-form-actions button{flex:1;min-height:43px}.urovo-v53-admin-category{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;border:1px solid var(--line);border-radius:17px;padding:11px;margin:9px 0;background:var(--surface)}.urovo-v53-admin-category.is-disabled{opacity:.72}.urovo-v53-admin-category-art{height:76px;width:76px;display:grid;place-items:center;border-radius:13px;background:var(--surface2);overflow:hidden;font-size:26px}.urovo-v53-admin-category-art img{width:100%;height:100%;object-fit:cover}.urovo-v53-admin-category-copy{min-width:0}.urovo-v53-admin-category-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.urovo-v53-admin-category-title h4{font:700 15px 'Space Grotesk';overflow-wrap:anywhere}.urovo-v53-admin-category-copy>p{font-size:11px;line-height:1.5;color:var(--muted);margin:6px 0}.urovo-v53-admin-category-copy>small{font-size:10px;line-height:1.5;color:var(--muted);display:block}.urovo-v53-default-pill{font-size:9px;border:1px solid var(--line);border-radius:99px;padding:4px 6px;color:var(--muted)}.urovo-v53-admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.urovo-v53-admin-actions button{font-size:10px;padding:8px 9px;min-height:32px}.urovo-v53-admin-actions button:disabled{opacity:.3}.urovo-v53-danger{border:1px solid rgba(255,54,85,.32);color:var(--red);background:rgba(255,54,85,.07);border-radius:10px;padding:8px 10px;font-weight:800}.urovo-v53-analytics-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 14px}.urovo-v53-analytics-stats>div{min-width:0;border:1px solid var(--line);background:var(--surface2);border-radius:13px;padding:10px}.urovo-v53-analytics-stats small{display:block;font-size:9px;line-height:1.4;color:var(--muted);margin-bottom:6px}.urovo-v53-analytics-stats b{font:700 13px 'Space Grotesk';overflow-wrap:anywhere;display:block}.urovo-v53-analytics-table-wrap{max-width:100%;overflow:auto}.urovo-v53-analytics-table{border-collapse:collapse;width:100%;font-size:11px;min-width:510px}.urovo-v53-analytics-table th,.urovo-v53-analytics-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}.urovo-v53-analytics-table th{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.6px}
+@media(max-width:650px){.urovo-v53-featured-home{padding-left:18px;padding-right:18px}.urovo-v53-search-category-grid,.urovo-v53-search-category-list{grid-template-columns:1fr}.urovo-v53-search-category .urovo-v53-category-image,.urovo-v53-search-category .urovo-v53-category-image-fallback{width:62px;height:62px;flex-basis:62px}.urovo-v53-category-hero{grid-template-columns:1fr;padding:10px;gap:12px}.urovo-v53-category-hero>img,.urovo-v53-category-hero-fallback{height:175px;min-height:175px;max-height:175px}.urovo-v53-category-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.urovo-v53-category-form{grid-template-columns:1fr}.urovo-v53-category-wide,.urovo-v53-category-form-actions,.urovo-v53-category-form #urovoV53CategoryMessage{grid-column:1}.urovo-v53-admin-category{grid-template-columns:58px minmax(0,1fr);gap:9px;padding:9px}.urovo-v53-admin-category-art{width:58px;height:58px}.urovo-v53-admin-actions button{flex:1}.urovo-v53-analytics-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+<style id="urovo-v54-compact-category-bubbles-css">
+/* Compact category bubbles: text-only, no thumbnails, arrows, stars or add symbols. */
+.urovo-v53-search-category-grid,
+.urovo-v53-search-category-list{
+  display:flex!important; flex-wrap:wrap; align-items:center; gap:7px;
+  margin:8px 0 18px; width:100%;
+}
+.urovo-v53-search-category{
+  display:inline-flex!important; flex:0 1 auto; align-items:center; justify-content:center;
+  width:auto!important; max-width:100%; min-width:0; min-height:34px;
+  padding:8px 13px!important; gap:0!important; border-radius:999px!important;
+  border:1px solid var(--line); background:var(--surface); color:var(--muted);
+  box-shadow:none; text-align:center; overflow:hidden; line-height:1.15;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease;
+}
+.urovo-v53-search-category:hover,
+.urovo-v53-search-category:focus-visible{
+  color:var(--text); border-color:var(--lime); background:rgba(200,255,0,.07);
+  outline:none; transform:translateY(-1px);
+}
+.urovo-v53-search-category:active{transform:scale(.98)}
+.urovo-v53-search-category .urovo-v53-search-category-copy{
+  display:block!important; flex:0 1 auto!important; min-width:0; max-width:100%; gap:0!important;
+}
+.urovo-v53-search-category .urovo-v53-search-category-copy b{
+  display:block; max-width:100%; font-size:12px; font-weight:700; line-height:1.2;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; overflow-wrap:normal;
+}
+/* The Search page shows every enabled root category; the bubbles stay small as the catalogue grows. */
+.urovo-v53-search-category-grid>.urovo-v53-search-category,
+.urovo-v53-search-category-list>.urovo-v53-search-category{width:auto!important;}
+.urovo-v53-search-categories-head p{margin-bottom:10px;}
+/* Existing Home category chips stay horizontally scrollable and use tighter spacing. */
+.categories{display:flex;flex-wrap:nowrap;gap:7px;padding-top:9px;padding-bottom:20px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;}
+.categories::-webkit-scrollbar{display:none}
+.categories .cat{flex:0 0 auto;min-height:32px;padding:8px 12px;border-radius:999px;font-size:12px;line-height:1.1;border:1px solid var(--line);}
+.categories .cat.active{border-color:var(--lime);}
+@media(max-width:650px){
+ .urovo-v53-search-category-grid,.urovo-v53-search-category-list{gap:6px;margin-bottom:15px;}
+ .urovo-v53-search-category{min-height:32px;padding:7px 11px!important;}
+ .urovo-v53-search-category .urovo-v53-search-category-copy b{font-size:11px;}
+}
+
+/* V55: category detail header keeps description, product count and share action, with no image/icon */
+.urovo-v53-category-hero.urovo-v55-category-hero-no-image{grid-template-columns:minmax(0,1fr);}
+.urovo-v53-category-hero.urovo-v55-category-hero-no-image .urovo-v53-category-hero-copy{grid-column:1/-1;width:100%;}
+</style>
+
+<script id="urovo-v53-category-suite">
+/* UROVO V53 — category suite: management, images, descriptions, hierarchy, featured cards,
+   category search/filter/share routes and reporting. This patch leaves existing product/order flows in place. */
+(function(){
+  'use strict';
+  const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
+  const DEFAULTS=['Gadgets','Home','Lifestyle'];
+  const sb=()=>window.supabaseClient||(typeof supabaseClient!=='undefined'?supabaseClient:null);
+  const currentEmail=()=>String((typeof user!=='undefined'&&user?.email)||(window.user&&window.user.email)||'').trim().toLowerCase();
+  const isCEO=()=>currentEmail()===CEO_EMAIL;
+  const norm=s=>String(s??'').trim().toLowerCase();
+  const esc=s=>typeof window.escapeHtml==='function'?window.escapeHtml(String(s??'')):String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const jsq=s=>"'"+String(s??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/</g,"\\x3c")+"'";
+  const safeUrl=s=>{const x=String(s||'').trim();if(!x)return '';try{const u=new URL(x,location.href);return ['http:','https:'].includes(u.protocol)?u.href:''}catch(e){return ''}};
+  const cash=n=>typeof window.money==='function'?window.money(Number(n||0)):'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+  const say=m=>{if(typeof window.toast==='function')window.toast(m);else console.log(m)};
+  let categories=[],catalogError='',browseCategory=null,categoryStats={orders:{},views:{},sales:{},units:{}},viewRecorded=new Set();
+  const VIEW_KEY='urovo_category_views_v53';
+  const localViews=()=>{try{return JSON.parse(localStorage.getItem(VIEW_KEY)||'{}')}catch(e){return {}}};
+  const saveLocalViews=o=>{try{localStorage.setItem(VIEW_KEY,JSON.stringify(o))}catch(e){}};
+  const productRows=()=>Array.isArray(window.products)?window.products:(typeof products!=='undefined'&&Array.isArray(products)?products:[]);
+  const productCodeName=p=>String(p?.category||'').trim();
+  const categoryIndex=()=>new Map(categories.map(c=>[norm(c.name),c]));
+  function isVisible(c){
+    if(!c||c.active===false)return false;
+    const map=categoryIndex();let p=c.parent_id,guard=0;
+    while(p&&guard++<20){const parent=categories.find(x=>String(x.id)===String(p));if(!parent||parent.active===false)return false;p=parent.parent_id}
+    return true;
+  }
+  function descendantsOf(row,includeSelf=true){
+    if(!row)return [];
+    const out=includeSelf?[row]:[],seen=new Set(out.map(x=>String(x.id)));
+    let changed=true,round=0;
+    while(changed&&round++<20){changed=false;for(const c of categories){if(!c||seen.has(String(c.id))||!c.parent_id)continue;if(seen.has(String(c.parent_id))){seen.add(String(c.id));out.push(c);changed=true}}}
+    return out;
+  }
+  function allPublicCategories(){
+    const result=categories.filter(isVisible).slice();
+    const names=new Set(categories.map(c=>norm(c.name)));
+    productRows().forEach(p=>{const n=String(p.category||'').trim();if(n&&norm(n)!=='all'&&!names.has(norm(n))){result.push({id:'virtual:'+norm(n),name:n,active:true,sort_order:9999,description:'',image_url:'',featured:false,parent_id:null,view_count:0,__virtual:true});names.add(norm(n))}});
+    DEFAULTS.forEach((n,i)=>{if(!names.has(norm(n)))result.push({id:'virtual:'+norm(n),name:n,active:true,sort_order:i*10,description:'',image_url:'',featured:false,parent_id:null,view_count:0,__virtual:true})});
+    const idx=new Map(result.map(c=>[norm(c.name),c]));
+    return result.sort((a,b)=>Number(a.sort_order??9999)-Number(b.sort_order??9999)||a.name.localeCompare(b.name));
+  }
+  function visibleChildren(row){return categories.filter(c=>isVisible(c)&&String(c.parent_id||'')===String(row?.id||'')).sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0)||a.name.localeCompare(b.name))}
+  function productSetFor(row){
+    if(!row)return productRows();
+    const rows=descendantsOf(row,true);const names=new Set(rows.map(c=>norm(c.name)));
+    names.add(norm(row.name));
+    return productRows().filter(p=>names.has(norm(p.category))&&p.active!==false);
+  }
+  function productCount(row){return productSetFor(row).length}
+  function imageMarkup(row,cls='urovo-v53-category-image'){
+    const u=safeUrl(row?.image_url||'');
+    return u?`<img class="${cls}" src="${esc(u)}" alt="${esc(row.name||'Category')}" loading="lazy" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='grid'"><span class="${cls}-fallback" style="${u?'display:none':''}">🏷️</span>`:`<span class="${cls}-fallback">🏷️</span>`;
+  }
+  async function fetchCatalog(seedDefaults=false){
+    const client=sb();if(!client){catalogError='Supabase client is unavailable';return categories}
+    let r=await client.from('urovo_categories').select('*').limit(500);
+    if(r.error){catalogError=r.error.message||'Could not load categories';console.warn('UROVO category catalogue:',catalogError);return categories}
+    categories=(r.data||[]).sort((a,b)=>Number(a.sort_order??9999)-Number(b.sort_order??9999)||String(a.name||'').localeCompare(String(b.name||'')));catalogError='';
+    if(seedDefaults&&isCEO()){
+      for(let i=0;i<DEFAULTS.length;i++){
+        const name=DEFAULTS[i];if(categories.some(c=>norm(c.name)===norm(name)))continue;
+        const add=await client.from('urovo_categories').insert({name,active:true,sort_order:i*10}).select('*').maybeSingle();
+        if(!add.error&&add.data)categories.push(add.data);
+      }
+      categories.sort((a,b)=>Number(a.sort_order??9999)-Number(b.sort_order??9999)||String(a.name||'').localeCompare(String(b.name||'')));
+    }
+    const dl=document.getElementById('urovoV43CategoryOptions');if(dl)dl.innerHTML=allPublicCategories().filter(c=>!c.__virtual||productRows().some(p=>norm(p.category)===norm(c.name))).map(c=>`<option value="${esc(c.name)}"></option>`).join('');
+    return categories;
+  }
+  window.urovoV53RefreshCategoryCatalog=async function(){await fetchCatalog(false);renderHomeFeatured();if(document.getElementById('searchPage')?.classList.contains('show'))window.renderFullSearch?.(document.getElementById('fullSearchInput')?.value||'');return categories};
+
+  async function uploadCategoryImage(file){
+    const client=sb();if(!client||!file) return '';
+    const ext=(String(file.name||'image.jpg').split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').toLowerCase()||'jpg';
+    const path=`categories/${Date.now()}-${Math.random().toString(36).slice(2,9)}.${ext}`;
+    const r=await client.storage.from('product-images').upload(path,file,{upsert:false,contentType:file.type||undefined});
+    if(r.error)throw r.error;
+    const pub=client.storage.from('product-images').getPublicUrl(path);return pub?.data?.publicUrl||'';
+  }
+  function imagePathFromPublicUrl(url){try{const u=new URL(url);const marker='/product-images/';const at=u.pathname.indexOf(marker);return at>=0?decodeURIComponent(u.pathname.slice(at+marker.length)):''}catch(e){return ''}}
+  async function maybeDeleteCategoryImage(url){const path=imagePathFromPublicUrl(url);if(!path)return;try{const client=sb();await client.storage.from('product-images').remove([path])}catch(e){}}
+  function renderHomeFeatured(){
+    let host=document.getElementById('urovoV53FeaturedHome');
+    const base=document.querySelector('.categories');if(!host&&base){host=document.createElement('section');host.id='urovoV53FeaturedHome';host.className='urovo-v53-featured-home';base.insertAdjacentElement('afterend',host)}
+    if(!host)return;
+    const list=allPublicCategories().filter(c=>c.featured===true&&!c.__virtual).slice(0,8);
+    if(!list.length){host.innerHTML='';host.style.display='none';return}
+    host.style.display='block';host.innerHTML=`<div class="urovo-v53-featured-heading"><div><small>CURATED FOR YOU</small><h3>Featured Categories</h3></div><button type="button" onclick="openSearchPage();setTimeout(()=>window.urovoCategoryBrowseByName&&window.urovoCategoryBrowseByName(''),80)">Explore all →</button></div><div class="urovo-v53-featured-track">${list.map(c=>`<button class="urovo-v53-featured-card" type="button" onclick="openCategory(${esc(jsq(c.name))})">${imageMarkup(c)}<span class="urovo-v53-featured-copy"><b>${esc(c.name)}</b><small>${productCount(c)} products</small></span><i>${c.featured?'★':''}</i></button>`).join('')}</div>`;
+  }
+  window.urovoV53RenderHomeFeatured=renderHomeFeatured;
+
+  function categoryShareUrl(row){const u=new URL(location.href);u.search='';u.searchParams.set('category',row?.name||'');return u.href}
+  window.urovoV53ShareCategory=async function(idOrName){const row=categories.find(c=>String(c.id)===String(idOrName)||norm(c.name)===norm(idOrName))||allPublicCategories().find(c=>norm(c.name)===norm(idOrName));if(!row)return say('Category not found');const url=categoryShareUrl(row);const data={title:`${row.name} | UROVO`,text:`Explore ${row.name} on UROVO.`,url};try{if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(url);say('Category link copied')}}catch(e){try{await navigator.clipboard.writeText(url);say('Category link copied')}catch(e2){prompt('Copy this category link',url)}}};
+
+  function categoriesForSearch(){return allPublicCategories().filter(c=>!c.__virtual||productRows().some(p=>norm(p.category)===norm(c.name)));}
+  function categoryCard(c,compact=false){
+    // Compact, text-only category bubbles keep the Search page light even with dozens of categories.
+    return `<button type="button" class="urovo-v53-search-category ${compact?'compact':''}" aria-label="Browse category ${esc(c.name)}" title="${esc(c.name)}" onclick="urovoCategoryBrowseByName(${esc(jsq(c.name))})"><span class="urovo-v53-search-category-copy"><b>${esc(c.name)}</b></span></button>`;
+  }
+  function recordView(row){
+    if(!row||viewRecorded.has(String(row.id)))return;viewRecorded.add(String(row.id));
+    const local=localViews();local[String(row.id)]=Number(local[String(row.id)]||0)+1;saveLocalViews(local);
+    const client=sb();if(row.id&&!String(row.id).startsWith('virtual:')&&client){client.rpc('urovo_record_category_view',{p_category_id:String(row.id)}).then(r=>{if(r?.error)console.warn('Category view metric:',r.error.message)}).catch(()=>{})}
+  }
+  function categoryProducts(row,query=''){
+    const q=norm(query);let list=productSetFor(row).filter(p=>!q||[p.name,p.category,p.desc,p.description,p.product_code].some(v=>norm(v).includes(q)));
+    const min=Number(document.getElementById('urovoV53CatMin')?.value||0);const maxRaw=document.getElementById('urovoV53CatMax')?.value;const max=maxRaw===''||maxRaw==null?Infinity:Number(maxRaw);
+    if(min>0)list=list.filter(p=>Number(p.price||0)>=min);if(Number.isFinite(max))list=list.filter(p=>Number(p.price||0)<=max);
+    if(document.getElementById('urovoV53CatStock')?.checked)list=list.filter(p=>p.stock==null||Number(p.stock)>0);
+    const sort=document.getElementById('urovoV53CatSort')?.value||'featured';
+    if(sort==='price_low')list.sort((a,b)=>Number(a.price||0)-Number(b.price||0));
+    else if(sort==='price_high')list.sort((a,b)=>Number(b.price||0)-Number(a.price||0));
+    else if(sort==='newest')list.sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')));
+    else if(sort==='popular')list.sort((a,b)=>Number(b.sales||b.sold_count||0)-Number(a.sales||a.sold_count||0));
+    else if(sort==='stock')list.sort((a,b)=>Number(b.stock??999999)-Number(a.stock??999999));
+    else list.sort((a,b)=>(a.is_new===b.is_new?0:a.is_new?-1:1)||Number(b.sales||0)-Number(a.sales||0));
+    return list;
+  }
+  function searchProductCard(p){const img=safeUrl(p.image||p.image_url||'');const name=String(p.name||'Product');const id=String(p.id||'');return `<div class="full-search-result" onclick="closeSearchPage();openProduct(${esc(jsq(id))})">${img?`<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'">`:`<div style="height:170px;display:grid;place-items:center;font-size:58px;background:var(--surface2)">${esc(p.icon||'📦')}</div>`}<div class="rs-info"><h4>${esc(name)}</h4><p>${cash(p.price)}</p><small style="color:var(--muted)">${esc(p.category||'')}</small></div></div>`}
+
+  window.urovoCategoryBrowseByName=async function(name,updateUrl=true){
+    await fetchCatalog(false);const row=categoriesForSearch().find(c=>norm(c.name)===norm(name));
+    if(!name){browseCategory=null;if(document.getElementById('fullSearchInput'))document.getElementById('fullSearchInput').value='';window.renderFullSearch?.('');return}
+    if(!row)return say('Category not found');browseCategory=row;recordView(row);
+    if(updateUrl){try{const u=new URL(location.href);u.search='';u.searchParams.set('category',row.name);history.replaceState({},'',u.pathname+u.search+u.hash)}catch(e){}}
+    const input=document.getElementById('fullSearchInput');if(input){input.value='';input.placeholder=`Search within ${row.name}…`}
+    window.renderFullSearch?.('');
+  };
+  window.urovoV53BrowseCategoryById=async function(id){const row=categoriesForSearch().find(c=>String(c.id)===String(id));if(row)return window.urovoCategoryBrowseByName(row.name)};
+  window.urovoCategoryBrowseBack=function(){browseCategory=null;const input=document.getElementById('fullSearchInput');if(input){input.value='';input.placeholder='Search products...'}try{const u=new URL(location.href);if(u.searchParams.has('category')){u.searchParams.delete('category');history.replaceState({},'',u.pathname+(u.search?u.search:'')+u.hash)}}catch(e){}window.renderFullSearch?.('')};
+  window.urovoCategoryRenderBrowse=function(q=''){
+    const body=document.getElementById('fullSearchBody');if(!body)return;
+    const row=browseCategory;if(!row){window.renderFullSearch?.(q);return}
+    const parent=categories.find(c=>String(c.id)===String(row.parent_id));const children=visibleChildren(row);const allRows=descendantsOf(row,true);const count=productCount(row);const productsFound=categoryProducts(row,q);const image=safeUrl(row.image_url||'');
+    const minMaxControls=`<div class="urovo-v53-category-filters"><input id="urovoV53CatMin" type="number" min="0" class="input" placeholder="Min ₹" oninput="window.urovoCategoryRenderBrowse(document.getElementById('fullSearchInput')?.value||'')"><input id="urovoV53CatMax" type="number" min="0" class="input" placeholder="Max ₹" oninput="window.urovoCategoryRenderBrowse(document.getElementById('fullSearchInput')?.value||'')"><select id="urovoV53CatSort" class="input" onchange="window.urovoCategoryRenderBrowse(document.getElementById('fullSearchInput')?.value||'')"><option value="featured">Recommended</option><option value="popular">Popularity</option><option value="newest">Newest</option><option value="price_low">Price: Low to High</option><option value="price_high">Price: High to Low</option><option value="stock">In Stock First</option></select><label><input id="urovoV53CatStock" type="checkbox" onchange="window.urovoCategoryRenderBrowse(document.getElementById('fullSearchInput')?.value||'')"> In stock only</label></div>`;
+    const stats=`<span>${count} products</span>${row.featured?'<span class="urovo-v53-featured-pill">★ FEATURED</span>':''}`;
+    const hero=`<div class="urovo-v53-category-hero urovo-v55-category-hero-no-image"><div class="urovo-v53-category-hero-copy"><button class="secondary" type="button" onclick="urovoCategoryBrowseBack()">← All Categories</button><small>${parent?`${esc(parent.name)} / `:''}CATEGORY</small><h2>${esc(row.name)}</h2><p>${esc(row.description||`Explore ${row.name} products at UROVO.`)}</p><div class="urovo-v53-category-stats">${stats}</div><button class="primary" style="margin-top:12px" onclick="urovoV53ShareCategory(${esc(jsq(row.id))})">↗ Share Category</button></div></div>`;
+    const subHtml=children.length?`<div class="search-section-title">Shop Subcategories</div><div class="urovo-v53-search-category-list">${children.map(c=>categoryCard(c,true)).join('')}</div>`:'';
+    body.innerHTML=`${hero}${subHtml}<div class="urovo-v53-category-products-head"><div><div class="search-section-title">${esc(row.name)} Products</div><small>${productsFound.length} result${productsFound.length===1?'':'s'}</small></div><button class="secondary" onclick="urovoCategoryBrowseBack()">Browse categories</button></div>${minMaxControls}${productsFound.length?`<div class="full-search-results">${productsFound.map(searchProductCard).join('')}</div>`:`<div class="search-empty"><div style="font-size:48px">📦</div><h3 style="color:var(--text);margin:10px">${q?'No matching products':'No products available yet'}</h3><p>${q?'Try another search or change the filters.':'New products added to this category will appear here.'}</p></div>`}`;
+    // Keep chosen filters while typing/searching by restoring current values across rerenders.
+    if(window.__urovoV53Filters){for(const [id,val] of Object.entries(window.__urovoV53Filters)){const el=document.getElementById(id);if(el){if(el.type==='checkbox')el.checked=!!val;else el.value=val}}}
+    ['urovoV53CatMin','urovoV53CatMax','urovoV53CatSort','urovoV53CatStock'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('change',()=>{window.__urovoV53Filters=Object.fromEntries(['urovoV53CatMin','urovoV53CatMax','urovoV53CatSort','urovoV53CatStock'].map(k=>{const v=document.getElementById(k);return [k,v?.type==='checkbox'?!!v.checked:(v?.value||'')]}))})});
+  };
+
+  window.renderFullSearch=function(q){
+    const body=document.getElementById('fullSearchBody');if(!body)return;const term=String(q||'').trim().toLowerCase();const catalog=categoriesForSearch();
+    if(browseCategory){window.urovoCategoryRenderBrowse(term);return}
+    if(!term){
+      const display=catalog.filter(c=>!c.parent_id).sort((a,b)=>Number(!!b.featured)-Number(!!a.featured)||Number(a.sort_order??9999)-Number(b.sort_order??9999)||String(a.name||'').localeCompare(String(b.name||'')));
+      const trend=`<div class="search-section-title">Trending Searches</div><div class="search-chips"><button class="search-chip" onclick="useFullSearch('gadgets')">Gadgets</button><button class="search-chip" onclick="useFullSearch('phone stand')">Phone Stand</button><button class="search-chip" onclick="useFullSearch('home')">Home</button><button class="search-chip" onclick="useFullSearch('cleaning')">Cleaning</button></div>`;
+      const cats=`<div class="urovo-v53-search-categories-head"><div><div class="search-section-title">Shop by Category</div><p>Choose a category to explore matching products.</p></div></div><div class="urovo-v53-search-category-grid">${display.map(c=>categoryCard(c)).join('')}</div>`;
+      const subcats=catalog.filter(c=>c.parent_id&&isVisible(c));
+      body.innerHTML=`${trend}${cats}${subcats.length?`<div class="search-section-title">Subcategories</div><div class="urovo-v53-search-category-list">${subcats.map(c=>categoryCard(c,true)).join('')}</div>`:''}<div class="search-section-title">Quick Links</div><div class="search-chips"><button class="search-chip" onclick="closeSearchPage();openWishlist()">❤️ Wishlist</button><button class="search-chip" onclick="closeSearchPage();openCart()">🛒 Cart</button></div>`;return;
+    }
+    const exact=catalog.find(c=>norm(c.name)===term);
+    if(exact){browseCategory=exact;recordView(exact);const input=document.getElementById('fullSearchInput');if(input)input.placeholder=`Search within ${exact.name}…`;window.urovoCategoryRenderBrowse('');return}
+    const matchingCats=catalog.filter(c=>norm(c.name).includes(term)||norm(c.description).includes(term));
+    const matches=productRows().filter(p=>`${p.name||''} ${p.category||''} ${p.desc||''} ${p.product_code||''}`.toLowerCase().includes(term)&&p.active!==false).slice(0,100);
+    const catSection=matchingCats.length?`<div class="search-section-title">Matching Categories</div><div class="urovo-v53-search-category-list">${matchingCats.map(c=>categoryCard(c,true)).join('')}</div>`:'';
+    body.innerHTML=`${catSection}<div class="search-section-title">${matches.length} product result${matches.length===1?'':'s'}</div>${matches.length?`<div class="full-search-results">${matches.map(searchProductCard).join('')}</div>`:`<div class="search-empty"><div style="font-size:45px">🔎</div><h3 style="color:var(--text);margin:10px">No products found</h3><p>Try another keyword or open a matching category.</p></div>`}`;
+  };
+  window.useFullSearch=function(q){const input=document.getElementById('fullSearchInput');const term=String(q||'');const exact=categoriesForSearch().find(c=>norm(c.name)===norm(term));if(exact){window.urovoCategoryBrowseByName(exact.name);return}browseCategory=null;if(input){input.value=term;input.placeholder='Search products...'}window.renderFullSearch(term)};
+
+  function managerParentOptions(current){
+    const excluded=new Set([String(current||'')]);const row=categories.find(c=>String(c.id)===String(current));descendantsOf(row,true).forEach(c=>excluded.add(String(c.id)));
+    return `<option value="">Top-level category</option>${categories.filter(c=>isVisible(c)&&!excluded.has(String(c.id))).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}`;
+  }
+  function directProductCount(name){return productRows().filter(p=>norm(p.category)===norm(name)).length}
+  function managerCategoryCard(c,i){
+    const isDefault=DEFAULTS.some(x=>norm(x)===norm(c.name));const children=visibleChildren(c);const count=productCount(c);const direct=directProductCount(c.name);const art=safeUrl(c.image_url||'');
+    return `<article class="urovo-v53-admin-category ${c.active===false?'is-disabled':''}"><div class="urovo-v53-admin-category-art">${art?`<img src="${esc(art)}" alt="${esc(c.name)}" onerror="this.style.display='none'">`:'🏷️'}</div><div class="urovo-v53-admin-category-copy"><div class="urovo-v53-admin-category-title"><h4>${esc(c.name)}</h4>${c.featured?'<span class="urovo-v53-featured-pill">★ Featured</span>':''}<span class="urovo-v43-status ${c.active===false?'is-off':'is-on'}">${c.active===false?'Hidden':'Active'}</span>${isDefault?'<span class="urovo-v53-default-pill">Default</span>':''}</div><p>${esc(c.description||'No description added')}</p><small>${c.parent_id?`Parent: ${esc(categories.find(x=>String(x.id)===String(c.parent_id))?.name||'—')} · `:''}${direct} direct products · ${count} including subcategories · Order ${Number(c.sort_order||0)}</small><div class="urovo-v53-admin-actions"><button class="secondary" onclick="urovoV53EditCategory('${esc(c.id)}')">✏️ Edit</button><button class="secondary" onclick="urovoV53ToggleFeatured('${esc(c.id)}',${c.featured?'false':'true'})">${c.featured?'★ Unfeature':'☆ Feature'}</button><button class="secondary" onclick="urovoV53MoveCategory('${esc(c.id)}',-1)" ${i===0?'disabled':''}>↑</button><button class="secondary" onclick="urovoV53MoveCategory('${esc(c.id)}',1)" ${i===categories.length-1?'disabled':''}>↓</button><button class="secondary" onclick="urovoV53ShareCategory('${esc(c.id)}')">↗ Share</button>${isDefault?'':`<button class="secondary" onclick="urovoV53ToggleCategory('${esc(c.id)}',${c.active===false?'true':'false'})">${c.active===false?'Enable':'Disable'}</button><button class="urovo-v53-danger" onclick="urovoV53DeleteCategory('${esc(c.id)}')">Delete</button>`}</div></div></article>`;
+  }
+  function managerFormHtml(edit=null){
+    const r=edit||{};
+    return `<section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><h3 id="urovoV53FormTitle">${edit?'✏️ Edit Category':'＋ Create Category'}</h3><p class="urovo-v43-muted">Images, descriptions, featured placement, sort order and nested subcategories.</p></div></div><form id="urovoV53CategoryForm" class="urovo-v53-category-form"><input id="urovoV53CategoryId" type="hidden" value="${esc(r.id||'')}"><label>Category name<input class="input" id="urovoV53CategoryName" maxlength="50" placeholder="e.g. Phone Accessories" value="${esc(r.name||'')}" required></label><label>Parent / Subcategory<select class="input" id="urovoV53CategoryParent">${managerParentOptions(r.id).replace(`value="${esc(r.parent_id||'')}"`,`value="${esc(r.parent_id||'')}" selected`)}</select></label><label>Sort order<input class="input" id="urovoV53CategorySort" type="number" min="0" step="1" value="${Number(r.sort_order??(categories.length*10))}"></label><label class="urovo-v53-category-wide">Short description<textarea class="input" id="urovoV53CategoryDescription" rows="2" maxlength="240" placeholder="What shoppers can find here">${esc(r.description||'')}</textarea></label><label class="urovo-v53-category-wide">Category image URL<input class="input" id="urovoV53CategoryImageUrl" type="url" placeholder="https://…" value="${esc(r.image_url||'')}"></label><label class="urovo-v53-category-wide">Upload category image<input class="input" id="urovoV53CategoryImageFile" type="file" accept="image/*"><small class="urovo-v43-muted">Use a clear, wide image. Uploads use the existing product-images bucket.</small></label><label class="urovo-v53-check"><input id="urovoV53CategoryFeatured" type="checkbox" ${r.featured?'checked':''}> <span><b>★ Featured category</b><small>Show on Home and at the top of Search categories.</small></span></label><label class="urovo-v53-check"><input id="urovoV53CategoryActive" type="checkbox" ${r.active===false?'':'checked'} ${DEFAULTS.some(x=>norm(x)===norm(r.name))?'disabled':''}> <span><b>Visible to customers</b><small>Hidden categories and their subcategories are not shown in public category browsing.</small></span></label><div class="urovo-v53-category-form-actions"><button class="primary" type="submit">${edit?'Save Category':'Add Category'}</button><button type="button" class="secondary" onclick="urovoV53ResetCategoryForm()">Clear / Cancel</button></div><p id="urovoV53CategoryMessage" aria-live="polite" class="urovo-v43-muted"></p></form></section>`;
+  }
+  window.urovoV53ResetCategoryForm=function(){const form=document.getElementById('urovoV53CategoryForm');if(!form)return;form.reset();document.getElementById('urovoV53CategoryId').value='';document.getElementById('urovoV53FormTitle').textContent='＋ Create Category';const b=form.querySelector('button[type="submit"]');if(b)b.textContent='Add Category';document.getElementById('urovoV53CategorySort').value=String((categories.length||0)*10);document.getElementById('urovoV53CategoryMessage').textContent='';};
+  window.urovoV53EditCategory=function(id){const row=categories.find(c=>String(c.id)===String(id));if(!row)return;const host=document.getElementById('urovoV53CategoryFormHost');if(!host)return;host.innerHTML=managerFormHtml(row);wireManagerForm();host.scrollIntoView({behavior:'smooth',block:'start'});};
+  async function renderAnalytics(){
+    const host=document.getElementById('urovoV53CategoryAnalytics');if(!host)return;host.innerHTML='<p class="urovo-v43-muted">Calculating category analytics…</p>';
+    const client=sb();let orderRows=[],allProducts=[];let orderError='';
+    try{const [pr,or]=await Promise.all([client.from('products').select('id,name,category,price,stock'),client.from('orders').select('*').order('created_at',{ascending:false}).limit(2000)]);if(pr.error)throw pr.error;allProducts=pr.data||[];if(or.error)orderError=or.error.message;else orderRows=or.data||[]}catch(e){orderError=e?.message||'Orders analytics are unavailable';allProducts=productRows().map(p=>({...p,id:p.id,category:p.category}))}
+    const prodMap=new Map(allProducts.map(p=>[String(p.id),p]));const agg=new Map();
+    const getAgg=name=>{const k=norm(name);if(!agg.has(k))agg.set(k,{orders:new Set(),units:0,revenue:0});return agg.get(k)};
+    for(const o of orderRows){if(String(o.status||'').toLowerCase()==='cancelled')continue;let items=o.items||o.order_items||[];if(typeof items==='string'){try{items=JSON.parse(items)}catch(e){items=[]}}if(!Array.isArray(items))continue;const touched=new Set();for(const it of items){const id=it.product_id||it.productId||it.id||it.product_id_snapshot;const prod=prodMap.get(String(id))||allProducts.find(p=>norm(p.name)===norm(it.product_name||it.name));const cat=String(it.category||it.product_category||prod?.category||'').trim();if(!cat)continue;const qty=Math.max(1,Number(it.quantity||it.qty||1));const unit=Number(it.unit_price??it.price??prod?.price??0);const revenue=Number(it.item_total??(qty*unit));const a=getAgg(cat);a.units+=qty;a.revenue+=revenue;if(o.id)touched.add(norm(cat))}touched.forEach(k=>getAgg(k).orders.add(String(o.id)))}
+    const locals=localViews();const rows=allPublicCategories().map(c=>{const names=new Set(descendantsOf(categories.find(x=>String(x.id)===String(c.id))||c,true).map(x=>norm(x.name)));names.add(norm(c.name));let pcount=productRows().filter(p=>names.has(norm(p.category))).length;let units=0,revenue=0,orderSet=new Set();names.forEach(n=>{const a=agg.get(n);if(a){units+=a.units;revenue+=a.revenue;a.orders.forEach(x=>orderSet.add(x))}});return {...c,pcount,units,revenue,orders:orderSet.size,views:Number(c.view_count||0)||Number(locals[String(c.id)]||0)}}).filter(c=>!c.__virtual);
+    const best=rows.slice().sort((a,b)=>b.units-a.units)[0],mostViewed=rows.slice().sort((a,b)=>b.views-a.views)[0];
+    host.innerHTML=`<div class="urovo-v53-analytics-stats"><div><small>Managed categories</small><b>${rows.length}</b></div><div><small>Products</small><b>${rows.reduce((n,c)=>n+c.pcount,0)}</b></div><div><small>Top by sales</small><b>${best&&best.units?esc(best.name):'—'}</b><small>${best&&best.units?best.units+' units':''}</small></div><div><small>Most viewed</small><b>${mostViewed&&mostViewed.views?esc(mostViewed.name):'—'}</b><small>${mostViewed&&mostViewed.views?mostViewed.views+' views':''}</small></div></div>${orderError?`<div class="urovo-v43-notice">Order metrics may be incomplete: ${esc(orderError)}</div>`:''}<div class="urovo-v53-analytics-table-wrap"><table class="urovo-v53-analytics-table"><thead><tr><th>Category</th><th>Products</th><th>Orders</th><th>Units</th><th>Item revenue</th><th>Views</th></tr></thead><tbody>${rows.map(c=>`<tr><td>${esc(c.name)}</td><td>${c.pcount}</td><td>${c.orders}</td><td>${c.units}</td><td>${cash(c.revenue)}</td><td>${c.views}</td></tr>`).join('')}</tbody></table></div><p class="urovo-v43-muted">Order revenue is estimated from available order item snapshots. Views use the database counter when the V53 SQL migration has been run; otherwise they fall back to this device.</p>`;
+  }
+  function wireManagerForm(){
+    const form=document.getElementById('urovoV53CategoryForm');if(!form)return;
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();if(!isCEO())return say('CEO access only');const client=sb();if(!client)return say('Store connection is unavailable');
+      const msg=document.getElementById('urovoV53CategoryMessage');const id=String(document.getElementById('urovoV53CategoryId').value||'');const old=categories.find(c=>String(c.id)===id);let name=String(document.getElementById('urovoV53CategoryName').value||'').trim();const parent=document.getElementById('urovoV53CategoryParent').value||null;const description=String(document.getElementById('urovoV53CategoryDescription').value||'').trim();let image_url=safeUrl(document.getElementById('urovoV53CategoryImageUrl').value);const file=document.getElementById('urovoV53CategoryImageFile').files?.[0];const featured=document.getElementById('urovoV53CategoryFeatured').checked;const active=document.getElementById('urovoV53CategoryActive').checked;const sort_order=Math.max(0,Math.floor(Number(document.getElementById('urovoV53CategorySort').value||0)));
+      if(!name||name.length>50||norm(name)==='all')return say('Enter a category name up to 50 characters. “All” is reserved.');
+      if(parent&&old&&String(parent)===String(old.id))return say('A category cannot be its own parent.');
+      const duplicate=categories.find(c=>norm(c.name)===norm(name)&&String(c.id)!==id);if(duplicate)return say('A category with this name already exists.');
+      if(DEFAULTS.some(n=>norm(n)===norm(old?.name))&&norm(name)!==norm(old.name))return say('Default category names are protected. You can still edit their description, image and featured status.');
+      if(msg)msg.textContent='Saving category…';
+      try{if(file)image_url=await uploadCategoryImage(file)}catch(err){if(msg)msg.textContent='Image upload failed: '+(err?.message||'Storage error');say('Image upload failed. Check product-images storage permissions.');return}
+      const payload={name,description,image_url:image_url||null,featured,active,sort_order,parent_id:parent||null};
+      let result;
+      if(id){result=await client.from('urovo_categories').update(payload).eq('id',id).select('*').maybeSingle();if(result.error)return say('Category update failed: '+result.error.message);if(!result.data)return say('Category update was not permitted.');
+        if(old&&norm(old.name)!==norm(name)){
+          const moved=await client.from('products').update({category:name}).eq('category',old.name);
+          if(moved.error){await client.from('urovo_categories').update({name:old.name}).eq('id',id);return say('Could not rename linked products: '+moved.error.message+'. Category rename was rolled back where permitted.');}
+        }
+        say('Category updated');
+      }else{
+        result=await client.from('urovo_categories').insert(payload).select('*').single();if(result.error)return say('Category save failed: '+result.error.message);say('Category added');
+      }
+      await fetchCatalog(false);window.urovoV43RefreshCategories?.();renderHomeFeatured();window.urovoV53ResetCategoryForm();await window.urovoV53RenderCategoryManager();if(document.getElementById('searchPage')?.classList.contains('show'))window.renderFullSearch?.('');
+    });
+  }
+  window.urovoV53ToggleCategory=async function(id,active){if(!isCEO())return say('CEO access only');const row=categories.find(c=>String(c.id)===String(id));if(!row)return; if(DEFAULTS.some(n=>norm(n)===norm(row.name)))return say('Default categories cannot be hidden.');const c=sb();const r=await c.from('urovo_categories').update({active:!!active}).eq('id',id).select('*').maybeSingle();if(r.error||!r.data)return say(r.error?.message||'Category update failed');await fetchCatalog(false);renderHomeFeatured();await window.urovoV53RenderCategoryManager();window.renderFullSearch?.('');say(active?'Category enabled':'Category hidden')};
+  window.urovoV53ToggleFeatured=async function(id,featured){if(!isCEO())return say('CEO access only');const c=sb();const r=await c.from('urovo_categories').update({featured:!!featured}).eq('id',id).select('id').maybeSingle();if(r.error||!r.data)return say(r.error?.message||'Could not update featured status. Run the V53 SQL migration.');await fetchCatalog(false);renderHomeFeatured();await window.urovoV53RenderCategoryManager();say(featured?'Featured category enabled':'Featured category removed')};
+  window.urovoV53MoveCategory=async function(id,direction){if(!isCEO())return say('CEO access only');await fetchCatalog(false);const ordered=categories.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));const i=ordered.findIndex(c=>String(c.id)===String(id)),j=i+Number(direction);if(i<0||j<0||j>=ordered.length)return;const c=sb(),a=ordered[i],b=ordered[j],av=Number(a.sort_order||0),bv=Number(b.sort_order||0);const r1=await c.from('urovo_categories').update({sort_order:bv}).eq('id',a.id);if(r1.error)return say(r1.error.message);const r2=await c.from('urovo_categories').update({sort_order:av}).eq('id',b.id);if(r2.error)return say(r2.error.message);await fetchCatalog(false);renderHomeFeatured();await window.urovoV53RenderCategoryManager();};
+  window.urovoV53DeleteCategory=async function(id){if(!isCEO())return say('CEO access only');const row=categories.find(c=>String(c.id)===String(id));if(!row)return; if(DEFAULTS.some(n=>norm(n)===norm(row.name)))return say('Default categories are protected.');const children=categories.filter(c=>String(c.parent_id||'')===String(id));if(children.length)return say('Move or delete its subcategories first.');const count=directProductCount(row.name);if(count)return say(`Cannot delete: ${count} products use this category. Move those products to another category first.`);if(!confirm(`Delete category “${row.name}”? This cannot be undone.`))return;const c=sb();const r=await c.from('urovo_categories').delete().eq('id',id).select('id').maybeSingle();if(r.error||!r.data)return say(r.error?.message||'Delete was not permitted');await maybeDeleteCategoryImage(row.image_url);await fetchCatalog(false);renderHomeFeatured();await window.urovoV53RenderCategoryManager();window.renderFullSearch?.('');say('Category deleted')};
+
+  window.urovoV53RenderCategoryManager=async function(){
+    if(!isCEO())return say('CEO access only');const host=document.getElementById('adminContent');if(!host)return;await fetchCatalog(true);
+    host.innerHTML=`<div class="urovo-v43-page-head"><div><span class="urovo-v43-kicker">STORE CONFIGURATION</span><h2>Category Studio</h2><p>Manage categories, subcategories, images, search visibility, sorting, featured cards and category analytics.</p></div><span class="urovo-v43-count">CATEGORY SUITE</span></div><div id="urovoV53CategoryFormHost">${managerFormHtml()}</div><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><h3>All Categories</h3><p class="urovo-v43-muted">Edit or enable/disable custom categories. Default categories are protected from delete/hide.</p></div><button class="secondary" onclick="urovoV53RenderCategoryManager()">↻ Refresh</button></div><input id="urovoV53CategoryAdminSearch" class="input" placeholder="Search categories…" oninput="urovoV53FilterAdminCategories()"><div id="urovoV53CategoryRows" style="margin-top:10px"></div></section><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><h3>📊 Category Analytics</h3><p class="urovo-v43-muted">Products, orders, units, estimated item revenue and views.</p></div><button class="secondary" onclick="urovoV53RenderCategoryAnalytics()">↻ Refresh analytics</button></div><div id="urovoV53CategoryAnalytics">Loading analytics…</div></section><p class="urovo-v43-muted">Category products and filters use the same category names stored in the Products table. A category cannot be deleted while products or subcategories still depend on it.</p>`;
+    wireManagerForm();await drawManagerRows();renderHomeFeatured();renderAnalytics();
+  };
+  window.urovoV53RenderCategoryAnalytics=renderAnalytics;
+  async function drawManagerRows(){const host=document.getElementById('urovoV53CategoryRows');if(!host)return;const all=categories.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0)||String(a.name||'').localeCompare(String(b.name||'')));const term=norm(document.getElementById('urovoV53CategoryAdminSearch')?.value||'');const filtered=all.filter(c=>!term||norm(c.name).includes(term)||norm(c.description).includes(term));host.innerHTML=catalogError?`<div class="urovo-v43-notice">Could not load the category table: ${esc(catalogError)}<br><br>Run the V53 Category SQL migration in Supabase SQL Editor, then refresh this page.</div>`:filtered.length?filtered.map(managerCategoryCard).join(''):'<div class="urovo-v43-empty"><div>🏷️</div><h3>No categories match</h3><p>Try another search or create a category above.</p></div>'}
+  window.urovoV53FilterAdminCategories=function(){drawManagerRows()};
+
+  const oldManager=window.urovoV43RenderCategoryManager;window.urovoV43RenderCategoryManager=window.urovoV53RenderCategoryManager;
+  const oldRefresh=window.urovoV43RefreshCategories;if(typeof oldRefresh==='function')window.urovoV43RefreshCategories=async function(...args){const res=await oldRefresh.apply(this,args);await fetchCatalog(false);renderHomeFeatured();return res};
+  const oldOpenSearch=window.openSearchPage;if(typeof oldOpenSearch==='function')window.openSearchPage=function(...args){const r=oldOpenSearch.apply(this,args);fetchCatalog(false).then(()=>window.renderFullSearch?.(document.getElementById('fullSearchInput')?.value||''));return r};
+  const oldCloseSearch=window.closeSearchPage;if(typeof oldCloseSearch==='function')window.closeSearchPage=function(...args){browseCategory=null;const input=document.getElementById('fullSearchInput');if(input)input.placeholder='Search products...';return oldCloseSearch.apply(this,args)};
+  const oldLoadProducts=window.loadStoreProducts;if(typeof oldLoadProducts==='function')window.loadStoreProducts=async function(...args){const out=await oldLoadProducts.apply(this,args);setTimeout(()=>{fetchCatalog(false).then(()=>{renderHomeFeatured();if(document.getElementById('searchPage')?.classList.contains('show'))window.renderFullSearch?.(document.getElementById('fullSearchInput')?.value||'')})},100);return out};
+  // Keep Home filters hierarchy-aware: selecting a parent category also includes its child categories.
+  const originalApplyDiscovery=window.applyDiscovery;
+  if(typeof originalApplyDiscovery==='function')window.applyDiscovery=function(...args){
+    let selected='All';try{selected=String(category||'All')}catch(e){}
+    const row=categories.find(c=>norm(c.name)===norm(selected));
+    const tree=row?descendantsOf(row,true):[];
+    if(!row||tree.length<=1)return originalApplyDiscovery.apply(this,args);
+    const allowed=new Set(tree.map(c=>norm(c.name)));
+    const sort=typeof discoverySort!=='undefined'?(discoverySort||'featured'):'featured';
+    const q=String(document.getElementById('search')?.value||'').toLowerCase().trim();
+    let list=productRows().filter(p=>allowed.has(norm(p.category))&&(!q||[p.name,p.category,p.desc,p.product_code].some(v=>String(v||'').toLowerCase().includes(q)))&&p.active!==false);
+    if(sort==='priceLow')list.sort((a,b)=>Number(a.price||0)-Number(b.price||0));
+    else if(sort==='priceHigh')list.sort((a,b)=>Number(b.price||0)-Number(a.price||0));
+    else if(sort==='rating'&&typeof productRating==='function')list.sort((a,b)=>productRating(b)-productRating(a));
+    else if(sort==='stock'&&typeof stockOf==='function')list.sort((a,b)=>(stockOf(b)??999999)-(stockOf(a)??999999));
+    else if(sort==='newest')list.sort((a,b)=>String(b.created_at||b.id).localeCompare(String(a.created_at||a.id)));
+    else list.sort((a,b)=>(typeof productIsBest==='function'&&productIsBest(b)?1:0)-(typeof productIsBest==='function'&&productIsBest(a)?1:0));
+    if(typeof window.renderProductList==='function')window.renderProductList(list);
+    else originalApplyDiscovery.apply(this,args);
+  };
+  // Record a category view for Home chips as well as Search category cards.
+  document.addEventListener('click',e=>{const b=e.target.closest('.categories .cat');if(!b)return;const n=String(b.dataset.cat||'').trim();if(!n||norm(n)==='all')return;const row=categoriesForSearch().find(c=>norm(c.name)===norm(n));if(row)recordView(row)});
+
+  // If a category share URL is opened, route directly to that category after the catalogue is available.
+  async function routeCategoryUrl(){try{const u=new URL(location.href);const name=u.searchParams.get('category');if(!name)return;await fetchCatalog(false);const match=categoriesForSearch().find(c=>norm(c.name)===norm(name));if(match){window.openSearchPage?.();setTimeout(()=>window.urovoCategoryBrowseByName(match.name,false),150)}}catch(e){console.warn('Category link route:',e?.message||e)}}
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{fetchCatalog(isCEO()).then(()=>{renderHomeFeatured();routeCategoryUrl()}).catch(e=>console.warn(e))},350)});
+  window.addEventListener('load',()=>setTimeout(()=>routeCategoryUrl(),1100));
+})();</script>
+
 </body></html>
