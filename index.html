@@ -549,7 +549,7 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
 <div class="image-lightbox" id="imageLightbox" onclick="closeImageLightbox(event)"><button class="lightbox-close" onclick="closeImageLightbox(event)">✕</button><img id="lightboxImage" alt="Product image"></div>
 <section id="homeAdsSection" class="section" style="padding-top:0;display:none"><div id="homeAds" class="home-ads"></div></section>
 <section class="search-wrap"><div class="search">🔎<input id="search" placeholder="Search UROVO products..." autocomplete="off"></div><div id="searchResults" class="search-results hidden"></div><div class="suggestions"><button class="suggestion" onclick="quickSearch('gadget')">Gadgets</button><button class="suggestion" onclick="quickSearch('stand')">Phone Stand</button><button class="suggestion" onclick="quickSearch('home')">Home</button><button class="suggestion" onclick="quickSearch('cleaning')">Cleaning</button></div></section>
-<div class="categories"><button class="cat active" data-cat="All">New</button><button class="cat" data-cat="Gadgets">Gadgets</button><button class="cat" data-cat="Home">Home</button><button class="cat" data-cat="Lifestyle">Lifestyle</button></div>
+<div class="categories"><button class="cat active" data-cat="All">All</button><button class="cat" data-cat="New Product">New Product</button><button class="cat" data-cat="Gadgets">Gadgets</button><button class="cat" data-cat="Home">Home</button><button class="cat" data-cat="Lifestyle">Lifestyle</button></div>
 <section class="urovo-discovery"><div class="discovery-left"><span>Sort & Filter</span><button class="sort-trigger" onclick="openSortSheet()" aria-label="Choose product sorting"><span id="sortLabel">Featured</span><small>⌄</small></button></div><div class="discovery-right"><span class="filter-chip active" data-filter="new" style="cursor:default">✨ New</span></div>
 </section>
 <div class="sort-sheet" id="sortSheet" onclick="if(event.target===this)closeSortSheet()">
@@ -567,7 +567,7 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
 
 <section class="deal"><div><small>LIMITED-TIME UROVO EDIT</small><h2>Premium picks at ₹499</h2><p>Limited-time UROVO launch pricing.</p></div><div class="timer"><div class="time"><b id="hh">08</b><span>HRS</span></div><div class="time"><b id="mm">00</b><span>MIN</span></div><div class="time"><b id="ss">00</b><span>SEC</span></div></div></section>
 
-<section class="section" id="productsSection"><div class="head"><div><h2>Trending Products</h2><p>Selected for UROVO</p></div><p id="count">0 products</p></div><div class="products" id="products"></div></section>
+<section class="section" id="productsSection"><div class="head"><div><h2>Trending Products</h2><p>New products first · Updated automatically</p></div><p id="count">0 products</p></div><div class="products" id="products"></div></section>
 <section class="features"><div class="head"><div><h2>Why UROVO?</h2><p>Simple shopping. Better experience.</p></div></div><div class="feature-grid"><div class="feature"><div class="feature-icon">⚡</div><h3>Simple Shopping</h3><p>Discover useful products without unnecessary complexity.</p></div><div class="feature"><div class="feature-icon">🛡️</div><h3>Quality Focus</h3><p>Products selected around usefulness and everyday value.</p></div><div class="feature"><div class="feature-icon">🚚</div><h3>Easy Delivery</h3><p>Designed for a smooth shopping and delivery experience.</p></div><div class="feature"><div class="feature-icon">💚</div><h3>Made for You</h3><p>A clean shopping experience built around modern customers.</p></div></div></section>
 <footer>© 2026 <strong>UROVO</strong> · Celebrate Every Moment. 🪔</footer>
 
@@ -1936,9 +1936,8 @@ function discountInfo(p){
   return {mrp:0,saving:0,percent:0};
 }
 function productIsNew(p){
-  const tag=String(p.tag||'').toLowerCase();
-  if(tag.includes('new')) return true;
-  return p.created_at ? (Date.now()-new Date(p.created_at).getTime()<14*86400000) : false;
+  // Home → Trending Products uses ONLY the manually enabled NEW badge.
+  return p?.is_new===true || String(p?.is_new).toLowerCase()==='true';
 }
 function productIsBest(p){
   const tag=String(p.tag||'').toLowerCase();
@@ -1980,16 +1979,14 @@ function applyDiscovery(){
   const sort=discoverySort||'featured';
   const q=(document.getElementById('search')?.value||'').toLowerCase().trim();
   let list=products.filter(p=>{
-    const cat=category==='All'||String(p.category).toLowerCase()===String(category).toLowerCase();
+    const isNewView=String(category).toLowerCase()==='new product';
+    const isHomeView=category==='All';
+    const cat=isHomeView||isNewView||String(p.category).toLowerCase()===String(category).toLowerCase();
     const search=!q||[p.name,p.category,p.desc].some(v=>String(v||'').toLowerCase().includes(q));
-    const d=discountInfo(p);
-    // Home/All is the Trending section: only manually enabled NEW products appear there.
-    // A selected category must show every active product assigned to that category.
-    const f=productIsNew(p);
-    const showForCurrentView = category === 'All' ? f : true;
-    return cat&&search&&showForCurrentView&&p.active!==false;
+    const newMatch=(isHomeView||isNewView)?productIsNew(p):true;
+    return cat&&search&&newMatch&&p.active!==false;
   });
-  if(sort==='priceLow')list.sort((a,b)=>a.price-b.price);else if(sort==='priceHigh')list.sort((a,b)=>b.price-a.price);else if(sort==='rating')list.sort((a,b)=>productRating(b)-productRating(a));else if(sort==='stock')list.sort((a,b)=>(stockOf(b)??999999)-(stockOf(a)??999999));else if(sort==='newest')list.sort((a,b)=>String(b.created_at||b.id).localeCompare(String(a.created_at||a.id)));else list.sort((a,b)=>(productIsBest(b)?1:0)-(productIsBest(a)?1:0));
+  if(sort==='priceLow')list.sort((a,b)=>a.price-b.price);else if(sort==='priceHigh')list.sort((a,b)=>b.price-a.price);else if(sort==='rating')list.sort((a,b)=>productRating(b)-productRating(a));else if(sort==='stock')list.sort((a,b)=>(stockOf(b)??999999)-(stockOf(a)??999999));else if(sort==='newest')list.sort((a,b)=>String(b.created_at||b.id).localeCompare(String(a.created_at||a.id)));else list.sort((a,b)=>{const n=(productIsNew(b)?1:0)-(productIsNew(a)?1:0);return n||((productIsBest(b)?1:0)-(productIsBest(a)?1:0));});
   renderProductList(list);
 }
 function renderProductList(list){
@@ -3037,6 +3034,50 @@ const wait=Math.max(0,INSTALL_MS-(Date.now()-start));if(wait)await new Promise(r
 if(!pe)try{toast('Install prompt is unavailable here. Chrome menu → Add to Home screen / Install app')}catch(e){}
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showButton,{once:true});else showButton();
+})();
+</script>
+<script id="urovo-v100-home-new-products-first-load-fix">
+(function(){
+  'use strict';
+  if(window.__urovoV100HomeNewLoadFix)return;
+  window.__urovoV100HomeNewLoadFix=true;
+  const previousLoad=window.loadStoreProducts;
+  if(typeof previousLoad!=='function')return;
+  const fixedLoad=async function(...args){
+    const result=await previousLoad.apply(this,args);
+    // The earlier loader adds the NEW flag from Supabase after its first render.
+    // Render again only after that metadata has arrived, so Home is correct on first open.
+    try{
+      if(!window.__urovoHomeInitialViewSet){
+        try{category='All'}catch(e){}
+        document.querySelectorAll('.categories .cat').forEach(b=>b.classList.toggle('active',String(b.dataset.cat||'').trim().toLowerCase()==='all'));
+        window.__urovoHomeInitialViewSet=true;
+        window.__urovoInitialHomeNewShown=true;
+      }
+      if(typeof window.applyDiscovery==='function')window.applyDiscovery();
+      else if(typeof window.renderProducts==='function')window.renderProducts();
+    }catch(e){console.warn('UROVO initial Home NEW products render:',e)}
+    return result;
+  };
+  fixedLoad.__urovoV100HomeNewLoadFix=true;
+  window.loadStoreProducts=fixedLoad;
+  // If the catalogue already finished loading before this patch ran, render it now too.
+  const renderLoadedHome=()=>{
+    try{
+      const list=Array.isArray(window.products)?window.products:[];
+      if(!list.length)return;
+      if(!window.__urovoHomeInitialViewSet){
+        try{category='All'}catch(e){}
+        document.querySelectorAll('.categories .cat').forEach(b=>b.classList.toggle('active',String(b.dataset.cat||'').trim().toLowerCase()==='all'));
+        window.__urovoHomeInitialViewSet=true;
+        window.__urovoInitialHomeNewShown=true;
+      }
+      if(typeof window.applyDiscovery==='function')window.applyDiscovery();
+      else if(typeof window.renderProducts==='function')window.renderProducts();
+    }catch(e){console.warn('UROVO initial Home render:',e)}
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(renderLoadedHome,1200),{once:true});
+  else setTimeout(renderLoadedHome,1200);
 })();
 </script>
 </body></html>`;
