@@ -2952,28 +2952,13 @@ setInterval(arrange,800);
 <div id="urovoInstallOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Installing UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Installing the app…</div><div class="urovoSpin"></div></div></div>
 <script id="urovo-v87-update-install-js">
 (function(){
- const $=id=>document.getElementById(id);
- function logoSrc(){return document.querySelector('link[rel="icon"]')?.href||document.querySelector('img[src*="logo"]')?.src||''}
- function show(id){const e=$(id);if(e){e.querySelector('img').src=logoSrc();e.style.display='flex'}}
- function hide(id){const e=$(id);if(e)e.style.display='none'}
- window.urovoShowUpdateAnimation=function(){show('urovoUpdateOverlay');setTimeout(()=>hide('urovoUpdateOverlay'),2200)};
- window.urovoShowInstallAnimation=function(){show('urovoInstallOverlay')};
- window.urovoHideInstallAnimation=function(){hide('urovoInstallOverlay')};
- window.addEventListener('beforeinstallprompt',e=>{window.__urovoInstallPrompt=e;});
- window.addEventListener('appinstalled',()=>{});
- // Wrap common update button handlers without replacing their actual update logic.
- document.addEventListener('click',e=>{
-   const b=e.target.closest('button'); if(!b)return;
-   const t=(b.innerText||b.textContent||'').trim().toLowerCase();
-   if(t==='update'||t.includes('update app')||t.includes('update website')) window.urovoShowUpdateAnimation();
-   if(t.includes('install')&&t.includes('app')) setTimeout(()=>window.urovoShowInstallAnimation(),0);
- },true);
- // Keep installing animation visible until appinstalled, but never block normal prompt.
- const oldInstall=window.installUrovoApp;
- if(typeof oldInstall==='function'&&!oldInstall.__urovoV87){
-   const wrapped=function(){window.urovoShowInstallAnimation();try{return oldInstall.apply(this,arguments)}catch(e){window.urovoHideInstallAnimation();throw e}};
-   wrapped.__urovoV87=true;window.installUrovoApp=wrapped;
- }
+  const $=id=>document.getElementById(id);
+  function logoSrc(){return document.querySelector('link[rel="icon"]')?.href||''}
+  function showUpdate(){const e=$('urovoUpdateOverlay');if(e){const i=e.querySelector('img');if(i)i.src=logoSrc();e.style.display='flex';}}
+  function hideUpdate(){const e=$('urovoUpdateOverlay');if(e)e.style.display='none';}
+  window.urovoShowUpdateAnimation=function(){showUpdate();setTimeout(hideUpdate,2200)};
+  window.urovoShowInstallAnimation=function(){};
+  window.urovoHideInstallAnimation=function(){};
 })();
 </script>
 
@@ -3335,38 +3320,8 @@ Thank you.`);
   window.open(`https://wa.me/918590921747?text=${msg}`,'_blank','noopener');
 }
 
-// Install prompt (works when the site is served over HTTPS and the companion manifest/service worker are present).
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById('installAppBtn')?.classList.remove('hidden')});
-window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;toast('UROVO App installed successfully ✓')});
-function isUrovoStandalone(){return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone===true}
-async function installUrovoApp(){
-  if(isUrovoStandalone()){toast('UROVO is already installed');return}
-  if(!deferredInstallPrompt){toast('Tap your browser menu → Add to Home screen / Install app');return}
-  const overlay=document.getElementById('urovoInstallOverlay');
-  const status=document.getElementById('urovoInstallStatus');
-  const progressText=document.getElementById('urovoInstallProgressText');
-  overlay?.classList.add('show');
-  overlay?.setAttribute('aria-hidden','false');
-  const started=Date.now();
-  let timer=setInterval(()=>{
-    const pct=Math.min(99,Math.floor(((Date.now()-started)/10000)*100));
-    if(progressText) progressText.textContent='Securing your app · '+pct+'%';
-    if(status) status.textContent=pct<35?'Preparing your premium app experience…':pct<70?'Optimizing UROVO for your device…':'Finalizing your app installation…';
-  },100);
-  try{
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice;
-  }catch(e){}
-  deferredInstallPrompt=null;
-  document.getElementById('installAppBtn')?.classList.add('hidden');
-  const remaining=Math.max(0,10000-(Date.now()-started));
-  setTimeout(()=>{
-    clearInterval(timer);
-    if(progressText) progressText.textContent='UROVO App ready · 100%';
-    if(status) status.textContent='Your premium UROVO experience is ready.';
-    setTimeout(()=>{overlay?.classList.remove('show');overlay?.setAttribute('aria-hidden','true')},350);
-  },remaining);
-}
+// Install prompt is controlled by the final UROVO V105 controller below.
+// Legacy install implementation removed to prevent duplicate prompts/animations.
 
 // Patch the product detail flow after the existing definitions have loaded.
 const _openProductOriginal=window.openProduct;
@@ -8349,7 +8304,7 @@ setInterval(arrange,800);
   window.__urovoV105InstallController = true;
 
   const INSTALLED_KEY = 'urovo_pwa_install_confirmed_v105';
-  const TRUSTED_LEGACY_KEYS = ['urovo_pwa_installed_v101', 'urovo_pwa_installed_v104'];
+  const TRUSTED_LEGACY_KEYS = [];
   const LEGACY_FALSE_POSITIVE_KEY = 'urovo_pwa_install_completed_v100';
   const OVERLAY_ID = 'urovoInstallOverlay';
   let savedPrompt = null;
@@ -8558,11 +8513,13 @@ setInterval(arrange,800);
   };
 
   function sync() {
-    // The v100 key could be written by an older fake 10-second animation. Trust it only
-    // when a standalone launch or a real appinstalled marker also exists.
-    if (!standalone() && !storageHas(INSTALLED_KEY) && !TRUSTED_LEGACY_KEYS.some(storageHas)) {
-      try { localStorage.removeItem(LEGACY_FALSE_POSITIVE_KEY); } catch (_) {}
-    }
+    // Never trust old-version install markers. Only standalone mode or a real V105
+    // appinstalled marker may hide the Install button.
+    try {
+      localStorage.removeItem('urovo_pwa_installed_v101');
+      localStorage.removeItem('urovo_pwa_installed_v104');
+      localStorage.removeItem(LEGACY_FALSE_POSITIVE_KEY);
+    } catch (_) {}
     if (confirmedInstalled()) hideInstallButtons();
     else showInstallButton();
   }
@@ -8570,8 +8527,19 @@ setInterval(arrange,800);
   if ('serviceWorker' in navigator && window.isSecureContext) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('./sw.js?v=105', { scope: './', updateViaCache: 'none' })
-        .then(function (registration) { return registration.update().catch(function () {}); })
-        .catch(function (error) { console.warn('UROVO service worker update failed:', error); });
+        .then(function (registration) {
+          return registration.update().catch(function () {}).then(function () {
+            return navigator.serviceWorker.ready;
+          });
+        })
+        .then(function () {
+          window.__urovoSWReady = true;
+          if (!confirmedInstalled()) showInstallButton();
+        })
+        .catch(function (error) {
+          window.__urovoSWReady = false;
+          console.warn('UROVO service worker registration failed:', error);
+        });
     }, { once: true });
   }
 
@@ -8579,6 +8547,9 @@ setInterval(arrange,800);
   else sync();
   window.addEventListener('pageshow', sync);
   window.addEventListener('focus', sync);
+  navigator.serviceWorker?.addEventListener('controllerchange', function () {
+    window.__urovoSWReady = true;
+  });
   document.addEventListener('visibilitychange', function () { if (!document.hidden && !animationActive) sync(); });
   setTimeout(sync, 250);
   setTimeout(sync, 1200);
