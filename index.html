@@ -14,7 +14,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json" id="urovoOrganizationSchema">{"@context":"https://schema.org","@type":"Organization","name":"UROVO","description":"Curated gadgets, home essentials and lifestyle picks."}</script>
 <script type="application/ld+json" id="urovoWebsiteSchema">{"@context":"https://schema.org","@type":"WebSite","name":"UROVO Store","description":"Upgrade Your Everyday"}</script>
-<link rel="manifest" href="./manifest.webmanifest">
+<link rel="manifest" href="./manifest.webmanifest?v=105">
+<link rel="icon" type="image/png" href="./icons/icon-192.png?v=105" id="urovo-pwa-install-icons-v100">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=105">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>UROVO — Wear Your Everyday</title>
@@ -632,7 +634,7 @@ window.supabaseClient=supabaseClient;
 const UROVO_PUSH_PUBLIC_KEY = "BAo-6dPnHVMpM_MhXn-BUnM1DtFm7quRiDUTDpgSPvhesOfwizsTQc736ROT_TxMWJcXNH1InqIa8w5FGMOYn4g";
 let urovoPushRegistration = null;
 function urovoUrlBase64ToUint8Array(base64String){const padding="=".repeat((4-base64String.length%4)%4);const base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");const rawData=atob(base64);return Uint8Array.from([...rawData].map(char=>char.charCodeAt(0)));}
-async function registerUrovoPushServiceWorker(){if(!("serviceWorker" in navigator))throw new Error("Service Worker is not supported on this device/browser.");urovoPushRegistration=await navigator.serviceWorker.register("./sw.js",{scope:"./"});await navigator.serviceWorker.ready;return urovoPushRegistration;}
+async function registerUrovoPushServiceWorker(){if(!("serviceWorker" in navigator))throw new Error("Service Worker is not supported on this device/browser.");urovoPushRegistration=await navigator.serviceWorker.register("./sw.js?v=105",{scope:"./"});await navigator.serviceWorker.ready;return urovoPushRegistration;}
 async function syncExistingUrovoPushSubscription(){if(!user?.email||!("Notification" in window)||Notification.permission!=="granted")return;try{const reg=await registerUrovoPushServiceWorker();const sub=await reg.pushManager.getSubscription();if(!sub)return;const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)return;const json=sub.toJSON();if(!json.endpoint||!json.keys?.p256dh||!json.keys?.auth)return;const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)console.warn("Push subscription sync:",error.message);}catch(e){console.warn("Push sync:",e.message);}}
 async function enableUrovoPushNotifications(){if(!user){showAccount();toast("Please login first");return;}if(!("Notification" in window)||!("PushManager" in window)){toast("Phone notifications are not supported in this browser.");return;}try{const permission=await Notification.requestPermission();if(permission!=="granted"){toast("Notification permission was not allowed.");renderFullAccount();return;}const reg=await registerUrovoPushServiceWorker();let sub=await reg.pushManager.getSubscription();if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urovoUrlBase64ToUint8Array(UROVO_PUSH_PUBLIC_KEY)});}const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)throw new Error("Login session not found. Please login again.");const json=sub.toJSON();const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)throw error;toast("🔔 Phone notifications enabled");renderFullAccount();}catch(e){console.error("UROVO push enable:",e);toast("Push setup failed: "+(e?.message||"Please try again"));}}
 function urovoPushStatusText(){if(!("Notification" in window))return "This browser does not support phone notifications.";if(Notification.permission==="granted")return "Phone notifications are enabled on this device.";if(Notification.permission==="denied")return "Notifications are blocked. Allow them in your browser/site settings.";return "Get order, chat and UROVO updates even when the app is closed.";}
@@ -2259,7 +2261,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
       if(permission==='default'&&options.requestPermission!==false)permission=await Notification.requestPermission();
       if(permission!=='granted')throw new Error('Notification permission was not granted. Tap Allow when your browser asks.');
       let reg;
-      try{reg=await navigator.serviceWorker.register('./sw.js',{scope:'./'});await navigator.serviceWorker.ready;}
+      try{reg=await navigator.serviceWorker.register('./sw.js?v=105',{scope:'./'});await navigator.serviceWorker.ready;}
       catch(e){throw new Error('Could not register sw.js. Upload sw.js beside index.html in the same GitHub Pages folder. '+(e?.message||''));}
       if(!reg?.pushManager)throw new Error('PushManager is unavailable after service worker registration.');
       let sub=await reg.pushManager.getSubscription();
@@ -2290,7 +2292,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     if(!getEmail()||!('Notification' in window)||Notification.permission!=='granted')return {ok:false,reason:'Notification permission is not granted.'};
     if(!window.isSecureContext||location.protocol!=='https:')return {ok:false,reason:'HTTPS is required.'};
     try{
-      const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./'});await navigator.serviceWorker.ready;
+      const reg=await navigator.serviceWorker.register('./sw.js?v=105',{scope:'./'});await navigator.serviceWorker.ready;
       const sub=await reg.pushManager.getSubscription();if(!sub)return {ok:false,reason:'No browser push subscription exists yet. Tap Phone Notifications once to enable it.'};
       await savePushSubscription(sub);try{localStorage.setItem(pushFlag,'1')}catch(e){}patchNotificationUi();return {ok:true,reason:'Subscription synced'};
     }catch(e){console.warn('UROVO V58 subscription sync:',e);return {ok:false,reason:String(e?.message||e)}}
@@ -3014,28 +3016,7 @@ setInterval(arrange,800);
 .urovo-v97-install-time{font-size:11px;color:#f7d47a;min-height:17px;font-weight:800;letter-spacing:.04em}
 @media(prefers-reduced-motion:reduce){.install-tool,.urovo-v97-install-icon{animation:none!important}.urovo-v97-install-icon:after{animation:none!important}}
 </style>
-<script id="urovo-v97-home-all-install-js">
-(function(){
-'use strict';
-if(window.__urovoV97Final)return;window.__urovoV97Final=true;
-const INSTALL_MS=10000,$=id=>document.getElementById(id);
-function makeUI(){const o=$('urovoInstallOverlay');const c=o?.querySelector('.urovoOverlayCard')||o?.querySelector('.urovo-install-card');if(!c)return;c.innerHTML='<div class="urovo-v97-install-icon">U</div><div style="font-size:24px;font-weight:900;margin-top:3px">UROVO App</div><div style="color:#aaa;margin-top:7px;font-size:13px">Preparing your premium app experience…</div><div class="urovo-v97-progress"><i id="urovoV97InstallBar"></i></div><div id="urovoV97InstallTime" class="urovo-v97-install-time">Preparing • 10 seconds</div>'}
-function show(){const o=$('urovoInstallOverlay');if(o){makeUI();o.style.display='flex';o.classList.add('show');o.setAttribute('aria-hidden','false')}}
-function hide(){const o=$('urovoInstallOverlay');if(o){o.style.display='none';o.classList.remove('show');o.setAttribute('aria-hidden','true')}}
-function showButton(){const b=$('installAppBtn');if(b&&!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true)){b.classList.remove('hidden');b.style.display='inline-flex';b.textContent='✦ Install UROVO App'}}
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__urovoV97Prompt=e;window.__urovoInstallPrompt=e;showButton()},true);
-window.addEventListener('appinstalled',()=>{window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;hide();try{toast('✦ UROVO App installed successfully')}catch(e){}});
-window.installUrovoApp=async function(){
-const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(standalone){try{toast('UROVO is already installed ✓')}catch(e){}return}
-const pe=window.__urovoV97Prompt||window.__urovoInstallPrompt||window.deferredInstallPrompt||null;show();const start=Date.now(),bar=$('urovoV97InstallBar'),tm=$('urovoV97InstallTime');let raf=0;
-const tick=()=>{const el=Date.now()-start,p=Math.min(100,Math.round(el/INSTALL_MS*100)),left=Math.max(0,Math.ceil((INSTALL_MS-el)/1000));if(bar)bar.style.width=p+'%';if(tm)tm.textContent=left?'Preparing • '+left+' seconds':'Ready ✓';if(el<INSTALL_MS)raf=requestAnimationFrame(tick)};tick();
-if(pe){try{pe.prompt();await pe.userChoice}catch(e){console.warn('UROVO install prompt:',e)}window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;window.deferredInstallPrompt=null}
-const wait=Math.max(0,INSTALL_MS-(Date.now()-start));if(wait)await new Promise(r=>setTimeout(r,wait));cancelAnimationFrame(raf);if(bar)bar.style.width='100%';if(tm)tm.textContent='Ready ✓';await new Promise(r=>setTimeout(r,350));hide();
-if(!pe)try{toast('Install prompt is unavailable here. Chrome menu → Add to Home screen / Install app')}catch(e){}
-};
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showButton,{once:true});else showButton();
-})();
-</script>
+
 <script id="urovo-v100-home-new-products-first-load-fix">
 (function(){
   'use strict';
@@ -3080,7 +3061,101 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   else setTimeout(renderLoadedHome,1200);
 })();
 </script>
-</body></html>`;
+
+<!-- UROVO PWA install reliability + hide the install/download button after installation -->
+<style id="urovo-pwa-install-final-css">
+  #installAppBtn.urovo-pwa-installed-hidden,
+  #installAppBtn[hidden] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  #urovoInstallOverlay.urovo-pwa-no-install-overlay { display: none !important; }
+</style>
+
+
+<!-- UROVO PWA INSTALL FINAL OVERRIDE v101 -->
+<style id="urovo-pwa-v101-install-css">
+#installAppBtn.urovo-pwa-installed-hidden,#installAppBtn[hidden]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#urovoInstallOverlay.urovo-pwa-v101-hidden{display:none!important!important}
+</style>
+
+
+
+<script id="urovo-v102-seller-approval-status-fix">
+(function(){
+  'use strict';
+  const esc=s=>typeof window.escapeHtml==='function'?window.escapeHtml(String(s??'')):String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const say=s=>{try{window.toast(s)}catch{console.log(s)}};
+  const db=()=>window.supabaseClient;
+  const email=()=>String(window.user?.email||'').trim().toLowerCase();
+
+  function statusUI(status,note){
+    const st=String(status||'pending').trim().toLowerCase();
+    if(st==='approved') return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(55,190,90,.12);border:1px solid rgba(85,212,122,.28);color:#55d47a;font-weight:900;font-size:11px">✓ Approved</span>';
+    if(st==='rejected') return '<span title="'+esc(note||'')+'" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,54,85,.10);border:1px solid rgba(255,54,85,.25);color:#ff5870;font-weight:900;font-size:11px">✕ Rejected</span>';
+    return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,190,60,.10);border:1px solid rgba(255,190,60,.22);color:#ffc44d;font-weight:900;font-size:11px">⏳ Pending Approval</span>';
+  }
+
+  // Make seller product cards show a clear approval state after every dashboard refresh.
+  const originalRender=window.urovoV43RenderSellerPanel;
+  if(typeof originalRender==='function'){
+    window.urovoV43RenderSellerPanel=async function(){
+      const result=await originalRender.apply(this,arguments);
+      try{
+        const em=email(); if(!em)return result;
+        const r=await db().from('products').select('id,approval_status,approval_notes').eq('seller_email',em).order('created_at',{ascending:false}).limit(500);
+        if(r.error)return result;
+        const map=new Map((r.data||[]).map(p=>[String(p.id),p]));
+        document.querySelectorAll('#urovoSellerInventoryV37 .urovo-v43-owned-product').forEach(card=>{
+          const edit=card.querySelector('button[onclick*="urovoSellerEditProductV40"]');
+          const m=edit?.getAttribute('onclick')?.match(/urovoSellerEditProductV40\('([^']+)'\)/); if(!m)return;
+          const p=map.get(String(m[1])); if(!p)return;
+          let row=card.querySelector('.urovo-v102-approval');
+          if(!row){row=document.createElement('div');row.className='urovo-v102-approval';row.style.cssText='margin-top:7px';card.querySelector('.urovo-v43-owned-product-copy')?.appendChild(row);}
+          row.innerHTML=statusUI(p.approval_status,p.approval_notes)+(String(p.approval_status||'').toLowerCase()==='rejected'&&p.approval_notes?'<div style="font-size:11px;color:var(--muted);margin-top:5px">Reason: '+esc(p.approval_notes)+'</div>':'');
+        });
+      }catch(e){console.warn('Seller approval UI:',e)}
+      return result;
+    };
+  }
+
+  // Seller submission: saving the product must not fail just because the optional product-code RPC is unavailable.
+  const oldCreate=window.urovoSellerCreateProductV37;
+  if(typeof oldCreate==='function'){
+    window.urovoSellerCreateProductV37=async function(){
+      try{
+        const em=email();
+        if(!em)throw new Error('Please sign in first');
+        const seller=await db().from('urovo_sellers').select('email,active').eq('email',em).maybeSingle();
+        if(seller.error)throw seller.error;
+        if(!seller.data||seller.data.active===false)throw new Error('Your Seller badge is not active');
+        const val=id=>document.getElementById(id)?.value?.trim()||'';
+        const name=val('svName'),category=val('svCategory')||'All',price=Number(val('svPrice')),old_price=Number(val('svOld')||0),stock=Math.max(0,Math.floor(Number(val('svStock')||0))),tag=(val('svTag').match(/#[A-Za-z0-9_-]+/g)||[]).join(' '),description=val('svDesc'),files=Array.from(document.getElementById('svImages')?.files||[]);
+        if(!name||!Number.isFinite(price)||price<=0||!description)throw new Error('Enter product name, positive price and description');
+        if(!files.length)throw new Error('Add at least one product image');
+        const uploader=window.uploadSellerImages;
+        if(typeof uploader!=='function')throw new Error('Product image uploader is unavailable');
+        const urls=await uploader(files,em);
+        const payload={name,category,price,old_price,stock,tag,description,icon:'📦',seller_email:em,active:true,approval_status:'pending',image_url:urls[0],image_urls:urls};
+        if(document.getElementById('svShipping')) payload.shipping_charge=Math.max(0,Number(val('svShipping')||0));
+        if(document.getElementById('svFreeShipping')) payload.free_shipping=document.getElementById('svFreeShipping').checked;
+        const created=await db().from('products').insert(payload).select('id').single();
+        if(created.error)throw created.error;
+        let code='';
+        try{const cr=await db().rpc('urovo_get_product_codes',{p_product_ids:[created.data.id]});if(!cr.error)code=(cr.data||[]).find(x=>String(x.product_id)===String(created.data.id))?.product_code||''}catch(e){console.warn('Optional product code:',e)}
+        say(code?'Product submitted for CEO approval · Code: '+code:'Product submitted for CEO approval');
+        await window.openSellerDashboard();
+      }catch(e){say(e?.message||'Could not add product')}
+    };
+  }
+
+  // If CEO approval/rejection happens while the seller dashboard is open, refresh its status on focus.
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&typeof window.urovoV43RenderSellerPanel==='function'&&window.user)window.urovoV43RenderSellerPanel().catch(()=>{})});
+})();
+</script>
+`;
   w.document.open();w.document.write(html);w.document.close();
 }
 
@@ -3478,7 +3553,7 @@ function useFullSearch(q){const i=document.getElementById('fullSearchInput');if(
 document.getElementById('fullSearchInput')?.addEventListener('input',e=>renderFullSearch(e.target.value));
 
 // PWA registration. The generated sw.js is included with this UROVO package.
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=105').catch(()=>{}))}
 </script>
 <script id="urovo-menu-startup-fix">
 document.addEventListener('DOMContentLoaded',()=>{const m=document.getElementById('accountMenu');if(m)m.classList.remove('show');window.scrollTo(0,0);});
@@ -4515,9 +4590,7 @@ window.addEventListener('load',normalizeHelpSurface);
     box.innerHTML=data.map(p=>{
       const status=String(p.approval_status||'pending').trim().toLowerCase();
       const statusLabel=status.charAt(0).toUpperCase()+status.slice(1);
-      const actions=status==='approved'
-        ? '<div style="margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(55,190,90,.10);color:#55d47a;font-weight:800;font-size:12px">✅ Approved · Published on store</div>'
-        : `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="primary" onclick="window.urovoV39ApproveProduct('${esc(p.id)}')">✅ Approve</button><button class="secondary" onclick="window.urovoV39RejectProduct('${esc(p.id)}')">Reject</button></div>`;
+      const actions=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="primary" onclick="window.urovoV39ApproveProduct('${esc(p.id)}')">✅ Approve</button><button class="secondary" onclick="window.urovoV39RejectProduct('${esc(p.id)}')">✕ Reject</button></div>`;
       return `<div class="order-card" style="margin:12px 0"><div style="display:flex;gap:12px;align-items:flex-start"><img loading="lazy" decoding="async" src="${esc(p.image_url||'')}" alt="" style="width:84px;height:84px;flex:0 0 84px;object-fit:cover;border-radius:12px;background:var(--surface2)" onerror="this.style.display='none'"><div style="flex:1;min-width:0;overflow-wrap:anywhere"><b>${esc(p.name)}</b><p style="color:var(--muted);font-size:12px;margin:4px 0">${esc(p.category||'All')} · Sold by ${esc(p.seller_name||p.seller_email||'UROVO Official Store')}</p><p style="font-size:13px;overflow-wrap:anywhere">₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)} · Code ${esc(productCodes.get(String(p.id))||'Not assigned')}</p><span class="order-status-pill urovo-approval-status status-${esc(status)}">${esc(statusLabel)}</span><p style="font-size:12px;color:var(--muted);margin-top:6px">${esc(p.description||'')}</p></div></div>${actions}</div>`;
     }).join('');
   }
@@ -5071,7 +5144,7 @@ window.addEventListener('load',normalizeHelpSurface);
     const sold=orders.reduce((s,o)=>s+Number(o.my_total||0),0);
     const statusCounts={Placed:0,Processing:0,Shipped:0,'Out for Delivery':0,Delivered:0,Cancelled:0};orders.forEach(o=>{const st=String(o.status||'Placed');if(statusCounts[st]!==undefined)statusCounts[st]++});
     const panel=document.createElement('div');panel.id='urovoSellerInventoryV37';panel.className='urovo-v43-seller-panel';
-    panel.innerHTML=`<div class="urovo-v43-seller-hero"><div><span class="urovo-v43-kicker">SELLER WORKSPACE</span><h2>${esc(access.data.name||em.split('@')[0])}</h2><p>${esc(em)} · Active seller</p></div><span class="urovo-v43-seller-mark">🏪</span></div><div class="urovo-v43-seller-stats"><div><small>My products</small><b>${myProducts.length}</b></div><div><small>Published</small><b>${active}</b></div><div><small>Pending approval</small><b>${pending}</b></div><div><small>My item sales</small><b>${cash(sold)}</b></div></div><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">CATALOGUE</span><h3>Manage my products</h3><p class="urovo-v43-muted">Only products owned by your seller account appear here.</p></div></div><div class="urovo-v43-add-product"><input id="svName" class="input" placeholder="Product name"><input id="svCategory" class="input" list="urovoV43CategoryOptions" placeholder="Category"><div class="coupon-row"><input id="svPrice" class="input" type="number" min="0.01" placeholder="Price ₹"><input id="svOld" class="input" type="number" min="0" placeholder="Old price ₹"></div><div class="coupon-row"><input id="svStock" class="input" type="number" min="0" value="1" placeholder="Stock"><input id="svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets #phone"></div><div class="coupon-row"><input id="svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping charge ₹"><label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:11px;color:var(--muted)"><input id="svFreeShipping" type="checkbox" checked> Free Shipping</label></div><small style="color:var(--muted);display:block;margin:-2px 0 7px">Use #tags here. Product details will suggest only products sharing at least one matching #tag.</small><small style="color:var(--muted);display:block;margin:-2px 0 7px">Leave shipping at ₹0 or keep Free Shipping enabled to show “Free Shipping” to customers.</small><textarea id="svDesc" class="input" rows="3" placeholder="Product description"></textarea><input id="svImages" class="input" type="file" accept="image/*" multiple><button type="button" class="primary" onclick="urovoSellerCreateProductV37()">＋ Add My Product</button></div><div class="urovo-v43-product-list">${myProducts.length?myProducts.map(p=>`<article class="urovo-v43-owned-product"><img src="${esc(p.image_url||'')}" alt="${esc(p.name||'Product')}" loading="lazy" onerror="this.style.display='none'"><div class="urovo-v43-owned-product-copy"><b>${esc(p.name||'Product')}</b><p>${esc(p.category||'All')} · ${cash(p.price)} · Stock ${Number(p.stock||0)}</p><small>Code: ${esc(productCodes.get(String(p.id))||'Auto-assigned')} · ${esc(p.approval_status||'approved')}</small></div><div class="urovo-v43-owned-actions"><button class="secondary" type="button" onclick="urovoSellerEditProductV40('${esc(p.id)}')">Edit</button><button class="secondary" type="button" onclick="urovoSellerSetActiveV37('${esc(p.id)}',${p.active===false?'true':'false'})">${p.active===false?'Publish':'Hide'}</button><button class="urovo-v43-delete" type="button" onclick="urovoV43DeleteOwnProduct('${esc(p.id)}')">🗑 Delete</button></div></article>`).join(''):'<div class="urovo-v43-empty"><div>🛍️</div><h3>No products yet</h3><p>Add a product above. Seller products remain hidden until CEO approval.</p></div>'}</div></section><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">FULFILMENT</span><h3>My product orders</h3><p class="urovo-v43-muted">Only your products are shown inside each order. Other sellers’ item details are not displayed.</p></div><span class="urovo-v43-count">${orders.length} ORDERS</span></div><div class="urovo-v43-order-tools"><input id="urovoV43SellerOrderSearch" class="input" placeholder="Search my orders or customer…" oninput="urovoV43FilterSellerOrders()"><select id="urovoV43SellerOrderStatus" class="input" onchange="urovoV43FilterSellerOrders()"><option value="all">All statuses</option>${STATUS_OPTIONS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div><div id="urovoV43SellerOrderCards">${orders.length?orders.map(o=>{
+    panel.innerHTML=`<div class="urovo-v43-seller-hero"><div><span class="urovo-v43-kicker">SELLER WORKSPACE</span><h2>${esc(access.data.name||em.split('@')[0])}</h2><p>${esc(em)} · Active seller</p></div><span class="urovo-v43-seller-mark">🏪</span></div><div class="urovo-v43-seller-stats"><div><small>My products</small><b>${myProducts.length}</b></div><div><small>Published</small><b>${active}</b></div><div><small>Pending approval</small><b>${pending}</b></div><div><small>My item sales</small><b>${cash(sold)}</b></div></div><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">CATALOGUE</span><h3>Manage my products</h3><p class="urovo-v43-muted">Only products owned by your seller account appear here.</p></div></div><div class="urovo-v43-add-product"><input id="svName" class="input" placeholder="Product name"><input id="svCategory" class="input" list="urovoV43CategoryOptions" placeholder="Category"><div class="coupon-row"><input id="svPrice" class="input" type="number" min="0.01" placeholder="Price ₹"><input id="svOld" class="input" type="number" min="0" placeholder="Old price ₹"></div><div class="coupon-row"><input id="svStock" class="input" type="number" min="0" value="1" placeholder="Stock"><input id="svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets #phone"></div><div class="coupon-row"><input id="svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping charge ₹"><label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:11px;color:var(--muted)"><input id="svFreeShipping" type="checkbox" checked> Free Shipping</label></div><small style="color:var(--muted);display:block;margin:-2px 0 7px">Use #tags here. Product details will suggest only products sharing at least one matching #tag.</small><small style="color:var(--muted);display:block;margin:-2px 0 7px">Leave shipping at ₹0 or keep Free Shipping enabled to show “Free Shipping” to customers.</small><textarea id="svDesc" class="input" rows="3" placeholder="Product description"></textarea><input id="svImages" class="input" type="file" accept="image/*" multiple><button type="button" class="primary" onclick="urovoSellerCreateProductV37()">＋ Add My Product</button></div><div class="urovo-v43-product-list">${myProducts.length?myProducts.map(p=>`<article class="urovo-v43-owned-product"><img src="${esc(p.image_url||'')}" alt="${esc(p.name||'Product')}" loading="lazy" onerror="this.style.display='none'"><div class="urovo-v43-owned-product-copy"><b>${esc(p.name||'Product')}</b><p>${esc(p.category||'All')} · ${cash(p.price)} · Stock ${Number(p.stock||0)}</p><small>Code: ${esc(productCodes.get(String(p.id))||'Auto-assigned')} · <strong>${String(p.approval_status||'pending').toLowerCase()==='approved'?'✓ Approved':String(p.approval_status||'pending').toLowerCase()==='rejected'?'✕ Rejected':'⏳ Pending Approval'}</strong>${p.approval_status==='rejected'&&p.approval_notes?`<br>Reason: ${esc(p.approval_notes)}`:''}</small></div><div class="urovo-v43-owned-actions"><button class="secondary" type="button" onclick="urovoSellerEditProductV40('${esc(p.id)}')">Edit</button><button class="secondary" type="button" onclick="urovoSellerSetActiveV37('${esc(p.id)}',${p.active===false?'true':'false'})">${p.active===false?'Publish':'Hide'}</button><button class="urovo-v43-delete" type="button" onclick="urovoV43DeleteOwnProduct('${esc(p.id)}')">🗑 Delete</button></div></article>`).join(''):'<div class="urovo-v43-empty"><div>🛍️</div><h3>No products yet</h3><p>Add a product above. Seller products remain hidden until CEO approval.</p></div>'}</div></section><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">FULFILMENT</span><h3>My product orders</h3><p class="urovo-v43-muted">Only your products are shown inside each order. Other sellers’ item details are not displayed.</p></div><span class="urovo-v43-count">${orders.length} ORDERS</span></div><div class="urovo-v43-order-tools"><input id="urovoV43SellerOrderSearch" class="input" placeholder="Search my orders or customer…" oninput="urovoV43FilterSellerOrders()"><select id="urovoV43SellerOrderStatus" class="input" onchange="urovoV43FilterSellerOrders()"><option value="all">All statuses</option>${STATUS_OPTIONS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div><div id="urovoV43SellerOrderCards">${orders.length?orders.map(o=>{
       const myLines=Array.isArray(o.my_items)?o.my_items:(Array.isArray(o.items)?o.items:[]);
       if(!myLines.length)return '';
       const total=Number(o.my_total||myLines.reduce((s,i)=>s+Number(i.item_total||0),0));
@@ -5218,7 +5291,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   async function registerSW(){
     try{
       if(typeof registerUrovoPushServiceWorker==='function')return await registerUrovoPushServiceWorker();
-      const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./'});await navigator.serviceWorker.ready;return reg;
+      const reg=await navigator.serviceWorker.register('./sw.js?v=105',{scope:'./'});await navigator.serviceWorker.ready;return reg;
     }catch(e){throw new Error(reason('Service Worker registration failed: ',e))}
   }
   async function saveSubscription(sub){
@@ -7075,7 +7148,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     const wrappedPush = async function (options = {}) {
       try {
         if ('serviceWorker' in navigator && 'PushManager' in window && window.isSecureContext && location.protocol === 'https:') {
-          const reg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+          const reg = await navigator.serviceWorker.register('./sw.js?v=105', { scope: './' });
           await navigator.serviceWorker.ready;
           const old = await reg.pushManager.getSubscription();
           if (old) {
@@ -8178,27 +8251,356 @@ setInterval(arrange,800);
 .urovo-v97-install-time{font-size:11px;color:#f7d47a;min-height:17px;font-weight:800;letter-spacing:.04em}
 @media(prefers-reduced-motion:reduce){.install-tool,.urovo-v97-install-icon{animation:none!important}.urovo-v97-install-icon:after{animation:none!important}}
 </style>
-<script id="urovo-v97-home-all-install-js">
+
+<!-- UROVO PWA INSTALL FINAL OVERRIDE v101 -->
+<style id="urovo-pwa-v101-install-css">
+#installAppBtn.urovo-pwa-installed-hidden,#installAppBtn[hidden]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#urovoInstallOverlay.urovo-pwa-v101-hidden{display:none!important!important}
+</style>
+
+
+
+<script id="urovo-v102-seller-approval-status-fix">
 (function(){
-'use strict';
-if(window.__urovoV97Final)return;window.__urovoV97Final=true;
-const INSTALL_MS=10000,$=id=>document.getElementById(id);
-function makeUI(){const o=$('urovoInstallOverlay');const c=o?.querySelector('.urovoOverlayCard')||o?.querySelector('.urovo-install-card');if(!c)return;c.innerHTML='<div class="urovo-v97-install-icon">U</div><div style="font-size:24px;font-weight:900;margin-top:3px">UROVO App</div><div style="color:#aaa;margin-top:7px;font-size:13px">Preparing your premium app experience…</div><div class="urovo-v97-progress"><i id="urovoV97InstallBar"></i></div><div id="urovoV97InstallTime" class="urovo-v97-install-time">Preparing • 10 seconds</div>'}
-function show(){const o=$('urovoInstallOverlay');if(o){makeUI();o.style.display='flex';o.classList.add('show');o.setAttribute('aria-hidden','false')}}
-function hide(){const o=$('urovoInstallOverlay');if(o){o.style.display='none';o.classList.remove('show');o.setAttribute('aria-hidden','true')}}
-function showButton(){const b=$('installAppBtn');if(b&&!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true)){b.classList.remove('hidden');b.style.display='inline-flex';b.textContent='✦ Install UROVO App'}}
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__urovoV97Prompt=e;window.__urovoInstallPrompt=e;showButton()},true);
-window.addEventListener('appinstalled',()=>{window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;hide();try{toast('✦ UROVO App installed successfully')}catch(e){}});
-window.installUrovoApp=async function(){
-const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(standalone){try{toast('UROVO is already installed ✓')}catch(e){}return}
-const pe=window.__urovoV97Prompt||window.__urovoInstallPrompt||window.deferredInstallPrompt||null;show();const start=Date.now(),bar=$('urovoV97InstallBar'),tm=$('urovoV97InstallTime');let raf=0;
-const tick=()=>{const el=Date.now()-start,p=Math.min(100,Math.round(el/INSTALL_MS*100)),left=Math.max(0,Math.ceil((INSTALL_MS-el)/1000));if(bar)bar.style.width=p+'%';if(tm)tm.textContent=left?'Preparing • '+left+' seconds':'Ready ✓';if(el<INSTALL_MS)raf=requestAnimationFrame(tick)};tick();
-if(pe){try{pe.prompt();await pe.userChoice}catch(e){console.warn('UROVO install prompt:',e)}window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;window.deferredInstallPrompt=null}
-const wait=Math.max(0,INSTALL_MS-(Date.now()-start));if(wait)await new Promise(r=>setTimeout(r,wait));cancelAnimationFrame(raf);if(bar)bar.style.width='100%';if(tm)tm.textContent='Ready ✓';await new Promise(r=>setTimeout(r,350));hide();
-if(!pe)try{toast('Install prompt is unavailable here. Chrome menu → Add to Home screen / Install app')}catch(e){}
-};
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showButton,{once:true});else showButton();
+  'use strict';
+  const esc=s=>typeof window.escapeHtml==='function'?window.escapeHtml(String(s??'')):String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const say=s=>{try{window.toast(s)}catch{console.log(s)}};
+  const db=()=>window.supabaseClient;
+  const email=()=>String(window.user?.email||'').trim().toLowerCase();
+
+  function statusUI(status,note){
+    const st=String(status||'pending').trim().toLowerCase();
+    if(st==='approved') return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(55,190,90,.12);border:1px solid rgba(85,212,122,.28);color:#55d47a;font-weight:900;font-size:11px">✓ Approved</span>';
+    if(st==='rejected') return '<span title="'+esc(note||'')+'" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,54,85,.10);border:1px solid rgba(255,54,85,.25);color:#ff5870;font-weight:900;font-size:11px">✕ Rejected</span>';
+    return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,190,60,.10);border:1px solid rgba(255,190,60,.22);color:#ffc44d;font-weight:900;font-size:11px">⏳ Pending Approval</span>';
+  }
+
+  // Make seller product cards show a clear approval state after every dashboard refresh.
+  const originalRender=window.urovoV43RenderSellerPanel;
+  if(typeof originalRender==='function'){
+    window.urovoV43RenderSellerPanel=async function(){
+      const result=await originalRender.apply(this,arguments);
+      try{
+        const em=email(); if(!em)return result;
+        const r=await db().from('products').select('id,approval_status,approval_notes').eq('seller_email',em).order('created_at',{ascending:false}).limit(500);
+        if(r.error)return result;
+        const map=new Map((r.data||[]).map(p=>[String(p.id),p]));
+        document.querySelectorAll('#urovoSellerInventoryV37 .urovo-v43-owned-product').forEach(card=>{
+          const edit=card.querySelector('button[onclick*="urovoSellerEditProductV40"]');
+          const m=edit?.getAttribute('onclick')?.match(/urovoSellerEditProductV40\('([^']+)'\)/); if(!m)return;
+          const p=map.get(String(m[1])); if(!p)return;
+          let row=card.querySelector('.urovo-v102-approval');
+          if(!row){row=document.createElement('div');row.className='urovo-v102-approval';row.style.cssText='margin-top:7px';card.querySelector('.urovo-v43-owned-product-copy')?.appendChild(row);}
+          row.innerHTML=statusUI(p.approval_status,p.approval_notes)+(String(p.approval_status||'').toLowerCase()==='rejected'&&p.approval_notes?'<div style="font-size:11px;color:var(--muted);margin-top:5px">Reason: '+esc(p.approval_notes)+'</div>':'');
+        });
+      }catch(e){console.warn('Seller approval UI:',e)}
+      return result;
+    };
+  }
+
+  // Seller submission: saving the product must not fail just because the optional product-code RPC is unavailable.
+  const oldCreate=window.urovoSellerCreateProductV37;
+  if(typeof oldCreate==='function'){
+    window.urovoSellerCreateProductV37=async function(){
+      try{
+        const em=email();
+        if(!em)throw new Error('Please sign in first');
+        const seller=await db().from('urovo_sellers').select('email,active').eq('email',em).maybeSingle();
+        if(seller.error)throw seller.error;
+        if(!seller.data||seller.data.active===false)throw new Error('Your Seller badge is not active');
+        const val=id=>document.getElementById(id)?.value?.trim()||'';
+        const name=val('svName'),category=val('svCategory')||'All',price=Number(val('svPrice')),old_price=Number(val('svOld')||0),stock=Math.max(0,Math.floor(Number(val('svStock')||0))),tag=(val('svTag').match(/#[A-Za-z0-9_-]+/g)||[]).join(' '),description=val('svDesc'),files=Array.from(document.getElementById('svImages')?.files||[]);
+        if(!name||!Number.isFinite(price)||price<=0||!description)throw new Error('Enter product name, positive price and description');
+        if(!files.length)throw new Error('Add at least one product image');
+        const uploader=window.uploadSellerImages;
+        if(typeof uploader!=='function')throw new Error('Product image uploader is unavailable');
+        const urls=await uploader(files,em);
+        const payload={name,category,price,old_price,stock,tag,description,icon:'📦',seller_email:em,active:true,approval_status:'pending',image_url:urls[0],image_urls:urls};
+        if(document.getElementById('svShipping')) payload.shipping_charge=Math.max(0,Number(val('svShipping')||0));
+        if(document.getElementById('svFreeShipping')) payload.free_shipping=document.getElementById('svFreeShipping').checked;
+        const created=await db().from('products').insert(payload).select('id').single();
+        if(created.error)throw created.error;
+        let code='';
+        try{const cr=await db().rpc('urovo_get_product_codes',{p_product_ids:[created.data.id]});if(!cr.error)code=(cr.data||[]).find(x=>String(x.product_id)===String(created.data.id))?.product_code||''}catch(e){console.warn('Optional product code:',e)}
+        say(code?'Product submitted for CEO approval · Code: '+code:'Product submitted for CEO approval');
+        await window.openSellerDashboard();
+      }catch(e){say(e?.message||'Could not add product')}
+    };
+  }
+
+  // If CEO approval/rejection happens while the seller dashboard is open, refresh its status on focus.
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&typeof window.urovoV43RenderSellerPanel==='function'&&window.user)window.urovoV43RenderSellerPanel().catch(()=>{})});
 })();
 </script>
+<style id="urovo-v105-install-fix-css">
+#installAppBtn.urovo-v105-installed-hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#urovoInstallOverlay.urovo-v105-overlay-hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#urovoInstallOverlay .urovo-v105-card{width:min(360px,92vw);text-align:center;padding:28px 22px;border:1px solid rgba(200,255,0,.28);border-radius:24px;background:#101010;color:#fff;box-shadow:0 18px 60px rgba(0,0,0,.45)}
+#urovoInstallOverlay .urovo-v105-mark{width:62px;height:62px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;background:#c8ff00;color:#070707;font-size:35px;font-weight:1000;box-shadow:0 0 26px rgba(200,255,0,.18)}
+#urovoInstallOverlay .urovo-v105-track{height:8px;border-radius:99px;overflow:hidden;background:#292929;margin:18px 0 10px}
+#urovoInstallOverlay .urovo-v105-bar{height:100%;width:0;border-radius:99px;background:#c8ff00;transition:width .12s linear}
+#urovoInstallOverlay .urovo-v105-caption{color:#aaa;margin-top:7px;font-size:13px;line-height:1.5}
+@media(prefers-reduced-motion:reduce){#urovoInstallOverlay .urovo-v105-bar{transition:none}}
+</style>
+<script id="urovo-v105-install-fix-js">
+(function () {
+  'use strict';
+  if (window.__urovoV105InstallController) return;
+  window.__urovoV105InstallController = true;
+
+  const INSTALLED_KEY = 'urovo_pwa_install_confirmed_v105';
+  const TRUSTED_LEGACY_KEYS = ['urovo_pwa_installed_v101', 'urovo_pwa_installed_v104'];
+  const LEGACY_FALSE_POSITIVE_KEY = 'urovo_pwa_install_completed_v100';
+  const OVERLAY_ID = 'urovoInstallOverlay';
+  let savedPrompt = null;
+  let animationActive = false;
+  let realInstallEventSeen = false;
+
+  const getButton = () => document.getElementById('installAppBtn');
+  const getOverlay = () => document.getElementById(OVERLAY_ID);
+  const getCard = () => {
+    const o = getOverlay();
+    if (!o) return null;
+    let c = o.querySelector('.urovo-v105-card');
+    if (!c) {
+      c = document.createElement('div');
+      c.className = 'urovo-v105-card';
+      o.replaceChildren(c);
+    }
+    return c;
+  };
+  function standalone() {
+    try {
+      return window.navigator.standalone === true ||
+        !!(window.matchMedia && (
+          window.matchMedia('(display-mode: standalone)').matches ||
+          window.matchMedia('(display-mode: fullscreen)').matches ||
+          window.matchMedia('(display-mode: minimal-ui)').matches
+        )) ||
+        String(document.referrer || '').startsWith('android-app://');
+    } catch (_) { return false; }
+  }
+  function storageHas(key) {
+    try { return localStorage.getItem(key) === '1'; } catch (_) { return false; }
+  }
+  function confirmedInstalled() {
+    return standalone() || storageHas(INSTALLED_KEY) || TRUSTED_LEGACY_KEYS.some(storageHas);
+  }
+  function setDisplayNone(el) {
+    if (!el) return;
+    if (!el.hidden) el.hidden = true;
+    if (!el.classList.contains('urovo-v105-installed-hidden')) el.classList.add('urovo-v105-installed-hidden');
+    if (el.style.getPropertyValue('display') !== 'none' || el.style.getPropertyPriority('display') !== 'important') {
+      el.style.setProperty('display', 'none', 'important');
+    }
+    if (el.getAttribute('aria-hidden') !== 'true') el.setAttribute('aria-hidden', 'true');
+  }
+  function setDisplayVisible(el) {
+    if (!el) return;
+    if (el.hidden) el.hidden = false;
+    if (el.classList.contains('urovo-v105-installed-hidden')) el.classList.remove('urovo-v105-installed-hidden');
+    if (el.classList.contains('hidden')) el.classList.remove('hidden');
+    if (el.style.getPropertyValue('display') || el.style.getPropertyPriority('display')) el.style.removeProperty('display');
+    if (el.hasAttribute('aria-hidden')) el.removeAttribute('aria-hidden');
+  }
+  function hideOverlay() {
+    const o = getOverlay();
+    if (!o) return;
+    o.classList.remove('show', 'urovo-v105-overlay-hidden', 'urovo-pwa-no-install-overlay', 'urovo-pwa-v101-hidden', 'urovo-v104-hidden');
+    o.classList.add('urovo-v105-overlay-hidden');
+    o.style.setProperty('display', 'none', 'important');
+    o.setAttribute('aria-hidden', 'true');
+  }
+  function showInstallButton() {
+    const b = getButton();
+    if (!b || confirmedInstalled() || animationActive) {
+      if (confirmedInstalled()) hideInstallButtons();
+      return;
+    }
+    setDisplayVisible(b);
+    if (b.textContent.trim() !== '⬇️ Install UROVO App') b.textContent = '⬇️ Install UROVO App';
+    if (b.disabled) b.disabled = false;
+    hideOverlay();
+  }
+  function hideInstallButtons() {
+    document.querySelectorAll('#installAppBtn,[data-install-app],.install-app-btn').forEach(setDisplayNone);
+    if (!animationActive) hideOverlay();
+  }
+  function toast(message) {
+    try { if (typeof window.toast === 'function') window.toast(message); else console.info(message); }
+    catch (_) { console.info(message); }
+  }
+  function saveConfirmedInstall() {
+    realInstallEventSeen = true;
+    try {
+      localStorage.setItem(INSTALLED_KEY, '1');
+      // Keep older versions of this page in sync, but only after a real appinstalled event
+      // or standalone-mode confirmation.
+      localStorage.setItem('urovo_pwa_installed_v101', '1');
+      localStorage.setItem('urovo_pwa_installed_v104', '1');
+      localStorage.setItem(LEGACY_FALSE_POSITIVE_KEY, '1');
+    } catch (_) {}
+    hideInstallButtons();
+  }
+  function showOverlay() {
+    const o = getOverlay();
+    const card = getCard();
+    if (!o || !card) return false;
+    o.classList.remove('urovo-v105-overlay-hidden', 'urovo-pwa-no-install-overlay', 'urovo-pwa-v101-hidden', 'urovo-v104-hidden');
+    o.style.setProperty('display', 'flex', 'important');
+    o.classList.add('show');
+    o.setAttribute('aria-hidden', 'false');
+    card.innerHTML = '<div class="urovo-v105-mark">U</div>' +
+      '<div style="font-size:23px;font-weight:900">Installing UROVO</div>' +
+      '<div class="urovo-v105-caption" id="urovoV105Status">Waiting for the browser to finish the install…</div>' +
+      '<div class="urovo-v105-track"><div class="urovo-v105-bar" id="urovoV105Bar"></div></div>' +
+      '<div class="urovo-v105-caption" id="urovoV105Countdown">10 seconds remaining</div>';
+    return true;
+  }
+  function updateProgress(percent, secondsLeft) {
+    const bar = document.getElementById('urovoV105Bar');
+    const countdown = document.getElementById('urovoV105Countdown');
+    if (bar) bar.style.width = Math.max(0, Math.min(100, percent)) + '%';
+    if (countdown) countdown.textContent = secondsLeft > 0 ? (secondsLeft + ' seconds remaining') : 'Checking installation…';
+  }
+  function setFinalOverlayState(installed) {
+    const card = getCard();
+    if (!card) return;
+    if (installed) {
+      card.innerHTML = '<div class="urovo-v105-mark">✓</div>' +
+        '<div style="font-size:23px;font-weight:900">Installed ✓</div>' +
+        '<div class="urovo-v105-caption">UROVO installation was confirmed by your browser.</div>';
+    } else {
+      card.innerHTML = '<div class="urovo-v105-mark">!</div>' +
+        '<div style="font-size:23px;font-weight:900">Not confirmed yet</div>' +
+        '<div class="urovo-v105-caption">Chrome has not confirmed installation. The Install button will stay available so you can try again.</div>';
+    }
+  }
+  async function runTenSecondAnimation() {
+    animationActive = true;
+    const b = getButton();
+    if (b) { b.disabled = true; b.textContent = 'Installing…'; }
+    const shown = showOverlay();
+    const start = Date.now();
+    const duration = 10000;
+    const timer = setInterval(function () {
+      const elapsed = Math.min(duration, Date.now() - start);
+      updateProgress(Math.round(elapsed / duration * 100), Math.ceil((duration - elapsed) / 1000));
+    }, 100);
+    await new Promise(resolve => setTimeout(resolve, duration));
+    clearInterval(timer);
+    updateProgress(100, 0);
+    const installed = realInstallEventSeen || confirmedInstalled();
+    if (installed) saveConfirmedInstall();
+    setFinalOverlayState(installed);
+    await new Promise(resolve => setTimeout(resolve, installed ? 800 : 1500));
+    animationActive = false;
+    hideOverlay();
+    if (confirmedInstalled()) hideInstallButtons();
+    else {
+      showInstallButton();
+      if (shown) toast('Chrome did not confirm the installation. Check the install prompt, then try again if needed.');
+    }
+  }
+
+  // Prevent older click listeners from displaying a fake installation overlay before Chrome's prompt.
+  window.urovoShowInstallAnimation = function () { hideOverlay(); };
+  window.urovoHideInstallAnimation = hideOverlay;
+
+  window.addEventListener('beforeinstallprompt', function (event) {
+    if (confirmedInstalled()) { try { event.preventDefault(); } catch (_) {} hideInstallButtons(); return; }
+    try { event.preventDefault(); } catch (_) {}
+    savedPrompt = event;
+    window.__urovoInstallPrompt = event;
+    window.__urovoV97Prompt = event;
+    window.deferredInstallPrompt = event;
+    showInstallButton();
+  }, true);
+
+  window.addEventListener('appinstalled', function () {
+    saveConfirmedInstall();
+    if (!animationActive) {
+      hideOverlay();
+      toast('UROVO App installed successfully ✓');
+    }
+  }, true);
+
+  window.installUrovoApp = async function installUrovoAppV105() {
+    if (confirmedInstalled()) { hideInstallButtons(); return; }
+    const promptEvent = savedPrompt || window.__urovoInstallPrompt || window.__urovoV97Prompt || window.deferredInstallPrompt || null;
+    if (!promptEvent || typeof promptEvent.prompt !== 'function') {
+      hideOverlay();
+      showInstallButton();
+      toast('Real install prompt is not available yet. In Chrome, open ⋮ → Install app / Add to Home screen. If that option is missing, upload index.html, manifest.webmanifest and sw.js together to the HTTPS site.');
+      return;
+    }
+    try {
+      // Must run directly from the user's tap; do not display a fake animation before this prompt.
+      promptEvent.prompt();
+      const choice = await promptEvent.userChoice;
+      savedPrompt = null;
+      window.__urovoInstallPrompt = null;
+      window.__urovoV97Prompt = null;
+      window.deferredInstallPrompt = null;
+      if (choice && choice.outcome === 'accepted') {
+        await runTenSecondAnimation();
+      } else {
+        hideOverlay();
+        showInstallButton();
+        toast('Installation was cancelled. Tap Install UROVO App to try again.');
+      }
+    } catch (error) {
+      console.warn('UROVO install prompt failed:', error);
+      hideOverlay();
+      showInstallButton();
+      toast('Chrome could not complete the install prompt. Use Chrome ⋮ → Install app / Add to Home screen.');
+    }
+  };
+
+  function sync() {
+    // The v100 key could be written by an older fake 10-second animation. Trust it only
+    // when a standalone launch or a real appinstalled marker also exists.
+    if (!standalone() && !storageHas(INSTALLED_KEY) && !TRUSTED_LEGACY_KEYS.some(storageHas)) {
+      try { localStorage.removeItem(LEGACY_FALSE_POSITIVE_KEY); } catch (_) {}
+    }
+    if (confirmedInstalled()) hideInstallButtons();
+    else showInstallButton();
+  }
+
+  if ('serviceWorker' in navigator && window.isSecureContext) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js?v=105', { scope: './', updateViaCache: 'none' })
+        .then(function (registration) { return registration.update().catch(function () {}); })
+        .catch(function (error) { console.warn('UROVO service worker update failed:', error); });
+    }, { once: true });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, { once: true });
+  else sync();
+  window.addEventListener('pageshow', sync);
+  window.addEventListener('focus', sync);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && !animationActive) sync(); });
+  setTimeout(sync, 250);
+  setTimeout(sync, 1200);
+
+  // Watch only the install button. Avoid the old whole-document observer loop that repeatedly
+  // rewrote style/class attributes when the button was already hidden.
+  function observeButton() {
+    const b = getButton();
+    if (!b || !('MutationObserver' in window)) return;
+    const observer = new MutationObserver(function () {
+      if (confirmedInstalled()) {
+        if (!b.hidden || !b.classList.contains('urovo-v105-installed-hidden') || b.style.getPropertyValue('display') !== 'none') setDisplayNone(b);
+      } else if (!animationActive && b.hidden) {
+        setDisplayVisible(b);
+      }
+    });
+    observer.observe(b, { attributes: true, attributeFilter: ['class', 'style', 'hidden', 'aria-hidden'] });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observeButton, { once: true });
+  else observeButton();
+})();
+</script>
+
 </body>
 </html>
