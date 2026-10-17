@@ -36,3 +36,14 @@ RECOMMENDED TEST
 VALIDATION NOTE
 The HTML's executable inline JavaScript blocks were syntax-checked successfully. The migration was prepared against the existing UROVO schema available in the working files, but it has not been executed against your live Supabase project from this chat. Back up first and stop if Supabase reports an error.
 
+UROVO V58 — Notification Enable Fix
+
+1. Extract this package.
+2. Upload index.html and sw.js into the SAME folder in your existing GitHub Pages repository.
+3. Keep your existing manifest.webmanifest and icons folder. Do not delete your other existing files.
+4. Open the hosted HTTPS UROVO site, sign in, then Account → Phone Notifications → Allow.
+5. If Android previously blocked permission, open Android Settings → Apps → Chrome (or UROVO) → Notifications and enable it, then return to UROVO.
+
+Important: browser push requires an HTTPS-hosted site, the sw.js file, a matching VAPID public/private key configuration, and a working urovo-send-push Edge Function. The HTML and service-worker syntax were checked here, but the live Supabase/Edge Function and Android device must be tested on the deployed site.
+
+
