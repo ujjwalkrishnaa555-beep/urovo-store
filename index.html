@@ -7,7 +7,7 @@
 <meta name="description" content="Shop curated gadgets, home essentials and lifestyle picks at UROVO. Upgrade your everyday.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="application-name" content="UROVO Store">
-<meta name="urovo-build" content="UROVO V72 CEO Back Fix">
+<meta name="urovo-build" content="UROVO V85 Chat Policy + White Product Image">
 <meta property="og:type" content="website">
 <meta property="og:title" content="UROVO — Upgrade Your Everyday">
 <meta property="og:description" content="Premium picks for your everyday. Discover gadgets, home essentials and lifestyle products at UROVO.">
@@ -437,6 +437,24 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
  #adminPage .card, #adminPage .panel, #adminPage .stat-card, #adminPage .dashboard-card, #adminPage .admin-card { padding:10px !important; }
 }
 </style>
+
+<style id="urovo-v85-product-image-white">
+/* V85: marketplace-style product image stage */
+.detail-image{background:#fff !important;border-color:#e9e9e9 !important;padding:12px !important;}
+.detail-image img{background:#fff !important;object-fit:contain !important;padding:4px !important;}
+.detail-thumb{background:#fff !important;border-color:#e6e6e6 !important;}
+.detail-thumb img{object-fit:contain !important;background:#fff !important;}
+</style>
+
+<style id="urovo-v91-royal-account">
+/* V91: premium royal Account UI */
+.account-page,.account-screen,[id*="account"] .account-card{font-family:inherit;}
+.urovo-royal-account-card{background:linear-gradient(145deg,#111 0%,#0b0b0b 55%,#151515 100%)!important;border:1px solid rgba(200,255,0,.22)!important;box-shadow:0 18px 55px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.04)!important;border-radius:24px!important;}
+.urovo-royal-account-card .avatar{border:2px solid #c8ff00!important;box-shadow:0 0 0 5px rgba(200,255,0,.08),0 0 28px rgba(200,255,0,.16)!important;}
+.urovo-royal-account-card .account-title{letter-spacing:.02em;font-weight:800;}
+.urovo-ceo-first{order:-9999!important;}
+</style>
+
 </head>
 <body>
 <!-- UROVO UPDATE GATE v38 -->
@@ -840,8 +858,29 @@ $("search").addEventListener("input",()=>{renderProducts();renderSearchResults()
 $("search").addEventListener("focus",renderSearchResults);
 document.addEventListener("click",e=>{if(!e.target.closest(".search-wrap"))$("searchResults")?.classList.add("hidden")});
 function quickSearch(t){$("search").value=t;renderProducts();renderSearchResults();scrollProducts()}
-document.querySelectorAll(".cat").forEach(btn=>btn.onclick=()=>{document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));btn.classList.add("active");category=btn.dataset.cat;renderProducts()});
-function openCategory(cat){category=cat;document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===cat));renderProducts();scrollProducts()}
+document.querySelectorAll(".cat").forEach(btn=>btn.onclick=()=>{
+  const clicked=btn.dataset.cat;
+  if(category===clicked && clicked!=="All"){
+    category="All";
+    document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat==="All"));
+  }else{
+    category=clicked;
+    document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===clicked));
+  }
+  renderProducts();
+  scrollProducts();
+});
+function openCategory(cat){
+  if(category===cat && cat!=="All"){
+    category="All";
+    document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat==="All"));
+  }else{
+    category=cat;
+    document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===cat));
+  }
+  renderProducts();
+  scrollProducts();
+}
 $("themeBtn").onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("urovoTheme",document.body.classList.contains("dark")?"dark":"light")};
 if(localStorage.getItem("urovoTheme")==="dark")document.body.classList.add("dark");
 $("cartBtn").onclick=openCart;
@@ -2807,6 +2846,94 @@ body.urovo-ceo-subpage .back-button { display:none !important; }
 })();
 </script>
 
+
+<style id="urovo-v83-quantity-order-css">
+#productModal #urovoDetailQtySlot{order:3!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:9px 0 0!important;box-sizing:border-box!important}
+#productModal .urovo-detail-share{order:4!important;width:100%!important}
+#productModal .urovo-detail-benefits{order:5!important}
+</style>
+<script id="urovo-v83-quantity-order-js">
+(function(){
+'use strict';
+if(window.__urovoV83QuantityOrder)return;window.__urovoV83QuantityOrder=true;
+function arrange(){
+ const m=document.getElementById('productModal'); if(!m)return;
+ const actions=m.querySelector('.detail-actions'), add=document.getElementById('detailAdd'), buy=document.getElementById('detailBuy'), share=document.getElementById('urovoProductShareBtn');
+ if(!actions||!add||!buy||!share)return;
+ if(add.parentElement!==actions)actions.insertBefore(add,buy); else if(add.nextElementSibling!==buy)actions.insertBefore(add,buy);
+ let slot=document.getElementById('urovoDetailQtySlot');
+ if(slot && slot.parentElement!==actions.parentElement) actions.parentElement.insertBefore(slot,share);
+ if(slot && share.previousElementSibling!==slot) actions.parentElement.insertBefore(slot,share);
+ if(share.previousElementSibling!==slot && slot) actions.parentElement.insertBefore(slot,share);
+}
+['DOMContentLoaded','load'].forEach(ev=>window.addEventListener(ev,()=>setTimeout(arrange,120)));
+setInterval(arrange,800);
+})();
+</script>
+<style id="urovo-v87-update-install-css">
+#urovoUpdateOverlay,#urovoInstallOverlay{position:fixed;inset:0;z-index:999999;background:rgba(7,7,7,.92);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;padding:24px;color:#fff}
+.urovoOverlayCard{width:min(360px,92vw);text-align:center;padding:28px 22px;border:1px solid rgba(200,255,0,.22);border-radius:24px;background:#101010;box-shadow:0 18px 60px rgba(0,0,0,.45)}
+.urovoOverlayLogo{width:72px;height:72px;object-fit:contain;border-radius:18px;margin:0 auto 18px;animation:urovoLogoPulse 1.2s ease-in-out infinite}
+.urovoSpin{width:34px;height:34px;border:3px solid rgba(255,255,255,.18);border-top-color:#c8ff00;border-radius:50%;margin:18px auto;animation:urovoSpin 1s linear infinite}
+.urovoProgress{height:5px;background:#202020;border-radius:99px;overflow:hidden;margin:18px 0 10px}.urovoProgress i{display:block;width:28%;height:100%;background:#c8ff00;border-radius:99px;animation:urovoProgress 1.5s ease-in-out infinite}
+@keyframes urovoSpin{to{transform:rotate(360deg)}}@keyframes urovoLogoPulse{50%{transform:scale(1.07)}}@keyframes urovoProgress{50%{width:82%}100%{width:28%}}
+@media(prefers-reduced-motion:reduce){.urovoOverlayLogo,.urovoSpin,.urovoProgress i{animation:none}}
+</style>
+<div id="urovoUpdateOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Updating UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Please wait…</div><div class="urovoProgress"><i></i></div></div></div>
+<div id="urovoInstallOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Installing UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Installing the app…</div><div class="urovoSpin"></div></div></div>
+<script id="urovo-v87-update-install-js">
+(function(){
+ const $=id=>document.getElementById(id);
+ function logoSrc(){return document.querySelector('link[rel="icon"]')?.href||document.querySelector('img[src*="logo"]')?.src||''}
+ function show(id){const e=$(id);if(e){e.querySelector('img').src=logoSrc();e.style.display='flex'}}
+ function hide(id){const e=$(id);if(e)e.style.display='none'}
+ window.urovoShowUpdateAnimation=function(){show('urovoUpdateOverlay');setTimeout(()=>hide('urovoUpdateOverlay'),2200)};
+ window.urovoShowInstallAnimation=function(){show('urovoInstallOverlay')};
+ window.urovoHideInstallAnimation=function(){hide('urovoInstallOverlay')};
+ window.addEventListener('beforeinstallprompt',e=>{window.__urovoInstallPrompt=e;});
+ window.addEventListener('appinstalled',()=>window.urovoHideInstallAnimation());
+ // Wrap common update button handlers without replacing their actual update logic.
+ document.addEventListener('click',e=>{
+   const b=e.target.closest('button'); if(!b)return;
+   const t=(b.innerText||b.textContent||'').trim().toLowerCase();
+   if(t==='update'||t.includes('update app')||t.includes('update website')) window.urovoShowUpdateAnimation();
+   if(t.includes('install')&&t.includes('app')) setTimeout(()=>window.urovoShowInstallAnimation(),0);
+ },true);
+ // Keep installing animation visible until appinstalled, but never block normal prompt.
+ const oldInstall=window.installUrovoApp;
+ if(typeof oldInstall==='function'&&!oldInstall.__urovoV87){
+   const wrapped=function(){window.urovoShowInstallAnimation();try{return oldInstall.apply(this,arguments)}catch(e){window.urovoHideInstallAnimation();throw e}};
+   wrapped.__urovoV87=true;window.installUrovoApp=wrapped;
+ }
+})();
+</script>
+
+<script id="urovo-v91-ceo-first">
+(function(){
+  function apply(){
+    const all=[...document.querySelectorAll('button,a,[role="button"],div')];
+    all.forEach(el=>{
+      const t=(el.textContent||'').trim().toLowerCase();
+      if(t==='ceo dashboard'||t.includes('ceo dashboard')) el.classList.add('urovo-ceo-first');
+    });
+    // Add a dedicated first-access CEO shortcut only for the configured CEO email.
+    try{
+      const email=String(window.user?.email||window.currentUser?.email||window.authUser?.email||'').toLowerCase();
+      if(email==='ujjwalkrishna0555@gmail.com') {
+        const nav=[...document.querySelectorAll('nav,header,.bottom-nav,.nav-bar')];
+        nav.forEach(n=>{
+          const ceo=[...n.querySelectorAll('button,a,[role="button"]')].find(x=>(x.textContent||'').toLowerCase().includes('ceo dashboard'));
+          if(ceo && ceo.parentElement) ceo.parentElement.prepend(ceo);
+        });
+      }
+    }catch(e){}
+  }
+  apply();
+  const mo=new MutationObserver(apply); mo.observe(document.body,{childList:true,subtree:true});
+  setTimeout(()=>mo.disconnect(),10000);
+})();
+</script>
+
 </body></html>`;
   w.document.open();w.document.write(html);w.document.close();
 }
@@ -3601,7 +3728,7 @@ document.addEventListener('DOMContentLoaded',()=>{urovoRemoveSplash();urovoEnsur
   'use strict';
   const KEY='urovo_ceo_chat_v3';
   const MODE_PREFIX='urovo_chat_mode_v36:';
-  const problemOptions=[['📦','Order issue'],['🚚','Delivery issue'],['🛍️','Product question'],['💳','Checkout / payment'],['🏷️','Coupon / offer'],['👤','Account issue'],['🧑‍💼','Seller issue']];
+  const problemOptions=[['📦','Order issue'],['🚚','Delivery issue'],['🛍️','Product question'],['💳','Checkout / payment'],['🏷️','Coupon / offer'],['↩️','Returns / Refunds'],['👤','Account issue'],['🧑‍💼','Seller issue']];
   const getUser=()=>{try{return (typeof user!=='undefined'&&user)?user:(window.user||null)}catch(e){return window.user||null}};
   const email=()=>String(getUser()?.email||'').trim().toLowerCase();
   const customerName=()=>String(getUser()?.name||getUser()?.full_name||email().split('@')[0]||'UROVO Customer').trim();
@@ -3682,7 +3809,8 @@ document.addEventListener('DOMContentLoaded',()=>{urovoRemoveSplash();urovoEnsur
     if(/payment|cod|upi|checkout|pay|gateway/.test(q))return `${n}, please use only the payment or checkout options actually shown in UROVO. Check that your delivery details are complete. If checkout shows an error, tell me its exact message; never share an OTP, password or card PIN in chat.`;
     if(/seller|sell|seller account|product upload/.test(q))return `${n}, seller tools are available only to accounts with an active Seller badge. Open your Seller Dashboard and check your badge. Tell me whether you cannot enter the dashboard, add a product, or manage an order.`;
     if(/account|login|profile|password|sign in/.test(q))return `${n}, first check that you are signed in with the correct account. Then open Account to review your profile and security options. Tell me the exact screen or error you see, but don’t share your password or OTP.`;
-    if(/cancel|return|refund/.test(q))return `${n}, please contact UROVO support with your order number so the team can explain the store's current order terms. Please do not share passwords, OTPs or payment PINs in chat.`;
+    if(/return|refund|exchange|returns|refunds/.test(q))return `${n}, UROVO does not offer returns or refunds. Please check the product details and order terms before placing an order. If you have an order-specific issue, contact Team UROVO with your order number. Please do not share passwords, OTPs or payment PINs in chat.`;
+    if(/cancel|cancellation|cancelled|canceled/.test(q))return `${n}, order cancellation is available only according to the current order status and checkout terms. Contact Team UROVO with your order number if you need help with a cancellation.`;
     if(/bug|error|not working|doesn't work|doesnt work|cannot|can't|failed|problem|issue/.test(q))return `${n}, let’s narrow it down. Close and reopen the page once, then tell me which button or step fails and any error text you see. I’ll guide you step by step. If this still needs a person, choose “Chat with CEO”.`;
     return `${n}, I can help with orders, delivery, products, checkout, offers, account access and seller tools. Tell me which screen you are on and what you expected to happen. For an issue I can’t resolve, choose “Chat with CEO”.`;
   }
@@ -3707,8 +3835,8 @@ document.addEventListener('DOMContentLoaded',()=>{urovoRemoveSplash();urovoEnsur
     const p=document.getElementById('urovoChatPage');if(!p)return;
     const mode=p.dataset.mode==='ceo'?'ceo':'ai',em=email(),name=customerName();
     const title=document.getElementById('urovoV31Title'),sub=document.getElementById('urovoV31Sub'),opts=document.getElementById('urovoV31Options'),act=document.getElementById('urovoV31CeoAction'),status=document.getElementById('urovoV36CEOStatus'),msg=document.getElementById('urovoV31Messages');
-    if(title)title.textContent='UROVO Assistant';
-    if(sub)sub.textContent=mode==='ceo'?`Hi ${name} — your CEO support request is active.`:`Hi ${name} — tell me your problem and I’ll try to solve it first.`;
+    if(title)title.textContent=mode==='ceo'?'Team UROVO':'UROVO Assistant';
+    if(sub)sub.textContent=mode==='ceo'?`Hi ${name} — your Team UROVO direct-support request is active.`:`Hi ${name} — tell me your problem and I’ll try to solve it first.`;
     if(opts){opts.style.display=mode==='ceo'?'none':'flex';opts.innerHTML=mode==='ceo'?'':problemOptions.map(([emoji,label])=>`<button type="button" onclick="sendUrovoV31Preset('${label.replace(/'/g,"\\'")}')">${emoji} ${label}</button>`).join('')}
     if(act)act.style.display=mode==='ceo'?'none':'block';
     if(status)status.style.display=mode==='ceo'?'block':'none';
@@ -3717,7 +3845,7 @@ document.addEventListener('DOMContentLoaded',()=>{urovoRemoveSplash();urovoEnsur
       const chatHtml=rows.length?rows.map(x=>`<div class="urovo-v31-msg ${x.from==='user'?'user':x.from==='ceo'?'ceo':'assistant'}">${esc(x.text)}<small>${x.from==='user'?'You':x.from==='ceo'?'UROVO CEO':'UROVO Assistant'} · ${fmtTime(x.at)}</small></div>`).join(''):`<div class="urovo-v36-empty"><div style="font-size:30px;margin-bottom:8px">💬</div><b>Hi ${esc(name)} 👋</b><p style="margin-top:6px">Choose a common issue above or type your question below. UROVO Assistant will try to help first.</p></div>`;
       const latestAssistant=[...rows].reverse().find(x=>x.from==='ai'&&!x.virtual&&String(x.text||'').trim());
       const assistantOfferedWhatsApp=mode==='ai'&&latestAssistant&&/whatsapp|what\s*['’]?s\s*app/i.test(String(latestAssistant.text||''));
-      const ceoInline=mode==='ai'?`<button id="urovoV31CeoActionInline" type="button" class="urovo-v31-ceo-inline" onclick="requestUrovoCEO()">👤 Need direct help? Chat with CEO</button>${assistantOfferedWhatsApp?`<button id="urovoV31WhatsAppInline" type="button" class="urovo-v31-wa-inline" onclick="urovoOpenWhatsAppSupport()">💬 Continue on WhatsApp</button>`:''}`:'';
+      const ceoInline=mode==='ai'?`<button id="urovoV31CeoActionInline" type="button" class="urovo-v31-ceo-inline" onclick="requestUrovoCEO()">👤 Need direct help? Chat with Team UROVO</button>${assistantOfferedWhatsApp?`<button id="urovoV31WhatsAppInline" type="button" class="urovo-v31-wa-inline" onclick="urovoOpenWhatsAppSupport()">💬 Continue on WhatsApp</button>`:''}`:'';
       msg.innerHTML=chatHtml+ceoInline;
       msg.scrollTop=msg.scrollHeight;
     }
@@ -3751,7 +3879,10 @@ document.addEventListener('DOMContentLoaded',()=>{urovoRemoveSplash();urovoEnsur
     const messageSavedRemotely=await insertDB(row);
     if(mode==='ai'){
       let replyText='';let liveAI=false;let savedAIMessage=null;
+      const isReturnRefund=/return|refund|exchange|returns|refunds/i.test(text);
+      if(isReturnRefund) replyText=assistantReply(text,customerName());
       try{
+        if(isReturnRefund) throw new Error('Store return/refund policy handled locally');
         const db=getSupabase();
         if(messageSavedRemotely&&db?.functions?.invoke){
           const result=await db.functions.invoke('urovo-ai-support',{body:{message:text,customerName:customerName()}});
@@ -5310,7 +5441,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     const content=$('detailDescription');if(content){
       let note=$('urovo-v49-detail-commerce');if(!note){note=document.createElement('div');note.id='urovo-v49-detail-commerce';note.style.cssText='margin:10px 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface2);font-size:12px;line-height:1.65';content.insertAdjacentElement('afterend',note)}
       const shipText=shippingFor(p)<=0?'🚚 Free Shipping':`🚚 Shipping ${cash(shippingFor(p))}`;
-      const advanceText=isSellerProduct(p)?'COD advance: 20% of the discounted product amount + shipping online.':`CEO COD advance: ${cash(p.cod_advance_amount||0)} per product + shipping online.`;
+      const advanceText=isSellerProduct(p)?'COD advance: 20% of the discounted product amount + shipping online.':`COD advance: ${cash(p.cod_advance_amount||0)} per product + shipping online.`;
       note.innerHTML=`<b>${shipText}</b><br><span>${esc(advanceText)}</span>`;
     }
     const shareBtn=$('urovoProductShareBtn');if(shareBtn){shareBtn.onclick=()=>window.urovoShareProduct(p.id);shareBtn.textContent='🔗 Share Product Link'}
@@ -7471,6 +7602,198 @@ body.urovo-ceo-subpage .back-button { display:none !important; }
   document.addEventListener('DOMContentLoaded',bindButtons);
   window.addEventListener('load',bindButtons);
   [100,500,1000].forEach(ms=>setTimeout(bindButtons,ms));
+})();
+</script>
+
+<style id="urovo-v83-quantity-order-css">
+#productModal #urovoDetailQtySlot{order:3!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:9px 0 0!important;box-sizing:border-box!important}
+#productModal .urovo-detail-share{order:4!important;width:100%!important}
+#productModal .urovo-detail-benefits{order:5!important}
+</style>
+<script id="urovo-v83-quantity-order-js">
+(function(){
+'use strict';
+if(window.__urovoV83QuantityOrder)return;window.__urovoV83QuantityOrder=true;
+function arrange(){
+ const m=document.getElementById('productModal'); if(!m)return;
+ const actions=m.querySelector('.detail-actions'), add=document.getElementById('detailAdd'), buy=document.getElementById('detailBuy'), share=document.getElementById('urovoProductShareBtn');
+ if(!actions||!add||!buy||!share)return;
+ if(add.parentElement!==actions)actions.insertBefore(add,buy); else if(add.nextElementSibling!==buy)actions.insertBefore(add,buy);
+ let slot=document.getElementById('urovoDetailQtySlot');
+ if(slot && slot.parentElement!==actions.parentElement) actions.parentElement.insertBefore(slot,share);
+ if(slot && share.previousElementSibling!==slot) actions.parentElement.insertBefore(slot,share);
+ if(share.previousElementSibling!==slot && slot) actions.parentElement.insertBefore(slot,share);
+}
+['DOMContentLoaded','load'].forEach(ev=>window.addEventListener(ev,()=>setTimeout(arrange,120)));
+setInterval(arrange,800);
+})();
+</script>
+
+<style id="urovo-v86-product-image-size">
+/* Flipkart/Amazon-style larger product image area */
+.detail-image{height:360px!important;min-height:360px!important;width:100%!important;background:#fff!important;border:1px solid #e8e8e8!important;border-radius:18px!important;padding:14px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:none!important;}
+.detail-image img,#productModal #detailMainImage{width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;object-fit:contain!important;background:#fff!important;padding:0!important;transform:none!important;}
+@media (min-width:700px){.detail-image{height:440px!important;min-height:440px!important;padding:18px!important;border-radius:20px!important;}}
+</style>
+<style id="urovo-v87-update-install-css">
+#urovoUpdateOverlay,#urovoInstallOverlay{position:fixed;inset:0;z-index:999999;background:rgba(7,7,7,.92);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;padding:24px;color:#fff}
+.urovoOverlayCard{width:min(360px,92vw);text-align:center;padding:28px 22px;border:1px solid rgba(200,255,0,.22);border-radius:24px;background:#101010;box-shadow:0 18px 60px rgba(0,0,0,.45)}
+.urovoOverlayLogo{width:72px;height:72px;object-fit:contain;border-radius:18px;margin:0 auto 18px;animation:urovoLogoPulse 1.2s ease-in-out infinite}
+.urovoSpin{width:34px;height:34px;border:3px solid rgba(255,255,255,.18);border-top-color:#c8ff00;border-radius:50%;margin:18px auto;animation:urovoSpin 1s linear infinite}
+.urovoProgress{height:5px;background:#202020;border-radius:99px;overflow:hidden;margin:18px 0 10px}.urovoProgress i{display:block;width:28%;height:100%;background:#c8ff00;border-radius:99px;animation:urovoProgress 1.5s ease-in-out infinite}
+@keyframes urovoSpin{to{transform:rotate(360deg)}}@keyframes urovoLogoPulse{50%{transform:scale(1.07)}}@keyframes urovoProgress{50%{width:82%}100%{width:28%}}
+@media(prefers-reduced-motion:reduce){.urovoOverlayLogo,.urovoSpin,.urovoProgress i{animation:none}}
+</style>
+<div id="urovoUpdateOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Updating UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Please wait…</div><div class="urovoProgress"><i></i></div></div></div>
+<div id="urovoInstallOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Installing UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Installing the app…</div><div class="urovoSpin"></div></div></div>
+<script id="urovo-v87-update-install-js">
+(function(){
+ const $=id=>document.getElementById(id);
+ function logoSrc(){return document.querySelector('link[rel="icon"]')?.href||document.querySelector('img[src*="logo"]')?.src||''}
+ function show(id){const e=$(id);if(e){e.querySelector('img').src=logoSrc();e.style.display='flex'}}
+ function hide(id){const e=$(id);if(e)e.style.display='none'}
+ window.urovoShowUpdateAnimation=function(){show('urovoUpdateOverlay');setTimeout(()=>hide('urovoUpdateOverlay'),2200)};
+ window.urovoShowInstallAnimation=function(){show('urovoInstallOverlay')};
+ window.urovoHideInstallAnimation=function(){hide('urovoInstallOverlay')};
+ window.addEventListener('beforeinstallprompt',e=>{window.__urovoInstallPrompt=e;});
+ window.addEventListener('appinstalled',()=>window.urovoHideInstallAnimation());
+ // Wrap common update button handlers without replacing their actual update logic.
+ document.addEventListener('click',e=>{
+   const b=e.target.closest('button'); if(!b)return;
+   const t=(b.innerText||b.textContent||'').trim().toLowerCase();
+   if(t==='update'||t.includes('update app')||t.includes('update website')) window.urovoShowUpdateAnimation();
+   if(t.includes('install')&&t.includes('app')) setTimeout(()=>window.urovoShowInstallAnimation(),0);
+ },true);
+ // Keep installing animation visible until appinstalled, but never block normal prompt.
+ const oldInstall=window.installUrovoApp;
+ if(typeof oldInstall==='function'&&!oldInstall.__urovoV87){
+   const wrapped=function(){window.urovoShowInstallAnimation();try{return oldInstall.apply(this,arguments)}catch(e){window.urovoHideInstallAnimation();throw e}};
+   wrapped.__urovoV87=true;window.installUrovoApp=wrapped;
+ }
+})();
+</script>
+</body></html>
+
+<style id="urovo-v87-image-size">
+@media(max-width:600px){.product-detail-image,.product-gallery-main,.product-main-image,.pd-main-image{height:300px!important;max-height:300px!important}}
+</style>
+
+<style id="urovo-v88-bigger-product-image">
+@media (max-width: 700px){
+  .detailimg,.product-detail-image,.product-detail-media,.detail-image,.product-image-large{
+    min-height:360px !important;
+    height:360px !important;
+    max-height:420px !important;
+  }
+  .detailimg img,.product-detail-image img,.product-detail-media img,.detail-image img,.product-image-large img{
+    max-height:380px !important;
+    width:auto !important;
+    max-width:100% !important;
+    object-fit:contain !important;
+  }
+}
+@media (min-width:701px){
+  .detailimg,.product-detail-image,.product-detail-media,.detail-image,.product-image-large{
+    min-height:440px !important;
+    height:440px !important;
+    max-height:500px !important;
+  }
+  .detailimg img,.product-detail-image img,.product-detail-media img,.detail-image img,.product-image-large img{
+    max-height:460px !important;
+    width:auto !important;
+    max-width:100% !important;
+    object-fit:contain !important;
+  }
+}
+</style>
+
+<!-- UROVO V89: CEO Home visibility option + larger product detail image -->
+<style id="urovo-v89-home-option-detail-image">
+  /* Product details: enlarge ONLY the image area, not the product details text/actions. */
+  #productModal .detail-image{
+    height:520px!important;
+    min-height:520px!important;
+    max-height:520px!important;
+    background:var(--surface2)!important;
+    border-color:var(--line)!important;
+    padding:10px!important;
+    box-shadow:0 18px 45px rgba(0,0,0,.30)!important;
+  }
+  #productModal .detail-image img,
+  #productModal #detailMainImage{
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+    background:transparent!important;
+    padding:0!important;
+  }
+  @media(max-width:720px){
+    #productModal .detail-image{
+      height:430px!important;
+      min-height:430px!important;
+      max-height:430px!important;
+      padding:8px!important;
+    }
+    #productModal .detail-image img,
+    #productModal #detailMainImage{
+      height:100%!important;
+      min-height:0!important;
+      max-height:100%!important;
+    }
+  }
+</style>
+<script id="urovo-v89-home-option">
+(function(){
+  'use strict';
+  if(window.__urovoV89HomeOption)return;
+  window.__urovoV89HomeOption=true;
+
+  function relabelHomeOption(root){
+    try{
+      const box=root?.querySelector?.('#adminIsNewBadge') || document.getElementById('adminIsNewBadge');
+      if(box){
+        const label=box.closest('label');
+        const b=label?.querySelector('b');
+        const small=label?.querySelector('small');
+        if(b)b.textContent='🏠 Show on Home';
+        if(small)small.textContent='Enable this to show the product in Home → Trending Products. CEO only.';
+      }
+      const editBox=root?.querySelector?.('#editIsNewBadge') || document.getElementById('editIsNewBadge');
+      if(editBox){
+        const label=editBox.closest('label');
+        const b=label?.querySelector('b');
+        const small=label?.querySelector('small');
+        if(b)b.textContent='🏠 Show on Home';
+        if(small)small.textContent='Enable this to show the product in Home → Trending Products. CEO only.';
+      }
+    }catch(e){console.warn('V89 home option label:',e)}
+  }
+
+  const originalShow=window.showAddProductForm;
+  if(typeof originalShow==='function'){
+    window.showAddProductForm=function(...args){
+      const r=originalShow.apply(this,args);
+      setTimeout(()=>relabelHomeOption(document.getElementById('adminContent')),30);
+      return r;
+    };
+  }
+
+  const originalEdit=window.editProduct;
+  if(typeof originalEdit==='function'){
+    window.editProduct=async function(...args){
+      const r=await originalEdit.apply(this,args);
+      setTimeout(()=>relabelHomeOption(document.getElementById('adminContent')),40);
+      return r;
+    };
+  }
+
+  /* Catch later feature packs that recreate the CEO form. */
+  const observer=new MutationObserver(()=>{
+    if(document.getElementById('adminIsNewBadge')||document.getElementById('editIsNewBadge'))relabelHomeOption(document.getElementById('adminContent'));
+  });
+  observer.observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 </body></html>
