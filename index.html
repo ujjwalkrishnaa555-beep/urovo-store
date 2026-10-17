@@ -14,9 +14,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json" id="urovoOrganizationSchema">{"@context":"https://schema.org","@type":"Organization","name":"UROVO","description":"Curated gadgets, home essentials and lifestyle picks."}</script>
 <script type="application/ld+json" id="urovoWebsiteSchema">{"@context":"https://schema.org","@type":"WebSite","name":"UROVO Store","description":"Upgrade Your Everyday"}</script>
-<link rel="manifest" href="./manifest.webmanifest?v=105">
-<link rel="icon" type="image/png" href="./icons/icon-192.png?v=105" id="urovo-pwa-install-icons-v100">
-<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=105">
+<link rel="manifest" href="./manifest.webmanifest?v=106">
+<link rel="icon" type="image/png" href="./icon-192.png?v=106" id="urovo-pwa-install-icons-v100">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=106">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>UROVO — Wear Your Everyday</title>
@@ -634,7 +634,7 @@ window.supabaseClient=supabaseClient;
 const UROVO_PUSH_PUBLIC_KEY = "BAo-6dPnHVMpM_MhXn-BUnM1DtFm7quRiDUTDpgSPvhesOfwizsTQc736ROT_TxMWJcXNH1InqIa8w5FGMOYn4g";
 let urovoPushRegistration = null;
 function urovoUrlBase64ToUint8Array(base64String){const padding="=".repeat((4-base64String.length%4)%4);const base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");const rawData=atob(base64);return Uint8Array.from([...rawData].map(char=>char.charCodeAt(0)));}
-async function registerUrovoPushServiceWorker(){if(!("serviceWorker" in navigator))throw new Error("Service Worker is not supported on this device/browser.");urovoPushRegistration=await navigator.serviceWorker.register("./sw.js?v=105",{scope:"./"});await navigator.serviceWorker.ready;return urovoPushRegistration;}
+async function registerUrovoPushServiceWorker(){if(!("serviceWorker" in navigator))throw new Error("Service Worker is not supported on this device/browser.");urovoPushRegistration=await navigator.serviceWorker.register("./sw.js?v=106",{scope:"./"});await navigator.serviceWorker.ready;return urovoPushRegistration;}
 async function syncExistingUrovoPushSubscription(){if(!user?.email||!("Notification" in window)||Notification.permission!=="granted")return;try{const reg=await registerUrovoPushServiceWorker();const sub=await reg.pushManager.getSubscription();if(!sub)return;const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)return;const json=sub.toJSON();if(!json.endpoint||!json.keys?.p256dh||!json.keys?.auth)return;const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)console.warn("Push subscription sync:",error.message);}catch(e){console.warn("Push sync:",e.message);}}
 async function enableUrovoPushNotifications(){if(!user){showAccount();toast("Please login first");return;}if(!("Notification" in window)||!("PushManager" in window)){toast("Phone notifications are not supported in this browser.");return;}try{const permission=await Notification.requestPermission();if(permission!=="granted"){toast("Notification permission was not allowed.");renderFullAccount();return;}const reg=await registerUrovoPushServiceWorker();let sub=await reg.pushManager.getSubscription();if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urovoUrlBase64ToUint8Array(UROVO_PUSH_PUBLIC_KEY)});}const sessionResult=await supabaseClient.auth.getSession();const uid=sessionResult?.data?.session?.user?.id;if(!uid)throw new Error("Login session not found. Please login again.");const json=sub.toJSON();const {error}=await supabaseClient.from("urovo_push_subscriptions").upsert({user_id:uid,endpoint:json.endpoint,subscription:json,updated_at:new Date().toISOString()},{onConflict:"endpoint"});if(error)throw error;toast("🔔 Phone notifications enabled");renderFullAccount();}catch(e){console.error("UROVO push enable:",e);toast("Push setup failed: "+(e?.message||"Please try again"));}}
 function urovoPushStatusText(){if(!("Notification" in window))return "This browser does not support phone notifications.";if(Notification.permission==="granted")return "Phone notifications are enabled on this device.";if(Notification.permission==="denied")return "Notifications are blocked. Allow them in your browser/site settings.";return "Get order, chat and UROVO updates even when the app is closed.";}
@@ -2261,7 +2261,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
       if(permission==='default'&&options.requestPermission!==false)permission=await Notification.requestPermission();
       if(permission!=='granted')throw new Error('Notification permission was not granted. Tap Allow when your browser asks.');
       let reg;
-      try{reg=await navigator.serviceWorker.register('./sw.js?v=105',{scope:'./'});await navigator.serviceWorker.ready;}
+      try{reg=await navigator.serviceWorker.register('./sw.js?v=106',{scope:'./'});await navigator.serviceWorker.ready;}
       catch(e){throw new Error('Could not register sw.js. Upload sw.js beside index.html in the same GitHub Pages folder. '+(e?.message||''));}
       if(!reg?.pushManager)throw new Error('PushManager is unavailable after service worker registration.');
       let sub=await reg.pushManager.getSubscription();
@@ -2292,7 +2292,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     if(!getEmail()||!('Notification' in window)||Notification.permission!=='granted')return {ok:false,reason:'Notification permission is not granted.'};
     if(!window.isSecureContext||location.protocol!=='https:')return {ok:false,reason:'HTTPS is required.'};
     try{
-      const reg=await navigator.serviceWorker.register('./sw.js?v=105',{scope:'./'});await navigator.serviceWorker.ready;
+      const reg=await navigator.serviceWorker.register('./sw.js?v=106',{scope:'./'});await navigator.serviceWorker.ready;
       const sub=await reg.pushManager.getSubscription();if(!sub)return {ok:false,reason:'No browser push subscription exists yet. Tap Phone Notifications once to enable it.'};
       await savePushSubscription(sub);try{localStorage.setItem(pushFlag,'1')}catch(e){}patchNotificationUi();return {ok:true,reason:'Subscription synced'};
     }catch(e){console.warn('UROVO V58 subscription sync:',e);return {ok:false,reason:String(e?.message||e)}}
@@ -2950,17 +2950,7 @@ setInterval(arrange,800);
 </style>
 <div id="urovoUpdateOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Updating UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Please wait…</div><div class="urovoProgress"><i></i></div></div></div>
 <div id="urovoInstallOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Installing UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Installing the app…</div><div class="urovoSpin"></div></div></div>
-<script id="urovo-v87-update-install-js">
-(function(){
-  const $=id=>document.getElementById(id);
-  function logoSrc(){return document.querySelector('link[rel="icon"]')?.href||''}
-  function showUpdate(){const e=$('urovoUpdateOverlay');if(e){const i=e.querySelector('img');if(i)i.src=logoSrc();e.style.display='flex';}}
-  function hideUpdate(){const e=$('urovoUpdateOverlay');if(e)e.style.display='none';}
-  window.urovoShowUpdateAnimation=function(){showUpdate();setTimeout(hideUpdate,2200)};
-  window.urovoShowInstallAnimation=function(){};
-  window.urovoHideInstallAnimation=function(){};
-})();
-</script>
+
 
 <script id="urovo-v91-ceo-first">
 (function(){
@@ -3255,7 +3245,7 @@ async function renderAdvancedAnalytics(){if(!requireAdmin())return;const {data,e
 
 /* ---------- BROWSER PUSH / NOTIFICATION OPT-IN ---------- */
 async function enableUrovoPush(){if(!('Notification' in window)){toast('Browser notifications are not supported');return}const permission=await Notification.requestPermission();if(permission!=='granted'){toast('Notification permission not granted');return}if(typeof window.enableUrovoPushNotifications==='function'){await window.enableUrovoPushNotifications({requestPermission:true});return;}toast('Push notification setup is unavailable.');}
-function showLocalPush(title,message){if('Notification' in window&&Notification.permission==='granted')try{new Notification(title,{body:message,icon:'icons/icon-192.png'})}catch{}}
+function showLocalPush(title,message){if('Notification' in window&&Notification.permission==='granted')try{new Notification(title,{body:message,icon:'./icon-192.png'})}catch{}}
 
 /* ---------- CEO TOOLS ---------- */
 function renderCEOTools(){if(!requireAdmin())return;$('adminContent').innerHTML=`<div class="order-card"><h3>🧰 UROVO Tools & Reports</h3><p style="color:var(--muted);margin-top:6px">All extra management tools in one place.</p></div><div class="urovo-tools-grid"><div class="urovo-tool-card"><h3>📊 Analytics</h3><p>Revenue, orders, users, sellers and monthly sales.</p><button class="primary" style="width:100%;margin-top:10px" onclick="renderAdvancedAnalytics()">Open Analytics</button></div><div class="urovo-tool-card"><h3>📦 Order Report</h3><p>Download all orders as CSV.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="ceoExportOrdersCSV()">Export Orders</button></div><div class="urovo-tool-card"><h3>👥 User Report</h3><p>Download registered user information as CSV.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="ceoExportUsersCSV()">Export Users</button></div><div class="urovo-tool-card"><h3>📝 Audit Log</h3><p>See CEO actions recorded by UROVO.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="renderAuditLogs()">View Audit Log</button></div><div class="urovo-tool-card"><h3>⭐ Reviews</h3><p>Moderate product reviews.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="renderCEOReviews()">Manage Reviews</button></div><div class="urovo-tool-card"><h3>💬 Q&A</h3><p>Answer customer product questions.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="renderCEOWA()">Manage Q&A</button></div><div class="urovo-tool-card"><h3>🎟️ Coupons</h3><p>Create and disable discount codes.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="renderCEOCoupons()">Manage Coupons</button></div><div class="urovo-tool-card"><h3>🔔 Push</h3><p>Enable browser notification permission on this device.</p><button class="secondary" style="width:100%;margin-top:10px" onclick="enableUrovoPush()">Enable Notifications</button></div></div>`}
@@ -3508,7 +3498,7 @@ function useFullSearch(q){const i=document.getElementById('fullSearchInput');if(
 document.getElementById('fullSearchInput')?.addEventListener('input',e=>renderFullSearch(e.target.value));
 
 // PWA registration. The generated sw.js is included with this UROVO package.
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=105').catch(()=>{}))}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=106').catch(()=>{}))}
 </script>
 <script id="urovo-menu-startup-fix">
 document.addEventListener('DOMContentLoaded',()=>{const m=document.getElementById('accountMenu');if(m)m.classList.remove('show');window.scrollTo(0,0);});
@@ -5246,7 +5236,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   async function registerSW(){
     try{
       if(typeof registerUrovoPushServiceWorker==='function')return await registerUrovoPushServiceWorker();
-      const reg=await navigator.serviceWorker.register('./sw.js?v=105',{scope:'./'});await navigator.serviceWorker.ready;return reg;
+      const reg=await navigator.serviceWorker.register('./sw.js?v=106',{scope:'./'});await navigator.serviceWorker.ready;return reg;
     }catch(e){throw new Error(reason('Service Worker registration failed: ',e))}
   }
   async function saveSubscription(sub){
@@ -7103,7 +7093,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     const wrappedPush = async function (options = {}) {
       try {
         if ('serviceWorker' in navigator && 'PushManager' in window && window.isSecureContext && location.protocol === 'https:') {
-          const reg = await navigator.serviceWorker.register('./sw.js?v=105', { scope: './' });
+          const reg = await navigator.serviceWorker.register('./sw.js?v=106', { scope: './' });
           await navigator.serviceWorker.ready;
           const old = await reg.pushManager.getSubscription();
           if (old) {
@@ -7859,32 +7849,7 @@ setInterval(arrange,800);
 </style>
 <div id="urovoUpdateOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Updating UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Please wait…</div><div class="urovoProgress"><i></i></div></div></div>
 <div id="urovoInstallOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Installing UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Installing the app…</div><div class="urovoSpin"></div></div></div>
-<script id="urovo-v87-update-install-js">
-(function(){
- const $=id=>document.getElementById(id);
- function logoSrc(){return document.querySelector('link[rel="icon"]')?.href||document.querySelector('img[src*="logo"]')?.src||''}
- function show(id){const e=$(id);if(e){e.querySelector('img').src=logoSrc();e.style.display='flex'}}
- function hide(id){const e=$(id);if(e)e.style.display='none'}
- window.urovoShowUpdateAnimation=function(){show('urovoUpdateOverlay');setTimeout(()=>hide('urovoUpdateOverlay'),2200)};
- window.urovoShowInstallAnimation=function(){show('urovoInstallOverlay')};
- window.urovoHideInstallAnimation=function(){hide('urovoInstallOverlay')};
- window.addEventListener('beforeinstallprompt',e=>{window.__urovoInstallPrompt=e;});
- window.addEventListener('appinstalled',()=>{});
- // Wrap common update button handlers without replacing their actual update logic.
- document.addEventListener('click',e=>{
-   const b=e.target.closest('button'); if(!b)return;
-   const t=(b.innerText||b.textContent||'').trim().toLowerCase();
-   if(t==='update'||t.includes('update app')||t.includes('update website')) window.urovoShowUpdateAnimation();
-   if(t.includes('install')&&t.includes('app')) setTimeout(()=>window.urovoShowInstallAnimation(),0);
- },true);
- // Keep installing animation visible until appinstalled, but never block normal prompt.
- const oldInstall=window.installUrovoApp;
- if(typeof oldInstall==='function'&&!oldInstall.__urovoV87){
-   const wrapped=function(){window.urovoShowInstallAnimation();try{return oldInstall.apply(this,arguments)}catch(e){window.urovoHideInstallAnimation();throw e}};
-   wrapped.__urovoV87=true;window.installUrovoApp=wrapped;
- }
-})();
-</script>
+
 
 <style id="urovo-v87-image-size">
 @media(max-width:600px){.product-detail-image,.product-gallery-main,.product-main-image,.pd-main-image{height:300px!important;max-height:300px!important}}
@@ -8467,6 +8432,7 @@ setInterval(arrange,800);
     try { event.preventDefault(); } catch (_) {}
     savedPrompt = event;
     window.__urovoInstallPrompt = event;
+    window.__urovoRealInstallPromptReady = true;
     window.__urovoV97Prompt = event;
     window.deferredInstallPrompt = event;
     showInstallButton();
@@ -8486,7 +8452,7 @@ setInterval(arrange,800);
     if (!promptEvent || typeof promptEvent.prompt !== 'function') {
       hideOverlay();
       showInstallButton();
-      toast('Real install prompt is not available yet. In Chrome, open ⋮ → Install app / Add to Home screen. If that option is missing, upload index.html, manifest.webmanifest and sw.js together to the HTTPS site.');
+      toast('Install prompt is not ready in this browser yet. Open Chrome ⋮ → Install app / Add to Home screen. If that option is missing, reload the HTTPS site once after deploying manifest.webmanifest, sw.js and the icons folder.');
       return;
     }
     try {
@@ -8526,7 +8492,7 @@ setInterval(arrange,800);
 
   if ('serviceWorker' in navigator && window.isSecureContext) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js?v=105', { scope: './', updateViaCache: 'none' })
+      navigator.serviceWorker.register('./sw.js?v=106', { scope: './', updateViaCache: 'none' })
         .then(function (registration) {
           return registration.update().catch(function () {}).then(function () {
             return navigator.serviceWorker.ready;
