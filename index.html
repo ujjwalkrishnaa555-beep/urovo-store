@@ -7,7 +7,7 @@
 <meta name="description" content="Shop curated gadgets, home essentials and lifestyle picks at UROVO. Upgrade your everyday.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="application-name" content="UROVO Store">
-<meta name="urovo-build" content="UROVO V85 Chat Policy + White Product Image">
+<meta name="urovo-build" content="UROVO V96 Premium PWA Download">
 <meta property="og:type" content="website">
 <meta property="og:title" content="UROVO — Upgrade Your Everyday">
 <meta property="og:description" content="Premium picks for your everyday. Discover gadgets, home essentials and lifestyle products at UROVO.">
@@ -455,6 +455,48 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
 .urovo-ceo-first{order:-9999!important;}
 </style>
 
+
+<style id="urovo-v99-download-position-fix">
+/* V99: premium Download/Install button typography and safe positioning */
+#installAppBtn.install-tool{
+  position:fixed!important;
+  right:16px!important;
+  bottom:136px!important;
+  z-index:2400!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  min-height:46px!important;
+  padding:12px 16px!important;
+  font-family:"Space Grotesk",Arial,sans-serif!important;
+  font-size:12px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:.01em!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:800px){
+  #installAppBtn.install-tool{
+    right:12px!important;
+    bottom:132px!important;
+    min-height:44px!important;
+    padding:11px 14px!important;
+    font-size:11.5px!important;
+  }
+}
+@media(max-width:390px){
+  #installAppBtn.install-tool{
+    right:10px!important;
+    bottom:128px!important;
+    max-width:calc(100vw - 20px)!important;
+    padding:11px 12px!important;
+    font-size:11px!important;
+  }
+}
+</style>
 </head>
 <body>
 <!-- UROVO UPDATE GATE v38 -->
@@ -470,7 +512,7 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
 (function(){
   'use strict';
   /* PERMANENT RULE: whenever this HTML is changed, increment UROVO_BUILD_VERSION. */
-  const UROVO_BUILD_VERSION='95';
+  const UROVO_BUILD_VERSION='99';
   const UROVO_ACTIVE_BUILD_KEY='urovo_active_build_version_v1';
   const gate=()=>document.getElementById('urovoUpdateGate');
   const unlock=()=>{
@@ -507,7 +549,7 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
 <div class="image-lightbox" id="imageLightbox" onclick="closeImageLightbox(event)"><button class="lightbox-close" onclick="closeImageLightbox(event)">✕</button><img id="lightboxImage" alt="Product image"></div>
 <section id="homeAdsSection" class="section" style="padding-top:0;display:none"><div id="homeAds" class="home-ads"></div></section>
 <section class="search-wrap"><div class="search">🔎<input id="search" placeholder="Search UROVO products..." autocomplete="off"></div><div id="searchResults" class="search-results hidden"></div><div class="suggestions"><button class="suggestion" onclick="quickSearch('gadget')">Gadgets</button><button class="suggestion" onclick="quickSearch('stand')">Phone Stand</button><button class="suggestion" onclick="quickSearch('home')">Home</button><button class="suggestion" onclick="quickSearch('cleaning')">Cleaning</button></div></section>
-<div class="categories"><button class="cat active" data-cat="All">All</button><button class="cat" data-cat="Gadgets">Gadgets</button><button class="cat" data-cat="Home">Home</button><button class="cat" data-cat="Lifestyle">Lifestyle</button></div>
+<div class="categories"><button class="cat active" data-cat="All">New</button><button class="cat" data-cat="Gadgets">Gadgets</button><button class="cat" data-cat="Home">Home</button><button class="cat" data-cat="Lifestyle">Lifestyle</button></div>
 <section class="urovo-discovery"><div class="discovery-left"><span>Sort & Filter</span><button class="sort-trigger" onclick="openSortSheet()" aria-label="Choose product sorting"><span id="sortLabel">Featured</span><small>⌄</small></button></div><div class="discovery-right"><span class="filter-chip active" data-filter="new" style="cursor:default">✨ New</span></div>
 </section>
 <div class="sort-sheet" id="sortSheet" onclick="if(event.target===this)closeSortSheet()">
@@ -1809,26 +1851,32 @@ loadSupabaseSession().then(()=>loadStoreProducts()).catch(e=>{console.error(e);t
 @media(max-width:760px){.urovo-footer-grid{grid-template-columns:1fr 1fr;gap:28px}.urovo-footer-grid>div:first-child{grid-column:1/-1}.urovo-footer-bottom{flex-direction:column}.urovo-info-box{padding:22px}}
 
 
-/* UROVO Premium App Install Experience */
-.urovo-install-overlay{position:fixed;inset:0;background:rgba(4,4,4,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:99999;display:none;align-items:center;justify-content:center;padding:22px}.urovo-install-overlay.show{display:flex}.urovo-install-card{width:min(390px,100%);background:linear-gradient(145deg,#121212,#080808);border:1px solid rgba(200,255,0,.24);border-radius:28px;padding:30px 24px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.65),0 0 45px rgba(200,255,0,.08);animation:urovoInstallIn .35s ease}.urovo-install-logo{width:76px;height:76px;margin:0 auto 18px;border-radius:22px;background:linear-gradient(145deg,#c8ff00,#8fb800);color:#050505;display:grid;place-items:center;font:900 42px Space Grotesk,Arial;box-shadow:0 0 35px rgba(200,255,0,.25);animation:urovoLogoPulse 1.5s ease-in-out infinite}.urovo-install-card h3{font:700 24px Space Grotesk,Arial;margin:0 0 7px;color:#fff}.urovo-install-card p{margin:0;color:#9d9d9d;font-size:13px}.urovo-install-progress{height:6px;background:#202020;border-radius:99px;overflow:hidden;margin:22px 0 12px}.urovo-install-progress i{display:block;height:100%;width:35%;background:#c8ff00;border-radius:99px;animation:urovoProgress 1.2s ease-in-out infinite}.urovo-install-status{font-size:12px;color:#c8ff00;min-height:18px}.urovo-install-dots{display:flex;justify-content:center;gap:6px;margin-top:18px}.urovo-install-dots span{width:6px;height:6px;border-radius:50%;background:#c8ff00;animation:urovoDot 1s infinite}.urovo-install-dots span:nth-child(2){animation-delay:.15s}.urovo-install-dots span:nth-child(3){animation-delay:.3s}@keyframes urovoInstallIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes urovoLogoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}@keyframes urovoProgress{0%{transform:translateX(-120%);width:28%}50%{width:58%}100%{transform:translateX(250%);width:28%}}@keyframes urovoDot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}@media(prefers-reduced-motion:reduce){.urovo-install-card,.urovo-install-logo,.urovo-install-progress i,.urovo-install-dots span{animation:none}.urovo-install-progress i{width:70%}}
-
-</style>
+/* UROVO V96 — Royal Premium PWA Install Experience */
+.urovo-install-overlay{position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,rgba(200,255,0,.10),transparent 32%),rgba(3,4,3,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);z-index:999999;display:none;align-items:center;justify-content:center;padding:22px}.urovo-install-overlay.show{display:flex}.urovo-install-card{position:relative;width:min(410px,100%);padding:32px 24px 26px;text-align:center;border-radius:30px;border:1px solid rgba(200,255,0,.28);background:linear-gradient(145deg,#171917 0%,#0b0d0b 58%,#090909 100%);box-shadow:0 35px 100px rgba(0,0,0,.75),0 0 55px rgba(200,255,0,.09),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden;animation:urovoInstallIn .5s cubic-bezier(.2,.8,.2,1)}.urovo-install-card:before{content:"";position:absolute;inset:-45%;background:conic-gradient(from 0deg,transparent 0 55%,rgba(200,255,0,.10),transparent 68%);animation:urovoRoyalSweep 4s linear infinite;pointer-events:none}.urovo-install-card>*{position:relative;z-index:1}.urovo-install-logo{width:104px;height:104px;margin:0 auto 20px;border-radius:30px;background:linear-gradient(145deg,#e2ff65 0%,#c8ff00 42%,#79a900 100%);color:#071000;display:grid;place-items:center;font:900 58px/1 "Space Grotesk",Arial;letter-spacing:-4px;border:2px solid rgba(255,255,255,.25);box-shadow:0 0 0 7px rgba(200,255,0,.055),0 0 45px rgba(200,255,0,.30),inset 0 2px 0 rgba(255,255,255,.45);animation:urovoLogoRoyal 2.2s ease-in-out infinite}.urovo-install-card h3{font:800 25px/1.15 "Space Grotesk",Arial;margin:0 0 8px;color:#fff;letter-spacing:-.5px}.urovo-install-card p{margin:0;color:#a8aea8;font-size:13px;line-height:1.55}.urovo-install-progress{height:8px;background:#202520;border:1px solid rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin:24px 0 12px}.urovo-install-progress i{display:block;height:100%;width:8%;background:linear-gradient(90deg,#8fb800,#c8ff00,#efffa0);border-radius:99px;box-shadow:0 0 18px rgba(200,255,0,.55);animation:urovoProgress10 10s linear forwards}.urovo-install-status{font-size:12px;color:#c8ff00;min-height:18px;font-weight:800;letter-spacing:.2px}.urovo-install-dots{display:flex;justify-content:center;gap:7px;margin-top:17px}.urovo-install-dots span{width:6px;height:6px;border-radius:50%;background:#c8ff00;box-shadow:0 0 10px rgba(200,255,0,.45);animation:urovoDot 1s ease-in-out infinite}.urovo-install-dots span:nth-child(2){animation-delay:.15s}.urovo-install-dots span:nth-child(3){animation-delay:.3s}@keyframes urovoInstallIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}@keyframes urovoLogoRoyal{0%,100%{transform:scale(1) rotate(0deg);box-shadow:0 0 0 7px rgba(200,255,0,.055),0 0 45px rgba(200,255,0,.30),inset 0 2px 0 rgba(255,255,255,.45)}50%{transform:scale(1.06) rotate(-2deg);box-shadow:0 0 0 11px rgba(200,255,0,.04),0 0 65px rgba(200,255,0,.42),inset 0 2px 0 rgba(255,255,255,.55)}}@keyframes urovoRoyalSweep{to{transform:rotate(360deg)}}@keyframes urovoProgress10{0%{width:5%}100%{width:100%}}@keyframes urovoDot{0%,80%,100%{opacity:.25;transform:translateY(0) scale(.9)}40%{opacity:1;transform:translateY(-3px) scale(1.15)}}@media(prefers-reduced-motion:reduce){.urovo-install-card,.urovo-install-logo,.urovo-install-card:before,.urovo-install-progress i,.urovo-install-dots span{animation:none}.urovo-install-progress i{width:100%}}</style>
 
 <div id="urovoInstallOverlay" class="urovo-install-overlay" aria-hidden="true">
  <div class="urovo-install-card" role="dialog" aria-label="Installing UROVO app">
   <div class="urovo-install-logo">U</div>
-  <h3>Setting up UROVO</h3>
-  <p id="urovoInstallStatus">Preparing your app experience…</p>
+  <h3>Welcome to UROVO</h3>
+  <p id="urovoInstallStatus">Preparing your premium app experience…</p>
   <div class="urovo-install-progress"><i></i></div>
-  <div class="urovo-install-status">Almost ready</div>
+  <div class="urovo-install-status" id="urovoInstallProgressText">Securing your app · 0%</div>
   <div class="urovo-install-dots"><span></span><span></span><span></span></div>
  </div>
 </div>
-<button id="installAppBtn" class="floating-tool install-tool hidden" onclick="installUrovoApp()">⬇️ Download UROVO App</button>
+<button id="installAppBtn" class="floating-tool install-tool" onclick="installUrovoApp()">⬇️ Download UROVO App</button>
+
+<style id="urovo-v96-pwa-download-button">
+.floating-tool.install-tool{position:fixed;right:16px;bottom:88px;z-index:2200;min-height:52px;padding:0 18px;border-radius:18px;border:1px solid rgba(200,255,0,.32);background:linear-gradient(135deg,#dfff57,#a8dc00 55%,#6f9500);color:#071000;font:900 13px/1 "Space Grotesk",sans-serif;letter-spacing:.2px;box-shadow:0 14px 38px rgba(0,0,0,.42),0 0 30px rgba(200,255,0,.16),inset 0 1px 0 rgba(255,255,255,.45);animation:urovoDownloadFloat 2.4s ease-in-out infinite}
+.floating-tool.install-tool:before{content:"";display:inline-grid;place-items:center;width:28px;height:28px;margin-right:9px;border-radius:10px;background:rgba(0,0,0,.13);content:"↓";font-size:18px}
+.floating-tool.install-tool:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(0,0,0,.48),0 0 38px rgba(200,255,0,.22)}
+@keyframes urovoDownloadFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media(max-width:560px){.floating-tool.install-tool{left:16px;right:16px;bottom:80px;justify-content:center;width:calc(100% - 32px);height:54px}}
+</style>
 <footer class="urovo-footer">
  <div class="urovo-footer-grid">
   <div><h3>URO<span>VO</span></h3><p>Upgrade Your Everyday. Discover useful, modern products selected for everyday life.</p><div style="margin-top:15px"><button onclick="urovoInfo('about')">About UROVO →</button></div></div>
-  <div><h4>Shop</h4><button onclick="urovoShop('')">All Products</button><button onclick="urovoShop('Gadgets')">Gadgets</button><button onclick="urovoShop('Home')">Home</button><button onclick="urovoShop('Lifestyle')">Lifestyle</button><button onclick="urovoShop('new')">New Arrivals</button></div>
+  <div><h4>Shop</h4><button onclick="urovoShop('')">New</button><button onclick="urovoShop('Gadgets')">Gadgets</button><button onclick="urovoShop('Home')">Home</button><button onclick="urovoShop('Lifestyle')">Lifestyle</button></div>
   <div><h4>Help</h4><button onclick="urovoInfo('contact')">Contact Us</button><button onclick="urovoInfo('faq')">FAQ</button><button onclick="urovoInfo('shipping')">Shipping</button><button onclick="urovoInfo('orders')">Order Help</button></div>
   <div><h4>Policies</h4><button onclick="urovoInfo('privacy')">Privacy Policy</button><button onclick="urovoInfo('terms')">Terms & Conditions</button></div>
  </div>
@@ -2913,7 +2961,7 @@ setInterval(arrange,800);
  window.urovoShowInstallAnimation=function(){show('urovoInstallOverlay')};
  window.urovoHideInstallAnimation=function(){hide('urovoInstallOverlay')};
  window.addEventListener('beforeinstallprompt',e=>{window.__urovoInstallPrompt=e;});
- window.addEventListener('appinstalled',()=>window.urovoHideInstallAnimation());
+ window.addEventListener('appinstalled',()=>{});
  // Wrap common update button handlers without replacing their actual update logic.
  document.addEventListener('click',e=>{
    const b=e.target.closest('button'); if(!b)return;
@@ -2956,6 +3004,41 @@ setInterval(arrange,800);
 })();
 </script>
 
+
+<style id="urovo-v97-home-all-install-css">
+.install-tool{background:linear-gradient(135deg,#f7d47a,#c88a32,#f7d47a)!important;color:#140a05!important;border:1px solid rgba(255,239,175,.75)!important;box-shadow:0 0 0 1px rgba(247,212,122,.15),0 12px 38px rgba(247,212,122,.18),inset 0 1px rgba(255,255,255,.45)!important;animation:urovoInstallButtonGlow 2.2s ease-in-out infinite}
+@keyframes urovoInstallButtonGlow{0%,100%{box-shadow:0 0 0 1px rgba(247,212,122,.15),0 12px 38px rgba(247,212,122,.18),inset 0 1px rgba(255,255,255,.45)}50%{box-shadow:0 0 0 1px rgba(247,212,122,.35),0 12px 48px rgba(247,212,122,.32),inset 0 1px rgba(255,255,255,.6)}}
+.urovo-v97-install-icon{width:88px!important;height:88px!important;border-radius:26px!important;background:linear-gradient(145deg,#f7d47a,#c88a32)!important;color:#120905!important;display:grid!important;place-items:center!important;font:900 46px/1 'Space Grotesk',Arial!important;box-shadow:0 0 0 1px rgba(255,239,175,.35),0 0 45px rgba(247,212,122,.28),inset 0 2px rgba(255,255,255,.45)!important;animation:urovoV97Logo 1.35s ease-in-out infinite!important;position:relative;overflow:hidden}
+.urovo-v97-install-icon:after{content:"";position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);transform:translateX(-65%) rotate(12deg);animation:urovoV97Sweep 2.1s linear infinite}
+@keyframes urovoV97Logo{0%,100%{transform:scale(1)}50%{transform:scale(1.06) rotate(-2deg)}}
+@keyframes urovoV97Sweep{to{transform:translateX(65%) rotate(12deg)}}
+.urovo-v97-progress{height:8px!important;border-radius:99px!important;background:#252525!important;overflow:hidden!important;margin:22px 0 10px!important}
+.urovo-v97-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#c88a32,#f7d47a,#fff1b5);border-radius:99px;transition:width .18s linear!important;box-shadow:0 0 18px rgba(247,212,122,.5)}
+.urovo-v97-install-time{font-size:11px;color:#f7d47a;min-height:17px;font-weight:800;letter-spacing:.04em}
+@media(prefers-reduced-motion:reduce){.install-tool,.urovo-v97-install-icon{animation:none!important}.urovo-v97-install-icon:after{animation:none!important}}
+</style>
+<script id="urovo-v97-home-all-install-js">
+(function(){
+'use strict';
+if(window.__urovoV97Final)return;window.__urovoV97Final=true;
+const INSTALL_MS=10000,$=id=>document.getElementById(id);
+function makeUI(){const o=$('urovoInstallOverlay');const c=o?.querySelector('.urovoOverlayCard')||o?.querySelector('.urovo-install-card');if(!c)return;c.innerHTML='<div class="urovo-v97-install-icon">U</div><div style="font-size:24px;font-weight:900;margin-top:3px">UROVO App</div><div style="color:#aaa;margin-top:7px;font-size:13px">Preparing your premium app experience…</div><div class="urovo-v97-progress"><i id="urovoV97InstallBar"></i></div><div id="urovoV97InstallTime" class="urovo-v97-install-time">Preparing • 10 seconds</div>'}
+function show(){const o=$('urovoInstallOverlay');if(o){makeUI();o.style.display='flex';o.classList.add('show');o.setAttribute('aria-hidden','false')}}
+function hide(){const o=$('urovoInstallOverlay');if(o){o.style.display='none';o.classList.remove('show');o.setAttribute('aria-hidden','true')}}
+function showButton(){const b=$('installAppBtn');if(b&&!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true)){b.classList.remove('hidden');b.style.display='inline-flex';b.textContent='✦ Install UROVO App'}}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__urovoV97Prompt=e;window.__urovoInstallPrompt=e;showButton()},true);
+window.addEventListener('appinstalled',()=>{window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;hide();try{toast('✦ UROVO App installed successfully')}catch(e){}});
+window.installUrovoApp=async function(){
+const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(standalone){try{toast('UROVO is already installed ✓')}catch(e){}return}
+const pe=window.__urovoV97Prompt||window.__urovoInstallPrompt||window.deferredInstallPrompt||null;show();const start=Date.now(),bar=$('urovoV97InstallBar'),tm=$('urovoV97InstallTime');let raf=0;
+const tick=()=>{const el=Date.now()-start,p=Math.min(100,Math.round(el/INSTALL_MS*100)),left=Math.max(0,Math.ceil((INSTALL_MS-el)/1000));if(bar)bar.style.width=p+'%';if(tm)tm.textContent=left?'Preparing • '+left+' seconds':'Ready ✓';if(el<INSTALL_MS)raf=requestAnimationFrame(tick)};tick();
+if(pe){try{pe.prompt();await pe.userChoice}catch(e){console.warn('UROVO install prompt:',e)}window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;window.deferredInstallPrompt=null}
+const wait=Math.max(0,INSTALL_MS-(Date.now()-start));if(wait)await new Promise(r=>setTimeout(r,wait));cancelAnimationFrame(raf);if(bar)bar.style.width='100%';if(tm)tm.textContent='Ready ✓';await new Promise(r=>setTimeout(r,350));hide();
+if(!pe)try{toast('Install prompt is unavailable here. Chrome menu → Add to Home screen / Install app')}catch(e){}
+};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showButton,{once:true});else showButton();
+})();
+</script>
 </body></html>`;
   w.document.open();w.document.write(html);w.document.close();
 }
@@ -3138,25 +3221,35 @@ Thank you.`);
 
 // Install prompt (works when the site is served over HTTPS and the companion manifest/service worker are present).
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById('installAppBtn')?.classList.remove('hidden')});
-window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;document.getElementById('installAppBtn')?.classList.add('hidden');toast('UROVO App installed successfully ✓')});
+window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;toast('UROVO App installed successfully ✓')});
 function isUrovoStandalone(){return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone===true}
 async function installUrovoApp(){
   if(isUrovoStandalone()){toast('UROVO is already installed');return}
   if(!deferredInstallPrompt){toast('Tap your browser menu → Add to Home screen / Install app');return}
   const overlay=document.getElementById('urovoInstallOverlay');
   const status=document.getElementById('urovoInstallStatus');
+  const progressText=document.getElementById('urovoInstallProgressText');
   overlay?.classList.add('show');
   overlay?.setAttribute('aria-hidden','false');
-  if(status) status.textContent='Preparing your app experience…';
-  await new Promise(r=>setTimeout(r,650));
-  if(status) status.textContent='Opening secure install prompt…';
+  const started=Date.now();
+  let timer=setInterval(()=>{
+    const pct=Math.min(99,Math.floor(((Date.now()-started)/10000)*100));
+    if(progressText) progressText.textContent='Securing your app · '+pct+'%';
+    if(status) status.textContent=pct<35?'Preparing your premium app experience…':pct<70?'Optimizing UROVO for your device…':'Finalizing your app installation…';
+  },100);
   try{
     deferredInstallPrompt.prompt();
     await deferredInstallPrompt.userChoice;
   }catch(e){}
   deferredInstallPrompt=null;
   document.getElementById('installAppBtn')?.classList.add('hidden');
-  setTimeout(()=>{overlay?.classList.remove('show');overlay?.setAttribute('aria-hidden','true')},450);
+  const remaining=Math.max(0,10000-(Date.now()-started));
+  setTimeout(()=>{
+    clearInterval(timer);
+    if(progressText) progressText.textContent='UROVO App ready · 100%';
+    if(status) status.textContent='Your premium UROVO experience is ready.';
+    setTimeout(()=>{overlay?.classList.remove('show');overlay?.setAttribute('aria-hidden','true')},350);
+  },remaining);
 }
 
 // Patch the product detail flow after the existing definitions have loaded.
@@ -3168,7 +3261,14 @@ window.openProduct=function(id){
 
 // Add MRP/savings and related products to the detail modal after it opens.
 const _loadStoreProductsOriginal=window.loadStoreProducts;
-window.loadStoreProducts=async function(){const r=await _loadStoreProductsOriginal?.();applyDiscovery();renderRecent();return r};
+window.loadStoreProducts=async function(){const r=await _loadStoreProductsOriginal?.();
+  // Always open the Home storefront on the NEW view first. Category clicks can still change the view, and tapping the same category again returns here.
+  if(!window.__urovoInitialHomeNewShown){
+    try{category='All'}catch(e){}
+    document.querySelectorAll('.categories .cat').forEach(b=>b.classList.toggle('active',String(b.dataset.cat||'').toLowerCase()==='all'));
+    window.__urovoInitialHomeNewShown=true;
+  }
+  applyDiscovery();renderRecent();return r};
 
 // Save customer email into the local order and provide a confirmation action.
 const _form=document.getElementById('checkoutForm');
@@ -3295,7 +3395,7 @@ window.showAccount=function(){openAccountPage()};
 // Recently Viewed is shown only inside Account; it is intentionally removed from Home.
 
 // Upgrade the existing product list with advanced filtering after initial data load.
-setTimeout(()=>{try{applyDiscovery();renderRecent()}catch(e){console.warn(e)}},800);
+setTimeout(()=>{try{if(!window.__urovoInitialHomeNewShown){category='All';document.querySelectorAll('.categories .cat').forEach(b=>b.classList.toggle('active',String(b.dataset.cat||'').toLowerCase()==='all'));window.__urovoInitialHomeNewShown=true}applyDiscovery();renderRecent()}catch(e){console.warn(e)}},800);
 
 // Dedicated animated Search page. It never scrolls Home to the search section.
 function openSearchPage(){
@@ -4125,7 +4225,7 @@ const originalOpen=window.openSellerDashboard;if(typeof originalOpen==='function
 (function(){
 'use strict';
 const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
-const BUILD='95';
+const BUILD='99';
 const VAPID_PUBLIC_KEY=String(window.UROVO_VAPID_PUBLIC_KEY||'PASTE_VAPID_PUBLIC_KEY_HERE');
 const $v=id=>document.getElementById(id);
 const safe=(v)=>String(v??'');
@@ -4141,7 +4241,7 @@ function normalizeHelpSurface(){
   document.querySelectorAll('.whatsapp-tool,#urovoSupportFab,#urovoSupportModal,#urovoCeoChatModal').forEach(x=>{if(x.id!=='urovoChatPage')x.remove()});
 }
 
-// Hosted sites can announce new builds through version.json. The locally-opened content:// copy uses the local update acknowledgement only.
+// Hosted sites announce new builds through version.json. A downloaded content:// HTML cannot replace its own bytes; it must open the hosted index.html to receive the new build.
 async function latestBuild(){
   const hosted='https://ujjwalkrishnaa555-beep.github.io/urovo-store/index.html';
   if(!/^https?:$/.test(location.protocol))return {version:BUILD,file:location.href};
@@ -4154,7 +4254,7 @@ async function latestBuild(){
       return {version:v,file:f};
     }
   }catch(e){}
-  return {version:'95',file:hosted};
+  return {version:BUILD,file:hosted};
 }
 async function configureUpdateGate(){
   const gate=$v('urovoUpdateGate'),btn=$v('urovoUpdateBtn'),hint=$v('urovoUpdateGateHint');if(!gate||!btn)return;
@@ -4170,8 +4270,8 @@ async function configureUpdateGate(){
       try{
         const target=new URL(latest.file,location.href);
         target.searchParams.set('urovo_update',latest.version);
-        target.searchParams.set('refresh',String(Date.now()));
-        location.assign(target.href);
+        target.searchParams.set('urovo_cache',String(Date.now()));
+        location.replace(target.href);
         return;
       }catch(e){console.warn('UROVO update target:',e)}
     }
@@ -7700,7 +7800,7 @@ setInterval(arrange,800);
  window.urovoShowInstallAnimation=function(){show('urovoInstallOverlay')};
  window.urovoHideInstallAnimation=function(){hide('urovoInstallOverlay')};
  window.addEventListener('beforeinstallprompt',e=>{window.__urovoInstallPrompt=e;});
- window.addEventListener('appinstalled',()=>window.urovoHideInstallAnimation());
+ window.addEventListener('appinstalled',()=>{});
  // Wrap common update button handlers without replacing their actual update logic.
  document.addEventListener('click',e=>{
    const b=e.target.closest('button'); if(!b)return;
@@ -7970,7 +8070,7 @@ setInterval(arrange,800);
   // Make the Update gate build version consistent and the UI explicit; the existing gate owns its update flow.
   try{
     const buildHint=document.getElementById('urovoUpdateGateHint');
-    if(buildHint&&!/^Build\s/i.test(buildHint.textContent||''))buildHint.textContent='UROVO build 95';
+    if(buildHint&&!/^Build\s/i.test(buildHint.textContent||''))buildHint.textContent='UROVO build 99';
   }catch(e){}
 
   // Wrap Account renderers to style/reorder immediately, then observe future modal/page content rebuilds.
@@ -8022,6 +8122,41 @@ setInterval(arrange,800);
       },true);
     }
   }catch(e){console.warn('UROVO update UI:',e)}
+})();
+</script>
+
+<style id="urovo-v97-home-all-install-css">
+.install-tool{background:linear-gradient(135deg,#f7d47a,#c88a32,#f7d47a)!important;color:#140a05!important;border:1px solid rgba(255,239,175,.75)!important;box-shadow:0 0 0 1px rgba(247,212,122,.15),0 12px 38px rgba(247,212,122,.18),inset 0 1px rgba(255,255,255,.45)!important;animation:urovoInstallButtonGlow 2.2s ease-in-out infinite}
+@keyframes urovoInstallButtonGlow{0%,100%{box-shadow:0 0 0 1px rgba(247,212,122,.15),0 12px 38px rgba(247,212,122,.18),inset 0 1px rgba(255,255,255,.45)}50%{box-shadow:0 0 0 1px rgba(247,212,122,.35),0 12px 48px rgba(247,212,122,.32),inset 0 1px rgba(255,255,255,.6)}}
+.urovo-v97-install-icon{width:88px!important;height:88px!important;border-radius:26px!important;background:linear-gradient(145deg,#f7d47a,#c88a32)!important;color:#120905!important;display:grid!important;place-items:center!important;font:900 46px/1 'Space Grotesk',Arial!important;box-shadow:0 0 0 1px rgba(255,239,175,.35),0 0 45px rgba(247,212,122,.28),inset 0 2px rgba(255,255,255,.45)!important;animation:urovoV97Logo 1.35s ease-in-out infinite!important;position:relative;overflow:hidden}
+.urovo-v97-install-icon:after{content:"";position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);transform:translateX(-65%) rotate(12deg);animation:urovoV97Sweep 2.1s linear infinite}
+@keyframes urovoV97Logo{0%,100%{transform:scale(1)}50%{transform:scale(1.06) rotate(-2deg)}}
+@keyframes urovoV97Sweep{to{transform:translateX(65%) rotate(12deg)}}
+.urovo-v97-progress{height:8px!important;border-radius:99px!important;background:#252525!important;overflow:hidden!important;margin:22px 0 10px!important}
+.urovo-v97-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#c88a32,#f7d47a,#fff1b5);border-radius:99px;transition:width .18s linear!important;box-shadow:0 0 18px rgba(247,212,122,.5)}
+.urovo-v97-install-time{font-size:11px;color:#f7d47a;min-height:17px;font-weight:800;letter-spacing:.04em}
+@media(prefers-reduced-motion:reduce){.install-tool,.urovo-v97-install-icon{animation:none!important}.urovo-v97-install-icon:after{animation:none!important}}
+</style>
+<script id="urovo-v97-home-all-install-js">
+(function(){
+'use strict';
+if(window.__urovoV97Final)return;window.__urovoV97Final=true;
+const INSTALL_MS=10000,$=id=>document.getElementById(id);
+function makeUI(){const o=$('urovoInstallOverlay');const c=o?.querySelector('.urovoOverlayCard')||o?.querySelector('.urovo-install-card');if(!c)return;c.innerHTML='<div class="urovo-v97-install-icon">U</div><div style="font-size:24px;font-weight:900;margin-top:3px">UROVO App</div><div style="color:#aaa;margin-top:7px;font-size:13px">Preparing your premium app experience…</div><div class="urovo-v97-progress"><i id="urovoV97InstallBar"></i></div><div id="urovoV97InstallTime" class="urovo-v97-install-time">Preparing • 10 seconds</div>'}
+function show(){const o=$('urovoInstallOverlay');if(o){makeUI();o.style.display='flex';o.classList.add('show');o.setAttribute('aria-hidden','false')}}
+function hide(){const o=$('urovoInstallOverlay');if(o){o.style.display='none';o.classList.remove('show');o.setAttribute('aria-hidden','true')}}
+function showButton(){const b=$('installAppBtn');if(b&&!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true)){b.classList.remove('hidden');b.style.display='inline-flex';b.textContent='✦ Install UROVO App'}}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.__urovoV97Prompt=e;window.__urovoInstallPrompt=e;showButton()},true);
+window.addEventListener('appinstalled',()=>{window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;hide();try{toast('✦ UROVO App installed successfully')}catch(e){}});
+window.installUrovoApp=async function(){
+const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;if(standalone){try{toast('UROVO is already installed ✓')}catch(e){}return}
+const pe=window.__urovoV97Prompt||window.__urovoInstallPrompt||window.deferredInstallPrompt||null;show();const start=Date.now(),bar=$('urovoV97InstallBar'),tm=$('urovoV97InstallTime');let raf=0;
+const tick=()=>{const el=Date.now()-start,p=Math.min(100,Math.round(el/INSTALL_MS*100)),left=Math.max(0,Math.ceil((INSTALL_MS-el)/1000));if(bar)bar.style.width=p+'%';if(tm)tm.textContent=left?'Preparing • '+left+' seconds':'Ready ✓';if(el<INSTALL_MS)raf=requestAnimationFrame(tick)};tick();
+if(pe){try{pe.prompt();await pe.userChoice}catch(e){console.warn('UROVO install prompt:',e)}window.__urovoV97Prompt=null;window.__urovoInstallPrompt=null;window.deferredInstallPrompt=null}
+const wait=Math.max(0,INSTALL_MS-(Date.now()-start));if(wait)await new Promise(r=>setTimeout(r,wait));cancelAnimationFrame(raf);if(bar)bar.style.width='100%';if(tm)tm.textContent='Ready ✓';await new Promise(r=>setTimeout(r,350));hide();
+if(!pe)try{toast('Install prompt is unavailable here. Chrome menu → Add to Home screen / Install app')}catch(e){}
+};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showButton,{once:true});else showButton();
 })();
 </script>
 </body>
