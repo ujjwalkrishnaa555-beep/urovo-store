@@ -1,59 +1,85 @@
-/* UROVO PWA service worker v105 — cache-busted install reliability fix */
 'use strict';
-const CACHE_NAME = 'urovo-pwa-v105';
+
+const CACHE_NAME = 'urovo-pwa-v106';
+
 const APP_SHELL = [
+  './',
   './index.html',
-  './manifest.webmanifest?v=105',
-  './icons/icon-192.png?v=105',
-  './icons/icon-512.png?v=105',
-  './icons/apple-touch-icon.png?v=105'
+  './manifest.webmanifest',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
+
 self.addEventListener('install', event => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    await Promise.all(APP_SHELL.map(url => cache.add(url).catch(() => null)));
-    await self.skipWaiting();
-  })());
-});
-self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter(key => key.startsWith('urovo-pwa-') && key !== CACHE_NAME).map(key => caches.delete(key)));
-    await self.clients.claim();
-  })());
-});
-self.addEventListener('fetch', event => {
-  const request = event.request;
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-  if (request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const response = await fetch(request, { cache: 'no-cache' });
-        if (response && response.ok) {
-          const cache = await caches.open(CACHE_NAME);
-          await cache.put('./index.html', response.clone());
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(async cache => {
+        for (const url of APP_SHELL) {
+          try {
+            const response = await fetch(url, { cache: 'no-cache' });
+            if (response.ok) {
+              await cache.put(url, response);
+            } else {
+              console.warn('UROVO PWA missing:', url, response.status);
+            }
+          } catch (error) {
+            console.warn('UROVO PWA failed:', url, error);
+          }
         }
-        return response;
-      } catch (_) {
-        return (await caches.match('./index.html')) || Response.error();
-      }
-    })());
+        await self.skipWaiting();
+      })
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => key.startsWith('urovo-pwa-') && key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-cache' })
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put('./index.html', copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
     return;
   }
-  event.respondWith((async () => {
-    const cached = await caches.match(request);
-    if (cached) return cached;
-    try {
-      const response = await fetch(request);
-      if (response && response.ok) {
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(request, response.clone()).catch(() => {});
-      }
-      return response;
-    } catch (_) {
-      return Response.error();
-    }
-  })());
+
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(event.request).then(response => {
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(event.request, copy));
+        }
+        return response;
+      });
+    })
+  );
 });
