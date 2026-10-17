@@ -1,55 +1,39 @@
-const CACHE_NAME = "urovo-pwa-v2";
-
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./manifest.webmanifest"
-];
-
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-  );
+/* UROVO V58 push notification service worker. Upload beside index.html on the same HTTPS host. */
+self.addEventListener('install', event => { self.skipWaiting(); });
+self.addEventListener('activate', event => { event.waitUntil(self.clients.claim()); });
+self.addEventListener('push', event => {
+  let payload = {};
+  try {
+    const raw = event.data ? event.data.text() : '';
+    if (raw) {
+      try { payload = JSON.parse(raw); }
+      catch (_) { payload = { message: raw }; }
+    }
+  } catch (_) {}
+  const title = String(payload.title || payload.notification?.title || 'UROVO Update');
+  const body = String(payload.message || payload.body || payload.notification?.body || 'You have a new update from UROVO.');
+  const url = String(payload.url || payload.data?.url || './');
+  const options = {
+    body,
+    icon: payload.icon || './icons/icon-192.png',
+    badge: payload.badge || './icons/icon-192.png',
+    tag: String(payload.tag || payload.event || 'urovo-update'),
+    renotify: true,
+    data: { url }
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
 });
-
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
-  const url = new URL(event.request.url);
-
-  if (url.origin !== self.location.origin) return;
-
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          const copy = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => cache.put("./index.html", copy));
-
-          return response;
-        })
-        .catch(() => caches.match("./index.html"))
-    );
-  } else {
-    event.respondWith(
-      caches.match(event.request)
-        .then(cached => cached || fetch(event.request))
-    );
-  }
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const target = new URL(event.notification?.data?.url || './', self.registration.scope).href;
+  event.waitUntil((async () => {
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of windows) {
+      if ('focus' in client) {
+        if (client.url !== target && 'navigate' in client) { try { await client.navigate(target); } catch (_) {} }
+        return client.focus();
+      }
+    }
+    if (self.clients.openWindow) return self.clients.openWindow(target);
+  })());
 });
