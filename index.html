@@ -470,7 +470,7 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
 (function(){
   'use strict';
   /* PERMANENT RULE: whenever this HTML is changed, increment UROVO_BUILD_VERSION. */
-  const UROVO_BUILD_VERSION='76';
+  const UROVO_BUILD_VERSION='95';
   const UROVO_ACTIVE_BUILD_KEY='urovo_active_build_version_v1';
   const gate=()=>document.getElementById('urovoUpdateGate');
   const unlock=()=>{
@@ -485,8 +485,13 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
   function initUpdateGate(){
     let active='';
     try{active=localStorage.getItem(UROVO_ACTIVE_BUILD_KEY)||''}catch(e){}
-    if(active!==UROVO_BUILD_VERSION) lock(); else unlock();
-    /* v38 runtime owns the update button so an outdated build cannot unlock directly. */
+    let fromUpdate='';
+    try{fromUpdate=new URLSearchParams(location.search).get('urovo_update')||''}catch(e){}
+    if(fromUpdate===UROVO_BUILD_VERSION){
+      try{localStorage.setItem(UROVO_ACTIVE_BUILD_KEY,UROVO_BUILD_VERSION)}catch(e){}
+      try{history.replaceState({},'',location.pathname+location.hash)}catch(e){}
+      unlock();
+    }else if(active!==UROVO_BUILD_VERSION) lock(); else unlock();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initUpdateGate,{once:true}); else initUpdateGate();
 })();
@@ -2059,6 +2064,23 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
  #adminPage .sidebar, #adminPage aside { width:190px !important; }
  #adminPage h1 { font-size:20px !important; }
  #adminPage .card, #adminPage .panel, #adminPage .stat-card, #adminPage .dashboard-card, #adminPage .admin-card { padding:10px !important; }
+}
+</style>
+<style id="urovo-v94-image-fill-fix">
+/* V94: Product Details image must fill the image frame; border remains only around the frame. */
+.product-detail-image img,.product-details-image img,.product-image-view img,.product-gallery-main img,
+#productDetails img,#productImage img,.pd-image img,.detail-image img{
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  display:block !important;
+}
+.product-detail-image,.product-details-image,.product-image-view,.product-gallery-main,
+#productDetails .image-wrap,#productDetails .product-image,#productImage,.pd-image,.detail-image{
+  overflow:hidden !important;
 }
 </style>
 </head><body><h1>UROVO</h1><p class="muted">Invoice · ${escapeHtml(o.id)}</p><hr><p><b>Customer:</b> ${escapeHtml(o.customer?.name||o.customer_name||'')}<br><b>Email:</b> ${escapeHtml(o.user_email||'')}<br><b>Phone:</b> ${escapeHtml(o.customer?.phone||o.phone||'')}<br><b>Address:</b> ${escapeHtml(o.address||o.customer?.address||'')}</p><table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="total">Total: ${money(o.total)}</div><p class="muted">Payment: ${escapeHtml(o.payment_method||o.payment||'')} · Status: ${escapeHtml(o.status||'Placed')}</p><p class="muted">Please use your browser print option to print this invoice.</p><scr` + `ipt>
@@ -4103,7 +4125,7 @@ const originalOpen=window.openSellerDashboard;if(typeof originalOpen==='function
 (function(){
 'use strict';
 const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
-const BUILD='45';
+const BUILD='95';
 const VAPID_PUBLIC_KEY=String(window.UROVO_VAPID_PUBLIC_KEY||'PASTE_VAPID_PUBLIC_KEY_HERE');
 const $v=id=>document.getElementById(id);
 const safe=(v)=>String(v??'');
@@ -4121,12 +4143,18 @@ function normalizeHelpSurface(){
 
 // Hosted sites can announce new builds through version.json. The locally-opened content:// copy uses the local update acknowledgement only.
 async function latestBuild(){
-  if(!/^https?:$/.test(location.protocol))return {version:BUILD,file:'./index.html'};
+  const hosted='https://ujjwalkrishnaa555-beep.github.io/urovo-store/index.html';
+  if(!/^https?:$/.test(location.protocol))return {version:BUILD,file:location.href};
   try{
     const r=await fetch('./version.json?ts='+Date.now(),{cache:'no-store'});
-    if(!r.ok)return {version:BUILD,file:'./index.html'};
-    const x=await r.json();return {version:String(x.version||BUILD),file:String(x.file||'./index.html')};
-  }catch{return {version:BUILD,file:'./index.html'}}
+    if(r.ok){
+      const x=await r.json();
+      const v=String(x.version||BUILD);
+      const f=String(x.file||hosted);
+      return {version:v,file:f};
+    }
+  }catch(e){}
+  return {version:'95',file:hosted};
 }
 async function configureUpdateGate(){
   const gate=$v('urovoUpdateGate'),btn=$v('urovoUpdateBtn'),hint=$v('urovoUpdateGateHint');if(!gate||!btn)return;
@@ -4138,10 +4166,26 @@ async function configureUpdateGate(){
   if(needsFetch||active!==BUILD)lock();else unlock();
   btn.onclick=async()=>{
     btn.disabled=true;btn.textContent='Checking update…';latest=await latestBuild();needsFetch=Number(latest.version)>Number(BUILD);
-    if(needsFetch&&/^https?:$/.test(location.protocol)){
-      try{const target=new URL(latest.file,location.href);target.searchParams.set('urovo_update',latest.version);target.searchParams.set('refresh',String(Date.now()));location.replace(target.href);return}catch(e){console.warn(e)}
+    if(needsFetch&&/^https?:$/.test(location.protocol)&&latest.file){
+      try{
+        const target=new URL(latest.file,location.href);
+        target.searchParams.set('urovo_update',latest.version);
+        target.searchParams.set('refresh',String(Date.now()));
+        location.assign(target.href);
+        return;
+      }catch(e){console.warn('UROVO update target:',e)}
     }
-    unlock();btn.disabled=false;btn.textContent='Update UROVO';window.scrollTo({top:0,behavior:'smooth'});tell(needsFetch?'New build could not be downloaded. Open the latest hosted page.':'UROVO updated successfully ✓');
+    // Never redirect to an older index.html. A downloaded/local HTML cannot replace its own bytes.
+    // Unlock this build only when no newer hosted build is actually available.
+    if(!needsFetch) {
+      unlock();
+      btn.disabled=false;btn.textContent='Update UROVO';
+      window.scrollTo({top:0,behavior:'smooth'});
+      tell('UROVO is already up to date ✓');
+      return;
+    }
+    btn.disabled=false;btn.textContent='Update UROVO';
+    tell('A newer hosted UROVO build is available, but no valid update file was provided.');
   };
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{normalizeHelpSurface();configureUpdateGate();setTimeout(()=>{try{urovoEnsurePaymentNotice();urovoBindCheckoutPaymentUI()}catch(e){}},100)},{once:true});else{normalizeHelpSurface();configureUpdateGate();setTimeout(()=>{try{urovoEnsurePaymentNotice();urovoBindCheckoutPaymentUI()}catch(e){}},100)}
@@ -7672,7 +7716,6 @@ setInterval(arrange,800);
  }
 })();
 </script>
-</body></html>
 
 <style id="urovo-v87-image-size">
 @media(max-width:600px){.product-detail-image,.product-gallery-main,.product-main-image,.pd-main-image{height:300px!important;max-height:300px!important}}
@@ -7757,16 +7800,16 @@ setInterval(arrange,800);
         const label=box.closest('label');
         const b=label?.querySelector('b');
         const small=label?.querySelector('small');
-        if(b)b.textContent='🏠 Show on Home';
-        if(small)small.textContent='Enable this to show the product in Home → Trending Products. CEO only.';
+        if(b&&b.textContent!=='🏠 Show on Home')b.textContent='🏠 Show on Home';
+        if(small&&small.textContent!=='Enable this to show the product in Home → Trending Products. CEO only.')small.textContent='Enable this to show the product in Home → Trending Products. CEO only.';
       }
       const editBox=root?.querySelector?.('#editIsNewBadge') || document.getElementById('editIsNewBadge');
       if(editBox){
         const label=editBox.closest('label');
         const b=label?.querySelector('b');
         const small=label?.querySelector('small');
-        if(b)b.textContent='🏠 Show on Home';
-        if(small)small.textContent='Enable this to show the product in Home → Trending Products. CEO only.';
+        if(b&&b.textContent!=='🏠 Show on Home')b.textContent='🏠 Show on Home';
+        if(small&&small.textContent!=='Enable this to show the product in Home → Trending Products. CEO only.')small.textContent='Enable this to show the product in Home → Trending Products. CEO only.';
       }
     }catch(e){console.warn('V89 home option label:',e)}
   }
@@ -7796,4 +7839,190 @@ setInterval(arrange,800);
   observer.observe(document.body,{childList:true,subtree:true});
 })();
 </script>
-</body></html>
+
+<!-- UROVO V92: final requested fixes (preserves existing store features) -->
+<style id="urovo-v92-final-fixes-css">
+/* Account: deep-black royal presentation with restrained gold/lime accents. */
+#accountModal .box{
+  background:radial-gradient(ellipse at 100% 0%,rgba(200,255,0,.08),transparent 40%),linear-gradient(145deg,#111 0%,#090909 70%,#12120d 100%)!important;
+  border:1px solid rgba(200,255,0,.28)!important;
+  box-shadow:0 26px 80px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.045)!important;
+}
+#accountContent>h2{font-size:25px!important;font-weight:900!important;letter-spacing:-.5px!important;padding-bottom:13px!important;border-bottom:1px solid rgba(200,255,0,.22)!important;color:#f5f5e9!important;}
+#accountContent .order-card,#accountContent .premium-card{
+  background:linear-gradient(145deg,rgba(200,255,0,.085),rgba(255,255,255,.025) 45%,rgba(188,145,55,.055))!important;
+  border:1px solid rgba(200,255,0,.20)!important;border-radius:20px!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)!important;padding:18px!important;
+}
+#accountContent .premium-level{display:inline-flex;align-items:center;border:1px solid rgba(200,255,0,.38)!important;background:linear-gradient(120deg,rgba(200,255,0,.16),rgba(200,255,0,.04))!important;color:var(--lime,#c8ff00)!important;border-radius:999px!important;padding:7px 12px!important;font-weight:900!important;letter-spacing:1px!important;}
+#accountContent .tabs{padding:5px!important;border:1px solid rgba(200,255,0,.18)!important;border-radius:15px!important;background:rgba(255,255,255,.025)!important;}
+#accountContent .form input,#accountContent .form textarea,#accountContent .input{border-color:rgba(200,255,0,.18)!important;border-radius:13px!important;background:rgba(255,255,255,.035)!important;}
+#accountContent .urovo-ceo-first-button{display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;min-height:52px!important;margin:14px 0 12px!important;border:1px solid rgba(200,255,0,.52)!important;border-radius:15px!important;background:linear-gradient(110deg,#c8ff00,#e5ff75)!important;color:#080808!important;font-weight:950!important;box-shadow:0 8px 26px rgba(200,255,0,.16)!important;}
+#accountContent button.secondary{border-color:rgba(200,255,0,.18)!important;border-radius:13px!important;}
+#accountPage .urovo-page-head{background:linear-gradient(105deg,rgba(200,255,0,.075),transparent 65%)!important;border-bottom:1px solid rgba(200,255,0,.20)!important;}
+#accountPage .urovo-page-kicker{color:var(--lime,#c8ff00)!important;letter-spacing:2.3px!important;font-weight:950!important;}
+#accountPage .urovo-profile-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 100% 0%,rgba(200,255,0,.15),transparent 40%),linear-gradient(145deg,#141414,#090909)!important;border:1px solid rgba(200,255,0,.27)!important;box-shadow:0 16px 46px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.04)!important;}
+#accountPage .urovo-avatar{background:linear-gradient(135deg,#d9ff45,#8eac00)!important;color:#090909!important;border:1px solid rgba(255,255,255,.25)!important;box-shadow:0 8px 26px rgba(200,255,0,.18)!important;}
+#accountPage .urovo-account-grid{align-items:stretch!important;}
+#accountPage .urovo-account-card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012))!important;border:1px solid rgba(200,255,0,.15)!important;border-radius:20px!important;box-shadow:0 11px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035)!important;padding:18px!important;}
+#accountPage .urovo-account-card .big{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:linear-gradient(140deg,rgba(200,255,0,.17),rgba(200,255,0,.035))!important;border:1px solid rgba(200,255,0,.22)!important;}
+#accountPage .urovo-account-card h4{font-size:14px!important;letter-spacing:.05px!important;}
+#accountPage .urovo-account-card.urovo-ceo-first-card{background:radial-gradient(circle at 100% 0%,rgba(200,255,0,.18),transparent 47%),linear-gradient(145deg,#171a0d,#090909 68%)!important;border-color:rgba(200,255,0,.58)!important;box-shadow:0 14px 34px rgba(200,255,0,.09),inset 0 1px 0 rgba(255,255,255,.06)!important;}
+#accountPage .urovo-account-card.urovo-ceo-first-card .big{background:linear-gradient(135deg,#c8ff00,#eaff9c)!important;color:#080808!important;}
+#accountMenu .urovo-menu-list #accountAdminMenuItem{background:linear-gradient(105deg,rgba(200,255,0,.17),rgba(200,255,0,.045))!important;border:1px solid rgba(200,255,0,.42)!important;border-radius:13px!important;font-weight:900!important;color:var(--text)!important;margin-bottom:7px!important;}
+
+/* Product details image: larger stage, keep UROVO's dark background (not white). */
+#productModal #detailImage.detail-image,
+#productModal .detail-image{
+  height:600px!important;min-height:600px!important;max-height:600px!important;width:100%!important;
+  background:radial-gradient(circle at 50% 38%,rgba(200,255,0,.12),transparent 47%),linear-gradient(145deg,#171717,#090909)!important;
+  border:1px solid rgba(200,255,0,.13)!important;border-radius:24px!important;padding:8px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 18px 48px rgba(0,0,0,.32)!important;
+}
+#productModal .detail-image img,#productModal #detailMainImage{
+  width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;
+  object-fit:contain!important;background:transparent!important;padding:0!important;transform:none!important;
+}
+#productModal .detail-thumb{background:var(--surface2,#171717)!important;border-color:var(--line,rgba(255,255,255,.12))!important;}
+#productModal .detail-thumb img{background:transparent!important;object-fit:contain!important;}
+@media(max-width:720px){
+  #productModal .box{padding:14px!important;}
+  #productModal #detailImage.detail-image,#productModal .detail-image{height:500px!important;min-height:500px!important;max-height:500px!important;padding:6px!important;border-radius:21px!important;}
+  #productModal .detail-image img,#productModal #detailMainImage{height:100%!important;max-height:100%!important;}
+}
+</style>
+<script id="urovo-v92-final-fixes-js">
+(function(){
+  'use strict';
+  if(window.__urovoV92FinalFixes)return;
+  window.__urovoV92FinalFixes=true;
+  const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
+  const norm=s=>String(s||'').trim().toLowerCase();
+  function isCeo(){
+    try{if(typeof isAdmin==='function'&&isAdmin())return true;}catch(e){}
+    return norm(window.user?.email||window.currentUser?.email||window.authUser?.email)===CEO_EMAIL;
+  }
+  function goCEO(){
+    try{if(typeof closeAccount==='function')closeAccount();}catch(e){}
+    try{if(typeof closeAccountPage==='function')closeAccountPage();}catch(e){}
+    try{if(typeof openAdmin==='function')openAdmin();else if(typeof window.openAdmin==='function')window.openAdmin();}catch(e){console.error('UROVO CEO dashboard:',e);try{toast('CEO Dashboard could not be opened. Please sign in again.')}catch(_){}}
+  }
+  function styleAndPrioritizeAccounts(){
+    const legacy=document.getElementById('accountContent');
+    if(legacy){
+      legacy.classList.add('urovo-royal-account-root');
+      legacy.querySelectorAll(':scope > .order-card,:scope > .premium-card').forEach(el=>el.classList.add('urovo-royal-account-card'));
+      if(isCeo()){
+        const title=legacy.querySelector(':scope > h2');
+        let btn=Array.from(legacy.querySelectorAll('button,a')).find(el=>/ceo dashboard/i.test(el.textContent||''));
+        if(!btn){
+          btn=document.createElement('button');btn.type='button';btn.textContent='👑 CEO Dashboard';btn.onclick=goCEO;btn.dataset.urovoCeoShortcut='true';
+        }
+        btn.classList.add('urovo-ceo-first-button');btn.classList.remove('secondary');btn.classList.add('primary');
+        if(title){if(title.nextElementSibling!==btn)title.insertAdjacentElement('afterend',btn)}else if(legacy.firstElementChild!==btn)legacy.prepend(btn);
+      }else{
+        legacy.querySelector('[data-urovo-ceo-shortcut="true"]')?.remove();
+      }
+    }
+    const full=document.getElementById('fullAccountContent');
+    if(full){
+      const grid=full.querySelector('.urovo-account-grid');
+      if(grid){
+        const cards=Array.from(grid.querySelectorAll(':scope > .urovo-account-card'));
+        cards.forEach(card=>card.classList.remove('urovo-ceo-first-card'));
+        if(isCeo()){
+          const ceo=cards.find(card=>/ceo dashboard/i.test(card.textContent||''));
+          if(ceo){ceo.classList.add('urovo-ceo-first-card');if(grid.firstElementChild!==ceo)grid.prepend(ceo)}
+        }
+      }
+    }
+    const menu=document.querySelector('#accountMenu .urovo-menu-list');
+    const menuBtn=document.getElementById('accountAdminMenuItem');
+    if(menu&&menuBtn&&isCeo()&&menu.firstElementChild!==menuBtn)menu.prepend(menuBtn);
+  }
+
+  // Use capture so this toggle works both on the original category chips and on dynamically rebuilt chips.
+  // Tapping the same active category turns it off, restores All/Home products and scrolls to the products.
+  document.addEventListener('click',function(e){
+    const btn=e.target?.closest?.('.categories .cat');
+    if(!btn)return;
+    const chosen=String(btn.dataset.cat||'All').trim()||'All';
+    let active='All';try{active=String(category||'All')}catch(err){}
+    const next=norm(active)===norm(chosen)&&norm(chosen)!=='all'?'All':chosen;
+    try{category=next}catch(err){console.warn('Category selection state:',err)}
+    document.querySelectorAll('.categories .cat').forEach(el=>el.classList.toggle('active',norm(el.dataset.cat||'All')===norm(next)));
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    try{if(typeof window.renderProducts==='function')window.renderProducts()}catch(err){console.error('Category product refresh:',err)}
+    const section=document.getElementById('productsSection');if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
+  },true);
+
+  // Keep seller forms from inheriting CEO-only Home/NEW controls if a later form renderer adds them.
+  function removeSellerHomeControls(){
+    const roots=[document.getElementById('sellerDashboard'),document.getElementById('sellerDashboardContent'),document.getElementById('sellerContent'),document.getElementById('svProductForm'),document.getElementById('sellerProductForm')].filter(Boolean);
+    for(const root of roots){
+      root.querySelectorAll('#adminIsNewBadge,#editIsNewBadge,#svIsNewBadge,#sellerIsNewBadge,#svShowOnHome,#sellerShowOnHome').forEach(el=>{
+        const label=el.closest('label,.urovo-v52-option-card');if(label)label.remove();else el.remove();
+      });
+      root.querySelectorAll('label').forEach(label=>{if(/show on home|home visibility|enable to show.*home/i.test(label.textContent||'')&&!label.querySelector('#adminIsNewBadge,#editIsNewBadge'))label.remove()});
+    }
+  }
+
+  // Make the Update gate build version consistent and the UI explicit; the existing gate owns its update flow.
+  try{
+    const buildHint=document.getElementById('urovoUpdateGateHint');
+    if(buildHint&&!/^Build\s/i.test(buildHint.textContent||''))buildHint.textContent='UROVO build 95';
+  }catch(e){}
+
+  // Wrap Account renderers to style/reorder immediately, then observe future modal/page content rebuilds.
+  const oldRenderAccount=window.renderAccount;
+  if(typeof oldRenderAccount==='function'&&!oldRenderAccount.__urovoV92){
+    const wrapped=function(...args){const result=oldRenderAccount.apply(this,args);setTimeout(styleAndPrioritizeAccounts,0);return result};
+    wrapped.__urovoV92=true;window.renderAccount=wrapped;
+  }
+  const oldShowAccount=window.showAccount;
+  if(typeof oldShowAccount==='function'&&!oldShowAccount.__urovoV92){
+    const wrapped=function(...args){const result=oldShowAccount.apply(this,args);setTimeout(styleAndPrioritizeAccounts,0);return result};
+    wrapped.__urovoV92=true;window.showAccount=wrapped;
+  }
+  const oldOpenMenu=window.openAccountMenu;
+  if(typeof oldOpenMenu==='function'&&!oldOpenMenu.__urovoV92){
+    const wrapped=async function(...args){const result=await oldOpenMenu.apply(this,args);styleAndPrioritizeAccounts();return result};
+    wrapped.__urovoV92=true;window.openAccountMenu=wrapped;
+  }
+  const targets=['accountContent','fullAccountContent'].map(id=>document.getElementById(id)).filter(Boolean);
+  if(targets.length){const observer=new MutationObserver(()=>styleAndPrioritizeAccounts());targets.forEach(el=>observer.observe(el,{childList:true,subtree:true}));}
+  styleAndPrioritizeAccounts();
+  removeSellerHomeControls();
+  const sellerRootIds=['sellerDashboard','sellerDashboardContent','sellerContent'];
+  const sellerObserver=new MutationObserver(()=>removeSellerHomeControls());
+  sellerRootIds.map(id=>document.getElementById(id)).filter(Boolean).forEach(el=>sellerObserver.observe(el,{childList:true,subtree:true}));
+  const oldOpenSeller=window.openSellerDashboard;
+  if(typeof oldOpenSeller==='function'&&!oldOpenSeller.__urovoV92){
+    const wrapped=async function(...args){const result=await oldOpenSeller.apply(this,args);setTimeout(removeSellerHomeControls,0);return result};
+    wrapped.__urovoV92=true;window.openSellerDashboard=wrapped;
+  }
+})();
+</script>
+
+\n<script>\n(function(){\n  function urovoNormalizeCategory(v){\n    v=String(v||'').trim();\n    if(!v)return '';\n    const map={gadgets:'Gadgets',gadget:'Gadgets',electronics:'Gadgets',home:'Home',\n      lifestyle:'Lifestyle',cleaning:'Home',household:'Home',accessories:'Lifestyle'};\n    const k=v.toLowerCase();\n    return map[k] || v.charAt(0).toUpperCase()+v.slice(1);\n  }\n  function urovoFixProductCategory(){\n    try{\n      if(Array.isArray(window.products)) window.products.forEach(p=>{\n        if(p){p.category=urovoNormalizeCategory(p.category||p.category_name||p.cat||'');}\n      });\n    }catch(e){}\n  }\n  window.urovoNormalizeCategory=urovoNormalizeCategory;\n  window.urovoFixProductCategory=urovoFixProductCategory;\n  urovoFixProductCategory();\n  // Keep category values consistent after products are loaded/refreshed.\n  let n=0; const t=setInterval(()=>{urovoFixProductCategory(); if(++n>30)clearInterval(t)},500);\n})();\n</script>\n
+<style id="urovo-v95-update-safe-css">
+/* V95: preserve the current UROVO visual style; update flow is handled by the gate above. */
+</style>
+<script id="urovo-v95-update-safe-js">
+(function(){
+  try{
+    const gate=document.getElementById('urovoUpdateGate');
+    const btn=document.getElementById('urovoUpdateBtn');
+    if(btn && !btn.dataset.urovoV95Bound){
+      btn.dataset.urovoV95Bound='1';
+      btn.addEventListener('click',function(){
+        const ov=document.getElementById('urovoUpdateOverlay');
+        if(ov) ov.style.display='flex';
+        setTimeout(()=>{if(ov)ov.style.display='none'},1400);
+      },true);
+    }
+  }catch(e){console.warn('UROVO update UI:',e)}
+})();
+</script>
+</body>
+</html>
