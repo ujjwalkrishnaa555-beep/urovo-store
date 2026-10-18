@@ -7,7 +7,7 @@
 <meta name="description" content="Shop curated gadgets, home essentials and lifestyle picks at UROVO. Upgrade your everyday.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="application-name" content="UROVO Store">
-<meta name="urovo-build" content="UROVO V116 - Seller Approval & Notification Fix">
+<meta name="urovo-build" content="UROVO V111 Final Seller + Wishlist Fix">
 <meta property="og:type" content="website">
 <meta property="og:title" content="UROVO — Upgrade Your Everyday">
 <meta property="og:description" content="Premium picks for your everyday. Discover gadgets, home essentials and lifestyle products at UROVO.">
@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=105">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>UROVO — Wear Your Everyday</title>
+<title>UROVO — Upgrade Your Everyday</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
@@ -499,14 +499,6 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
   }
 }
 </style>
-<style id="urovo-v117-ceo-shortcuts-style">@media(max-width:520px){.urovo-v117-approval-shortcuts{grid-template-columns:1fr!important}.urovo-v117-approval-shortcuts button{width:100%}}</style>
-
-<style id="urovo-v118-product-image-fill">
-/* V118: make the product detail image occupy the full image stage without blank bands. */
-#detailImage.detail-image{height: min(78vw, 560px) !important; min-height:300px !important; padding:0 !important; overflow:hidden !important; background:#fff !important;}
-#detailImage.detail-image img,#detailMainImage{display:block !important;width:100% !important;height:100% !important;min-height:0 !important;max-height:none !important;object-fit:cover !important;object-position:center !important;padding:0 !important;margin:0 !important;background:#fff !important;}
-@media(min-width:700px){#detailImage.detail-image{height: min(42vw, 560px) !important;}}
-</style>
 </head>
 <body>
 <!-- UROVO UPDATE GATE v38 -->
@@ -515,14 +507,14 @@ body.ceo-dashboard, .ceo-dashboard { font-size: 13px !important; }
     <h3 id="urovoUpdateTitle">🔄 UROVO Update Available</h3>
     <p>A new UROVO version is ready. Tap Update to activate this version. Until you update, the rest of the store will stay locked.</p>
     <button id="urovoUpdateBtn" type="button">Update UROVO</button>
-    <div id="urovoUpdateGateHint">UROVO build 102</div>
+    <div id="urovoUpdateGateHint">UROVO build 99</div>
   </div>
 </div>
 <script id="urovo-update-gate-js">
 (function(){
   'use strict';
   /* PERMANENT RULE: whenever this HTML is changed, increment UROVO_BUILD_VERSION. */
-  const UROVO_BUILD_VERSION='102';
+  const UROVO_BUILD_VERSION='99';
   const UROVO_ACTIVE_BUILD_KEY='urovo_active_build_version_v1';
   const gate=()=>document.getElementById('urovoUpdateGate');
   const unlock=()=>{
@@ -1296,7 +1288,7 @@ async function renderCEONewBadgeProducts(){
       const rows=$("urovoNewProductRows");
       if(!rows)return;
       rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:11px;align-items:center;margin:9px 0;padding:11px">
-        <img src="${esc(p.image_url||'')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0">
+        <img src="${esc(p.image_url||'')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'">
         <div style="flex:1;min-width:0"><b>${esc(p.name||'Product')}</b><p style="font-size:11px;color:var(--muted);margin-top:3px">${esc(p.category||'All')} · ${money(p.price||0)}</p><p style="font-size:12px;margin-top:4px">Code: <strong>${esc(codes.get(String(p.id))||'Not assigned')}</strong></p></div>
         <button class="secondary" onclick="openProduct('${String(p.id)}');closeModal('adminModal')">Open</button>
       </div>`).join(''):'<p style="color:var(--muted);padding:14px 0">No matching products found.</p>';
@@ -1361,10 +1353,7 @@ function openAdmin(){if(!requireAdmin())return;$("adminModal").classList.add("sh
 async function renderCEOSellers(){
  if(!requireAdmin())return;
  const c=$("adminContent");
- c.innerHTML=`<div class="urovo-v118-seller-tools" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px">
- <button type="button" onclick="window.urovoV117OpenSellerApprovals()" style="text-align:left;padding:15px;border-radius:15px;border:1px solid rgba(200,255,0,.38);background:linear-gradient(135deg,rgba(200,255,0,.13),rgba(255,255,255,.025));color:inherit;cursor:pointer"><strong style="display:block;font-size:14px">🏪 Seller Product Approvals</strong><span style="display:block;font-size:12px;color:var(--muted,#aaa);margin-top:6px">Review, approve or reject seller products</span></button>
- <button type="button" onclick="window.urovoV117OpenSellerStatus()" style="text-align:left;padding:15px;border-radius:15px;border:1px solid rgba(100,180,255,.35);background:linear-gradient(135deg,rgba(100,180,255,.12),rgba(255,255,255,.025));color:inherit;cursor:pointer"><strong style="display:block;font-size:14px">📋 Seller Product Status</strong><span style="display:block;font-size:12px;color:var(--muted,#aaa);margin-top:6px">View pending, approved and rejected products</span></button>
- </div><div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Only a Gmail that is already registered in UROVO can receive a Seller Badge.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Registered seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
+ c.innerHTML=`<div class="order-card"><h3>🏪 Seller Management</h3><p style="color:var(--muted);font-size:13px;margin:7px 0 14px">Only a Gmail that is already registered in UROVO can receive a Seller Badge.</p><div style="display:grid;grid-template-columns:1fr;gap:10px"><input id="ceoSellerEmail" class="input" type="email" placeholder="Registered seller Gmail"><input id="ceoSellerName" class="input" placeholder="Seller name (optional)"><button class="primary" onclick="ceoGrantSeller()">🏷️ Give Seller Badge</button></div></div><div id="ceoSellerList" style="margin-top:15px"><p style="color:var(--muted)">Loading sellers...</p></div>`;
  const {data,error}=await supabaseClient.from("urovo_sellers").select("*").order("created_at",{ascending:false});
  if(error){$("ceoSellerList").innerHTML=`<div class="order-card"><p style="color:#ff5555">Seller table error: ${escapeHtml(error.message)}</p><p style="color:var(--muted);font-size:12px">Make sure the <b>urovo_sellers</b> table exists in Supabase.</p></div>`;return}
  renderCEOSellerList(data||[]);
@@ -1441,7 +1430,7 @@ function saveCEOAdsSettings(){setBannerRotation(Number($("ceoBannerRotation")?.v
 function renderCEOAdsList(rows){
  const el=$("ceoAdsList");if(!el)return;
  const stats=(()=>{try{return JSON.parse(localStorage.getItem('urovo_banner_stats_v1')||'{}')}catch{return{}}})();
- el.innerHTML=rows.length?rows.map(a=>{const m=bannerMeta(a.id),st=stats[String(a.id)]||{impressions:0,clicks:0};const live=bannerIsScheduledActive(a);const ctr=st.impressions?((st.clicks/st.impressions)*100).toFixed(1):'0.0';const schedule=(m.startAt||m.endAt)?`${m.startAt?new Date(m.startAt).toLocaleString():'Now'} → ${m.endAt?new Date(m.endAt).toLocaleString():'No end'}`:'No schedule';return `<div class="order-card" style="margin-top:10px"><img src="${escapeHtml(a.image_url||'')}" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px"><h3 style="margin-top:10px">${escapeHtml(a.title||'Untitled Banner')}</h3><p style="color:var(--muted)">${escapeHtml(a.subtitle||'')}</p><p style="font-size:12px;color:var(--muted)">${live?'🟢 Live':'⚪ Not live'} · Order ${Number(a.sort_order||0)} · ${escapeHtml(schedule)}</p><p style="font-size:12px;color:var(--muted)">👁 ${st.impressions} impressions · 🖱 ${st.clicks} clicks · CTR ${ctr}% · ${m.target==='new'?'New tab':'Same page'}</p><div class="seller-admin-actions"><button class="secondary" onclick="ceoToggleBanner('${String(a.id)}',${a.active===false})">${a.active===false?'▶ Enable':'⏸ Disable'}</button><button class="secondary" onclick="ceoEditBanner('${String(a.id)}')">✏️ Edit</button><button class="secondary" onclick="ceoDuplicateBanner('${String(a.id)}')">⧉ Duplicate</button><button class="secondary" onclick="ceoMoveBanner('${String(a.id)}',-1)">↑</button><button class="secondary" onclick="ceoMoveBanner('${String(a.id)}',1)">↓</button><button class="secondary" onclick="ceoDeleteBanner('${String(a.id)}')">🗑️ Delete</button></div></div>`}).join(''):'<div class="order-card"><p style="color:var(--muted)">No banners added yet.</p></div>'
+ el.innerHTML=rows.length?rows.map(a=>{const m=bannerMeta(a.id),st=stats[String(a.id)]||{impressions:0,clicks:0};const live=bannerIsScheduledActive(a);const ctr=st.impressions?((st.clicks/st.impressions)*100).toFixed(1):'0.0';const schedule=(m.startAt||m.endAt)?`${m.startAt?new Date(m.startAt).toLocaleString():'Now'} → ${m.endAt?new Date(m.endAt).toLocaleString():'No end'}`:'No schedule';return `<div class="order-card" style="margin-top:10px"><img src="${escapeHtml(a.image_url||'')}" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px" onerror="this.style.display='none'"><h3 style="margin-top:10px">${escapeHtml(a.title||'Untitled Banner')}</h3><p style="color:var(--muted)">${escapeHtml(a.subtitle||'')}</p><p style="font-size:12px;color:var(--muted)">${live?'🟢 Live':'⚪ Not live'} · Order ${Number(a.sort_order||0)} · ${escapeHtml(schedule)}</p><p style="font-size:12px;color:var(--muted)">👁 ${st.impressions} impressions · 🖱 ${st.clicks} clicks · CTR ${ctr}% · ${m.target==='new'?'New tab':'Same page'}</p><div class="seller-admin-actions"><button class="secondary" onclick="ceoToggleBanner('${String(a.id)}',${a.active===false})">${a.active===false?'▶ Enable':'⏸ Disable'}</button><button class="secondary" onclick="ceoEditBanner('${String(a.id)}')">✏️ Edit</button><button class="secondary" onclick="ceoDuplicateBanner('${String(a.id)}')">⧉ Duplicate</button><button class="secondary" onclick="ceoMoveBanner('${String(a.id)}',-1)">↑</button><button class="secondary" onclick="ceoMoveBanner('${String(a.id)}',1)">↓</button><button class="secondary" onclick="ceoDeleteBanner('${String(a.id)}')">🗑️ Delete</button></div></div>`}).join(''):'<div class="order-card"><p style="color:var(--muted)">No banners added yet.</p></div>'
 }
 async function ceoUploadBannerImage(file){if(!file)return'';const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'-'),path=`banners/${Date.now()}-${Math.random().toString(36).slice(2)}-${safe}`;const {error}=await supabaseClient.storage.from('banner-images').upload(path,file,{upsert:false});if(error)throw error;return supabaseClient.storage.from('banner-images').getPublicUrl(path).data.publicUrl}
 async function ceoAddBanner(){if(!requireAdmin())return;const title=$("ceoAdTitle").value.trim(),subtitle=$("ceoAdSubtitle").value.trim(),button_text=$("ceoAdButton").value.trim(),button_link=$("ceoAdLink").value.trim(),sort_order=Math.max(0,Number($("ceoAdOrder").value||0)),file=$("ceoAdImage").files[0];if(!file){toast('Select a banner image');return}try{const image_url=await ceoUploadBannerImage(file);const {data,error}=await supabaseClient.from('urovo_banners').insert({title,subtitle,button_text,button_link,image_url,active:true,sort_order,created_by:ADMIN_EMAIL}).select('*').single();if(error)throw error;const m=getUrovoBannerMeta();m[String(data.id)]={target:$("ceoAdTarget").value,startAt:$("ceoAdStart").value?new Date($("ceoAdStart").value).toISOString():'',endAt:$("ceoAdEnd").value?new Date($("ceoAdEnd").value).toISOString():'',draft:false};saveUrovoBannerMeta(m);toast('📢 Banner campaign added');await loadHomeAds();renderCEOAds()}catch(e){console.error(e);toast('Banner save failed: '+e.message)}}
@@ -2108,13 +2097,7 @@ function generateInvoice(order){
   if(!w){if(typeof toast==='function')toast('Allow pop-ups to generate invoice');else console.warn('Allow pop-ups to generate invoice');return}
   const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(id)} — UROVO Invoice</title><style>
   :root{color-scheme:light}*{box-sizing:border-box}body{font-family:Arial,sans-serif;padding:28px;color:#111;max-width:850px;margin:auto}h1{letter-spacing:3px;margin:0 0 6px}p{line-height:1.5}.muted{color:#666;font-size:13px}.invoice-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:2px solid #111;padding-bottom:18px}table{width:100%;border-collapse:collapse;margin-top:24px}th,td{padding:11px 8px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}th{background:#f5f5f5;font-size:12px}td{font-size:13px}.total{font-size:21px;font-weight:bold;margin-top:22px;text-align:right}.print{padding:10px 15px;border:0;border-radius:8px;background:#c8ff00;font-weight:800;cursor:pointer}@media print{body{padding:0}.print{display:none}}
-  </style></head><body><div class="invoice-head"><div><h1>UROVO</h1><div class="muted">Upgrade Your Everyday</div></div><div style="text-align:right"><b>INVOICE</b><p style="margin:6px 0 0">Order: ${esc(id)}</p><p class="muted" style="margin:4px 0 0">${esc(o.created_at||o.createdAt||new Date().toLocaleDateString())}</p></div></div><h3>Customer details</h3><p><b>Name:</b> ${esc(o.customer?.name||o.customer_name||o.name||'')}<br><b>Email:</b> ${esc(o.user_email||o.email||'')}<br><b>Phone:</b> ${esc(o.customer?.phone||o.phone||'')}<br><b>Address:</b> ${esc(o.address||o.customer?.address||'')}</p><table><thead><tr><th>Product</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>${rows||'<tr><td colspan="4">No item details recorded.</td></tr>'}</tbody></table><div class="total">Total: ${fmt(o.total||o.total_amount||0)}</div><p class="muted">Payment: ${esc(o.payment_method||o.payment||'')} · Status: ${esc(o.status||'Placed')}</p><button class="print" onclick="window.print()">Print / Save as PDF</button>
-<style id="urovo-v113-seller-notifications-style">
-#urovoV113SellerApprovalNotifications{border:1px solid var(--line,rgba(255,255,255,.12));border-radius:16px;padding:14px;background:var(--surface2,#151515);color:var(--text,#fff)}
-#urovoV113SellerApprovalNotifications h3{margin:0 0 8px}#urovoV113SellerApprovalNotifications .urovo-v108-reason{overflow-wrap:anywhere}
-</style>
-
-</body></html>`;
+  </style></head><body><div class="invoice-head"><div><h1>UROVO</h1><div class="muted">Upgrade Your Everyday</div></div><div style="text-align:right"><b>INVOICE</b><p style="margin:6px 0 0">Order: ${esc(id)}</p><p class="muted" style="margin:4px 0 0">${esc(o.created_at||o.createdAt||new Date().toLocaleDateString())}</p></div></div><h3>Customer details</h3><p><b>Name:</b> ${esc(o.customer?.name||o.customer_name||o.name||'')}<br><b>Email:</b> ${esc(o.user_email||o.email||'')}<br><b>Phone:</b> ${esc(o.customer?.phone||o.phone||'')}<br><b>Address:</b> ${esc(o.address||o.customer?.address||'')}</p><table><thead><tr><th>Product</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>${rows||'<tr><td colspan="4">No item details recorded.</td></tr>'}</tbody></table><div class="total">Total: ${fmt(o.total||o.total_amount||0)}</div><p class="muted">Payment: ${esc(o.payment_method||o.payment||'')} · Status: ${esc(o.status||'Placed')}</p><button class="print" onclick="window.print()">Print / Save as PDF</button></body></html>`;
   try{w.document.open();w.document.write(html);w.document.close()}catch(e){try{w.close()}catch(_){};console.error('UROVO invoice:',e);if(typeof toast==='function')toast('Could not generate invoice')}
 }
 </script>
@@ -2140,7 +2123,7 @@ function generateInvoice(order){
     const c={messages:0,orders:0,products:0,sellers:0,badgeProducts:0,campaigns:0,ads:0,notifications:0,chats:0};
     const db=window.supabaseClient;if(!db)return c;
     try{const r=await db.from('orders').select('id,created_at,status').order('created_at',{ascending:false}).limit(200);const seen=JSON.parse(localStorage.getItem('urovo_ceo_seen_orders')||'[]');c.orders=(r.data||[]).filter(o=>!seen.includes(String(o.id))&&o.status!=='Delivered').length}catch(e){}
-    try{const r=await db.from('products').select('id,approval_status,seller_email,active').limit(1000);c.badgeProducts=(r.data||[]).filter(p=>String(p.approval_status||'').toLowerCase()==='pending').length;c.products=c.badgeProducts}catch(e){}
+    try{const r=await db.from('products').select('id,approval_status,seller_email,active,is_new').limit(1000);if(r.error)throw r.error;const list=r.data||[];c.products=list.filter(p=>String(p.seller_email||'').trim()&&String(p.approval_status||'pending').trim().toLowerCase()==='pending').length;c.badgeProducts=list.filter(p=>p.is_new===true).length}catch(e){console.warn('UROVO Pending Center product counts:',e?.message||e)}
     try{const r=await db.from('urovo_sellers').select('*').limit(500);c.sellers=(r.data||[]).filter(x=>String(x.status||'').toLowerCase()==='pending'||x.approved===false&&x.active!==true).length}catch(e){}
     try{const r=await db.from('urovo_chats').select('id,sender,read,created_at').eq('sender','user').eq('read',false).limit(1000);c.chats=(r.data||[]).length;c.messages=c.chats}catch(e){}
     try{const r=await db.from('urovo_notifications').select('id,read,created_at').eq('sent_by',ADMIN_EMAIL).eq('read',false).limit(1000);c.notifications=(r.data||[]).length}catch(e){}
@@ -2154,7 +2137,7 @@ function generateInvoice(order){
     host.innerHTML=`<div class="ceo-page-head"><div><h3>⚡ Pending Center</h3><p><span class="ceo-live-dot"></span>Live status from your UROVO data</p></div><button class="secondary" id="ceoPendingRefresh">↻ Refresh</button></div><div class="ceo-quick-grid" id="ceoPendingStats"><div class="ceo-quick-card"><div class="ico">⏳</div><strong>…</strong><small>Loading pending items</small></div></div><div class="order-card"><h3>Pending & unread actions</h3><div id="ceoPendingRows" class="ceo-pending-list" style="margin-top:10px"><p style="color:var(--muted)">Checking live data…</p></div></div>`;
     document.getElementById('ceoPendingRefresh')?.addEventListener('click',renderPending);
     const c=await liveCounts();const stats=document.getElementById('ceoPendingStats'),rows=document.getElementById('ceoPendingRows');
-    const items=[['orders','🛒','Orders','orders'],['products','📦','Product approvals','products'],['sellers','👤','Seller approvals','sellers'],['badgeProducts','⭐','Product approvals','newproducts'],['campaigns','🎯','Campaign Studio','campaigns'],['ads','📢','Ads & Banners','ads'],['notifications','🔔','Notifications','notifications'],['chats','💬','Customer chats','chat']];
+    const items=[['orders','🛒','Orders','orders'],['products','📦','Seller Product Approvals','sellerapprovals'],['sellers','👤','Seller Access Requests','sellers'],['badgeProducts','✨','NEW Badge Products','newproducts'],['campaigns','🎯','Campaign Studio','campaigns'],['ads','📢','Ads & Banners','ads'],['notifications','🔔','Notifications','notifications'],['chats','💬','Customer chats','chat']];
     stats.innerHTML=items.slice(0,4).map(i=>`<div class="ceo-quick-card"><div class="ico">${i[1]}</div><strong>${c[i[0]]||0}</strong><small>${i[2]}</small></div>`).join('');
     rows.innerHTML=items.map(i=>`<button type="button" class="ceo-pending-row" data-tab="${i[3]}"><div class="ico">${i[1]}</div><div class="meta"><b>${i[2]}</b><span>${Number(c[i[0]]||0)?'Needs attention':'All clear'}</span></div><div class="num">${Number(c[i[0]]||0)}</div></button>`).join('');
     rows.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>window.adminTab(b.dataset.tab)));
@@ -2812,6 +2795,34 @@ setInterval(arrange,800);
 <div id="urovoUpdateOverlay" role="status" aria-live="polite"><div class="urovoOverlayCard"><img class="urovoOverlayLogo" src="" alt="UROVO"><div style="font-size:20px;font-weight:800">Updating UROVO</div><div style="color:#aaa;margin-top:7px;font-size:14px">Please wait…</div><div class="urovoProgress"><i></i></div></div></div>
 
 
+
+<script id="urovo-v91-ceo-first">
+(function(){
+  function apply(){
+    const all=[...document.querySelectorAll('button,a,[role="button"],div')];
+    all.forEach(el=>{
+      const t=(el.textContent||'').trim().toLowerCase();
+      if(t==='ceo dashboard'||t.includes('ceo dashboard')) el.classList.add('urovo-ceo-first');
+    });
+    // Add a dedicated first-access CEO shortcut only for the configured CEO email.
+    try{
+      const email=String(window.user?.email||window.currentUser?.email||window.authUser?.email||'').toLowerCase();
+      if(email==='ujjwalkrishna0555@gmail.com') {
+        const nav=[...document.querySelectorAll('nav,header,.bottom-nav,.nav-bar')];
+        nav.forEach(n=>{
+          const ceo=[...n.querySelectorAll('button,a,[role="button"]')].find(x=>(x.textContent||'').toLowerCase().includes('ceo dashboard'));
+          if(ceo && ceo.parentElement) ceo.parentElement.prepend(ceo);
+        });
+      }
+    }catch(e){}
+  }
+  apply();
+  const mo=new MutationObserver(apply); mo.observe(document.body,{childList:true,subtree:true});
+  setTimeout(()=>mo.disconnect(),10000);
+})();
+</script>
+
+
 <style id="urovo-v97-home-all-install-css">
 .install-tool{background:linear-gradient(135deg,#f7d47a,#c88a32,#f7d47a)!important;color:#140a05!important;border:1px solid rgba(255,239,175,.75)!important;box-shadow:0 0 0 1px rgba(247,212,122,.15),0 12px 38px rgba(247,212,122,.18),inset 0 1px rgba(255,255,255,.45)!important;animation:urovoInstallButtonGlow 2.2s ease-in-out infinite}
 @keyframes urovoInstallButtonGlow{0%,100%{box-shadow:0 0 0 1px rgba(247,212,122,.15),0 12px 38px rgba(247,212,122,.18),inset 0 1px rgba(255,255,255,.45)}50%{box-shadow:0 0 0 1px rgba(247,212,122,.35),0 12px 48px rgba(247,212,122,.32),inset 0 1px rgba(255,255,255,.6)}}
@@ -2890,79 +2901,6 @@ setInterval(arrange,800);
 </style>
 
 
-
-<script id="urovo-v102-seller-approval-status-fix">
-(function(){
-  'use strict';
-  const esc=s=>typeof window.escapeHtml==='function'?window.escapeHtml(String(s??'')):String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  const say=s=>{try{window.toast(s)}catch{console.log(s)}};
-  const db=()=>window.supabaseClient;
-  const email=()=>String(window.user?.email||'').trim().toLowerCase();
-
-  function statusUI(status,note){
-    const st=String(status||'pending').trim().toLowerCase();
-    if(st==='approved') return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(55,190,90,.12);border:1px solid rgba(85,212,122,.28);color:#55d47a;font-weight:900;font-size:11px">✓ Approved</span>';
-    if(st==='rejected') return '<span title="'+esc(note||'')+'" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,54,85,.10);border:1px solid rgba(255,54,85,.25);color:#ff5870;font-weight:900;font-size:11px">✕ Rejected</span>';
-    return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,190,60,.10);border:1px solid rgba(255,190,60,.22);color:#ffc44d;font-weight:900;font-size:11px">⏳ Pending Approval</span>';
-  }
-
-  // Make seller product cards show a clear approval state after every dashboard refresh.
-  const originalRender=window.urovoV43RenderSellerPanel;
-  if(typeof originalRender==='function'){
-    window.urovoV43RenderSellerPanel=async function(){
-      const result=await originalRender.apply(this,arguments);
-      try{
-        const em=email(); if(!em)return result;
-        const r=await db().from('products').select('id,approval_status,approval_notes').eq('seller_email',em).order('created_at',{ascending:false}).limit(500);
-        if(r.error)return result;
-        const map=new Map((r.data||[]).map(p=>[String(p.id),p]));
-        document.querySelectorAll('#urovoSellerInventoryV37 .urovo-v43-owned-product').forEach(card=>{
-          const edit=card.querySelector('button[onclick*="urovoSellerEditProductV40"]');
-          const m=edit?.getAttribute('onclick')?.match(/urovoSellerEditProductV40\('([^']+)'\)/); if(!m)return;
-          const p=map.get(String(m[1])); if(!p)return;
-          let row=card.querySelector('.urovo-v102-approval');
-          if(!row){row=document.createElement('div');row.className='urovo-v102-approval';row.style.cssText='margin-top:7px';card.querySelector('.urovo-v43-owned-product-copy')?.appendChild(row);}
-          row.innerHTML=statusUI(p.approval_status,p.approval_notes)+(String(p.approval_status||'').toLowerCase()==='rejected'&&p.approval_notes?'<div style="font-size:11px;color:var(--muted);margin-top:5px">Reason: '+esc(p.approval_notes)+'</div>':'');
-        });
-      }catch(e){console.warn('Seller approval UI:',e)}
-      return result;
-    };
-  }
-
-  // Seller submission: saving the product must not fail just because the optional product-code RPC is unavailable.
-  const oldCreate=window.urovoSellerCreateProductV37;
-  if(typeof oldCreate==='function'){
-    window.urovoSellerCreateProductV37=async function(){
-      try{
-        const em=email();
-        if(!em)throw new Error('Please sign in first');
-        const seller=await db().from('urovo_sellers').select('email,active').eq('email',em).maybeSingle();
-        if(seller.error)throw seller.error;
-        if(!seller.data||seller.data.active===false)throw new Error('Your Seller badge is not active');
-        const val=id=>document.getElementById(id)?.value?.trim()||'';
-        const name=val('svName'),category=val('svCategory')||'All',price=Number(val('svPrice')),old_price=Number(val('svOld')||0),stock=Math.max(0,Math.floor(Number(val('svStock')||0))),tag=(val('svTag').match(/#[A-Za-z0-9_-]+/g)||[]).join(' '),description=val('svDesc'),files=Array.from(document.getElementById('svImages')?.files||[]);
-        if(!name||!Number.isFinite(price)||price<=0||!description)throw new Error('Enter product name, positive price and description');
-        if(!files.length)throw new Error('Add at least one product image');
-        const uploader=window.uploadSellerImages;
-        if(typeof uploader!=='function')throw new Error('Product image uploader is unavailable');
-        const urls=await uploader(files,em);
-        const payload={name,category,price,old_price,stock,tag,description,icon:'📦',seller_email:em,active:true,approval_status:'pending',image_url:urls[0],image_urls:urls};
-        if(document.getElementById('svShipping')) payload.shipping_charge=Math.max(0,Number(val('svShipping')||0));
-        if(document.getElementById('svFreeShipping')) payload.free_shipping=document.getElementById('svFreeShipping').checked;
-        const created=await db().from('products').insert(payload).select('id').single();
-        if(created.error)throw created.error;
-        let code='';
-        try{const cr=await db().rpc('urovo_get_product_codes',{p_product_ids:[created.data.id]});if(!cr.error)code=(cr.data||[]).find(x=>String(x.product_id)===String(created.data.id))?.product_code||''}catch(e){console.warn('Optional product code:',e)}
-        say(code?'Product submitted for CEO approval · Code: '+code:'Product submitted for CEO approval');
-        await window.openSellerDashboard();
-      }catch(e){say(e?.message||'Could not add product')}
-    };
-  }
-
-  // If CEO approval/rejection happens while the seller dashboard is open, refresh its status on focus.
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&typeof window.urovoV43RenderSellerPanel==='function'&&window.user)window.urovoV43RenderSellerPanel().catch(()=>{})});
-})();
-</script>
 <style id="urovo-all-features-style">
 .urovo-feature-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.urovo-feature-actions button{min-height:44px}
 .urovo-review-summary{display:flex;gap:14px;align-items:center;padding:14px;background:var(--surface2);border:1px solid var(--line);border-radius:16px;margin:12px 0}.urovo-rating-big{font-size:34px;font-weight:900}.urovo-review-item,.urovo-question{padding:13px 0;border-bottom:1px solid var(--line)}
@@ -3332,15 +3270,13 @@ document.addEventListener('DOMContentLoaded',()=>{const m=document.getElementByI
 window.addEventListener('load',()=>window.scrollTo(0,0));
 if(isUrovoStandalone && isUrovoStandalone()){document.getElementById('installAppBtn')?.classList.add('hidden')}
 </script>
-<style id="urovo-v5-final-upgrades">
+<style id="urovo-v5-final-upgrades-style">
 .urovo-notification-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.urovo-notification-actions button{flex:1;min-width:105px}
 .urovo-v5-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px}.urovo-v5-tools button{min-height:42px}
 .urovo-saved-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.2);color:var(--lime);font-size:11px;font-weight:800}
 @media(max-width:560px){.urovo-v5-tools{grid-template-columns:1fr}}
 </style>
-</style>
-</style>
-<script id="urovo-v5-final-upgrades-js">
+<script id="urovo-v5-final-upgrades">
 /* UROVO v5 — final customer/admin polish. Cancellation + return/refund remain intentionally excluded. */
 const UROVO_V5='2026.10.15-v5';
 const UROVO_DELETED_NOTIFICATIONS_KEY='urovo_deleted_notifications_v5';
@@ -4105,7 +4041,7 @@ window.urovoSellerCreateProductV37=async function(){try{const em=await ensureSel
 window.urovoSellerEditProductV37=async function(id){try{const em=await ensureSeller();const r=await sb().from('products').select('*').eq('id',id).eq('seller_email',em).single();if(r.error)throw r.error;const p=r.data;const name=prompt('Product name',p.name||'');if(name===null)return;const category=prompt('Category',p.category||'All');if(category===null)return;const price=Number(prompt('Selling price (₹)',String(p.price||0)));if(!Number.isFinite(price)||price<=0){toast('Enter a valid positive price');return}const old_price=Number(prompt('Old price (₹)',String(p.old_price||0))||0);const shipping_charge=Number(prompt('Shipping charge (₹)',String(p.shipping_charge||0))||0);if(!Number.isFinite(shipping_charge)||shipping_charge<0){toast('Shipping charge must be zero or more');return}const stock=Number(prompt('Stock quantity',String(p.stock||0)));if(!Number.isInteger(stock)||stock<0){toast('Stock must be zero or more');return}const description=prompt('Description',p.description||'');if(description===null)return;const update={name:name.trim(),category:category.trim()||'All',price,old_price,stock,shipping_charge,description:description.trim()};if(confirm('Replace product images? Choose OK to select new images; Cancel keeps existing images.')){const input=document.createElement('input');input.type='file';input.accept='image/*';input.multiple=true;input.onchange=async()=>{try{if(!input.files.length)return;const urls=await uploadSellerImages(Array.from(input.files),em);update.image_url=urls[0];update.image_urls=urls;const u=await sb().from('products').update(update).eq('id',id).eq('seller_email',em);if(u.error)throw u.error;toast('Product changes submitted for CEO approval');await window.openSellerDashboard()}catch(e){toast(e.message||'Update failed')}};input.click();return}const u=await sb().from('products').update(update).eq('id',id).eq('seller_email',em);if(u.error)throw u.error;toast('Product changes submitted for CEO approval');await window.openSellerDashboard()}catch(e){toast(e.message||'Product update failed')}};
 window.urovoSellerSetActiveV37=async function(id,active){try{const em=await ensureSeller();const r=await sb().from('products').update({active:!!active}).eq('id',id).eq('seller_email',em);if(r.error)throw r.error;toast(active?'Product published':'Product hidden');await window.openSellerDashboard()}catch(e){toast(e.message||'Status update failed')}};
 window.urovoSellerUpdateStatusV37=async function(id,status){try{const em=await ensureSeller();if(!['Placed','Processing','Shipped','Out for Delivery','Delivered'].includes(status))throw new Error('Invalid status');const order=await sb().from('orders').select('id,user_email,order_number,items,total,customer_name').eq('id',id).single();if(order.error)throw order.error;let items=order.data.items||[];if(typeof items==='string')try{items=JSON.parse(items)}catch{items=[]}if(!items.some(i=>String(i.seller_email||'').toLowerCase()===em))throw new Error('This order does not contain your products');const upd=await sb().from('orders').update({status}).eq('id',id);if(upd.error)throw upd.error;const title='UROVO order update',message=`Order ${order.data.order_number||order.data.id} status: ${status}`;const push=await sb().functions.invoke('urovo-send-push',{body:{event:'seller-order-status',order_id:id,recipient_email:order.data.user_email,title,message}});if(push.error)console.warn('Seller notification:',push.error.message);toast('Order status updated');await window.openSellerDashboard()}catch(e){toast(e.message||'Could not update order')}};
-const originalOpen=window.openSellerDashboard;if(typeof originalOpen==='function')window.openSellerDashboard=async function(...args){const result=await originalOpen.apply(this,args);setTimeout(async()=>{try{if(window.__UROVO_V43_SELLER_RPC_ACTIVE)return;const em=await ensureSeller();const box=document.getElementById('sellerDashboardContent');if(!box||document.getElementById('urovoSellerInventoryV37'))return;const [pr,or]=await Promise.all([sb().from('products').select('*').eq('seller_email',em).order('created_at',{ascending:false}),sb().from('orders').select('*').order('created_at',{ascending:false})]);if(pr.error)throw pr.error;if(or.error)throw or.error;const products=pr.data||[];const codesRes=products.length?await sb().rpc('urovo_get_product_codes',{p_product_ids:products.map(p=>p.id)}):{data:[],error:null};if(codesRes.error)throw codesRes.error;const productCodes=new Map((codesRes.data||[]).map(x=>[String(x.product_id),x.product_code]));let orders=(or.data||[]).filter(o=>{let a=o.items||[];if(typeof a==='string')try{a=JSON.parse(a)}catch{a=[]}return a.some(i=>String(i.seller_email||'').toLowerCase()===em)});const snapRes=orders.length?await sb().from('urovo_order_item_private').select('*').in('order_id',orders.map(o=>o.id)).order('created_at',{ascending:true}):{data:[],error:null};if(snapRes.error)throw snapRes.error;const orderItemSnapshots={};(snapRes.data||[]).forEach(it=>{(orderItemSnapshots[String(it.order_id)]||(orderItemSnapshots[String(it.order_id)]=[])).push(it)});const panel=document.createElement('div');panel.id='urovoSellerInventoryV37';panel.innerHTML=`<div class="order-card"><h3>🧰 Manage My Products</h3><p style="color:var(--muted);font-size:12px">Only products owned by your seller account appear here.</p><input id="svName" class="input" placeholder="Product name"><input id="svCategory" class="input" placeholder="Category"><div class="coupon-row"><input id="svPrice" class="input" type="number" min="0.01" placeholder="Price ₹"><input id="svOld" class="input" type="number" min="0" placeholder="Old price ₹"></div><div class="coupon-row"><input id="svStock" class="input" type="number" min="0" value="1" placeholder="Stock"><input id="svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping charge ₹"></div><div class="coupon-row"><input id="svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets #phone"></div><small style="color:var(--muted);display:block;margin:4px 0 8px">A unique private product code is generated automatically when you submit the product.</small><textarea id="svDesc" class="input" rows="3" placeholder="Product description"></textarea><input id="svImages" class="input" type="file" accept="image/*" multiple><button class="primary" style="width:100%;margin-top:8px" onclick="urovoSellerCreateProductV37()">Add My Product</button><hr style="border-color:var(--line);margin:16px 0"><h3>My Product List (${products.length})</h3>${products.map(p=>`<div class="order-card"><b>${esc(p.name)}</b><p style="color:var(--muted);font-size:12px;margin-top:5px">${cash(p.price)} · Stock ${Number(p.stock||0)} · Code ${esc(productCodes.get(String(p.id))||'Not assigned')} · ${p.active===false?'Hidden':'Live'}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="secondary" onclick="urovoSellerEditProductV40('${String(p.id)}')">Edit details / stock</button><button class="secondary" onclick="urovoSellerSetActiveV37('${String(p.id)}',${p.active===false})">${p.active===false?'Publish':'Hide'}</button></div></div>`).join('')||'<p>No products yet.</p>'}</div><div class="order-card"><h3>📦 Manage My Orders (${orders.length})</h3>${orders.map(o=>`<div class="order-card"><b>Order ${esc(o.order_number||String(o.id).slice(0,12))}</b><p style="color:var(--muted);font-size:12px;margin:5px 0">${esc(o.customer_name||'Customer')} · ${esc(o.status||'Placed')} · ${cash(o.total)}</p><p style="font-size:12px;color:var(--muted)">🧾 ${esc(o.order_number||o.id)} · ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Date unavailable'}</p><p style="font-size:12px;margin-top:6px"><b>Phone:</b> ${esc(o.phone||'Not provided')}<br><b>Delivery address:</b> ${esc(o.address||'Not provided')}</p><div style="margin-top:10px"><b>Ordered products</b>${(orderItemSnapshots[String(o.id)]||[]).map(it=>`<div class="order-card" style="display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px"><img src="${esc(it.image_url||'')}" alt="${esc(it.product_name||'Product')}" style="width:72px;height:72px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0"><div style="min-width:0;flex:1"><b>${esc(it.product_name||'Product')}</b><p style="font-size:12px;color:var(--muted);margin-top:4px">Product Code: <strong>${esc(it.product_code||'Not assigned')}</strong></p><p style="font-size:12px;color:var(--muted)">Qty ${Number(it.quantity||1)} × ${cash(it.unit_price)} = <strong>${cash(it.item_total)}</strong></p>${it.snapshot_source==='legacy_backfill'?'<p style="font-size:11px;color:var(--muted);margin-top:4px">Legacy order: code was added during migration.</p>':''}</div></div>`).join('')||'<p style="font-size:12px;color:var(--muted);margin-top:6px">Order item snapshots will appear here for orders made after the V40 migration.</p>'}</div><select id="urovoSellerStatus_${String(o.id)}" class="input">${['Placed','Processing','Shipped','Out for Delivery','Delivered'].map(st=>`<option ${o.status===st?'selected':''}>${st}</option>`).join('')}</select><button class="secondary" style="width:100%;margin-top:7px" onclick="urovoSellerUpdateStatusV37('${String(o.id)}',document.getElementById('urovoSellerStatus_${String(o.id)}').value)">Update Order Status</button></div>`).join('')||'<p>No orders for your products yet.</p>'}</div>`;box.appendChild(panel)}catch(e){console.warn('Seller inventory panel:',e?.message||e)}},450);return result};
+const originalOpen=window.openSellerDashboard;if(typeof originalOpen==='function')window.openSellerDashboard=async function(...args){const result=await originalOpen.apply(this,args);setTimeout(async()=>{try{if(window.__UROVO_V43_SELLER_RPC_ACTIVE)return;const em=await ensureSeller();const box=document.getElementById('sellerDashboardContent');if(!box||document.getElementById('urovoSellerInventoryV37'))return;const [pr,or]=await Promise.all([sb().from('products').select('*').eq('seller_email',em).order('created_at',{ascending:false}),sb().from('orders').select('*').order('created_at',{ascending:false})]);if(pr.error)throw pr.error;if(or.error)throw or.error;const products=pr.data||[];const codesRes=products.length?await sb().rpc('urovo_get_product_codes',{p_product_ids:products.map(p=>p.id)}):{data:[],error:null};if(codesRes.error)throw codesRes.error;const productCodes=new Map((codesRes.data||[]).map(x=>[String(x.product_id),x.product_code]));let orders=(or.data||[]).filter(o=>{let a=o.items||[];if(typeof a==='string')try{a=JSON.parse(a)}catch{a=[]}return a.some(i=>String(i.seller_email||'').toLowerCase()===em)});const snapRes=orders.length?await sb().from('urovo_order_item_private').select('*').in('order_id',orders.map(o=>o.id)).order('created_at',{ascending:true}):{data:[],error:null};if(snapRes.error)throw snapRes.error;const orderItemSnapshots={};(snapRes.data||[]).forEach(it=>{(orderItemSnapshots[String(it.order_id)]||(orderItemSnapshots[String(it.order_id)]=[])).push(it)});const panel=document.createElement('div');panel.id='urovoSellerInventoryV37';panel.innerHTML=`<div class="order-card"><h3>🧰 Manage My Products</h3><p style="color:var(--muted);font-size:12px">Only products owned by your seller account appear here.</p><input id="svName" class="input" placeholder="Product name"><input id="svCategory" class="input" placeholder="Category"><div class="coupon-row"><input id="svPrice" class="input" type="number" min="0.01" placeholder="Price ₹"><input id="svOld" class="input" type="number" min="0" placeholder="Old price ₹"></div><div class="coupon-row"><input id="svStock" class="input" type="number" min="0" value="1" placeholder="Stock"><input id="svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping charge ₹"></div><div class="coupon-row"><input id="svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets #phone"></div><small style="color:var(--muted);display:block;margin:4px 0 8px">A unique private product code is generated automatically when you submit the product.</small><textarea id="svDesc" class="input" rows="3" placeholder="Product description"></textarea><input id="svImages" class="input" type="file" accept="image/*" multiple><button class="primary" style="width:100%;margin-top:8px" onclick="urovoSellerCreateProductV37()">Add My Product</button><hr style="border-color:var(--line);margin:16px 0"><h3>My Product List (${products.length})</h3>${products.map(p=>`<div class="order-card"><b>${esc(p.name)}</b><p style="color:var(--muted);font-size:12px;margin-top:5px">${cash(p.price)} · Stock ${Number(p.stock||0)} · Code ${esc(productCodes.get(String(p.id))||'Not assigned')} · ${p.active===false?'Hidden':'Live'}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="secondary" onclick="urovoSellerEditProductV40('${String(p.id)}')">Edit details / stock</button><button class="secondary" onclick="urovoSellerSetActiveV37('${String(p.id)}',${p.active===false})">${p.active===false?'Publish':'Hide'}</button></div></div>`).join('')||'<p>No products yet.</p>'}</div><div class="order-card"><h3>📦 Manage My Orders (${orders.length})</h3>${orders.map(o=>`<div class="order-card"><b>Order ${esc(o.order_number||String(o.id).slice(0,12))}</b><p style="color:var(--muted);font-size:12px;margin:5px 0">${esc(o.customer_name||'Customer')} · ${esc(o.status||'Placed')} · ${cash(o.total)}</p><p style="font-size:12px;color:var(--muted)">🧾 ${esc(o.order_number||o.id)} · ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Date unavailable'}</p><p style="font-size:12px;margin-top:6px"><b>Phone:</b> ${esc(o.phone||'Not provided')}<br><b>Delivery address:</b> ${esc(o.address||'Not provided')}</p><div style="margin-top:10px"><b>Ordered products</b>${(orderItemSnapshots[String(o.id)]||[]).map(it=>`<div class="order-card" style="display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px"><img src="${esc(it.image_url||'')}" alt="${esc(it.product_name||'Product')}" style="width:72px;height:72px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'"><div style="min-width:0;flex:1"><b>${esc(it.product_name||'Product')}</b><p style="font-size:12px;color:var(--muted);margin-top:4px">Product Code: <strong>${esc(it.product_code||'Not assigned')}</strong></p><p style="font-size:12px;color:var(--muted)">Qty ${Number(it.quantity||1)} × ${cash(it.unit_price)} = <strong>${cash(it.item_total)}</strong></p>${it.snapshot_source==='legacy_backfill'?'<p style="font-size:11px;color:var(--muted);margin-top:4px">Legacy order: code was added during migration.</p>':''}</div></div>`).join('')||'<p style="font-size:12px;color:var(--muted);margin-top:6px">Order item snapshots will appear here for orders made after the V40 migration.</p>'}</div><select id="urovoSellerStatus_${String(o.id)}" class="input">${['Placed','Processing','Shipped','Out for Delivery','Delivered'].map(st=>`<option ${o.status===st?'selected':''}>${st}</option>`).join('')}</select><button class="secondary" style="width:100%;margin-top:7px" onclick="urovoSellerUpdateStatusV37('${String(o.id)}',document.getElementById('urovoSellerStatus_${String(o.id)}').value)">Update Order Status</button></div>`).join('')||'<p>No orders for your products yet.</p>'}</div>`;box.appendChild(panel)}catch(e){console.warn('Seller inventory panel:',e?.message||e)}},450);return result};
 })();
 </script>
 
@@ -4113,7 +4049,7 @@ const originalOpen=window.openSellerDashboard;if(typeof originalOpen==='function
 (function(){
 'use strict';
 const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
-const BUILD='101';
+const BUILD='99';
 const VAPID_PUBLIC_KEY=String(window.UROVO_VAPID_PUBLIC_KEY||'PASTE_VAPID_PUBLIC_KEY_HERE');
 const $v=id=>document.getElementById(id);
 const safe=(v)=>String(v??'');
@@ -4363,7 +4299,7 @@ window.addEventListener('load',normalizeHelpSurface);
       const status=String(p.approval_status||'pending').trim().toLowerCase();
       const statusLabel=status.charAt(0).toUpperCase()+status.slice(1);
       const actions=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="primary" onclick="window.urovoV39ApproveProduct('${esc(p.id)}')">✅ Approve</button><button class="secondary" onclick="window.urovoV39RejectProduct('${esc(p.id)}')">✕ Reject</button></div>`;
-      return `<div class="order-card" style="margin:12px 0"><div style="display:flex;gap:12px;align-items:flex-start"><img loading="lazy" decoding="async" src="${esc(p.image_url||'')}" alt="" style="width:84px;height:84px;flex:0 0 84px;object-fit:cover;border-radius:12px;background:var(--surface2)"><div style="flex:1;min-width:0;overflow-wrap:anywhere"><b>${esc(p.name)}</b><p style="color:var(--muted);font-size:12px;margin:4px 0">${esc(p.category||'All')} · Sold by ${esc(p.seller_name||p.seller_email||'UROVO Official Store')}</p><p style="font-size:13px;overflow-wrap:anywhere">₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)} · Code ${esc(productCodes.get(String(p.id))||'Not assigned')}</p><span class="order-status-pill urovo-approval-status status-${esc(status)}">${esc(statusLabel)}</span><p style="font-size:12px;color:var(--muted);margin-top:6px">${esc(p.description||'')}</p></div></div>${actions}</div>`;
+      return `<div class="order-card" style="margin:12px 0"><div style="display:flex;gap:12px;align-items:flex-start"><img loading="lazy" decoding="async" src="${esc(p.image_url||'')}" alt="" style="width:84px;height:84px;flex:0 0 84px;object-fit:cover;border-radius:12px;background:var(--surface2)" onerror="this.style.display='none'"><div style="flex:1;min-width:0;overflow-wrap:anywhere"><b>${esc(p.name)}</b><p style="color:var(--muted);font-size:12px;margin:4px 0">${esc(p.category||'All')} · Sold by ${esc(p.seller_name||p.seller_email||'UROVO Official Store')}</p><p style="font-size:13px;overflow-wrap:anywhere">₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)} · Code ${esc(productCodes.get(String(p.id))||'Not assigned')}</p><span class="order-status-pill urovo-approval-status status-${esc(status)}">${esc(statusLabel)}</span><p style="font-size:12px;color:var(--muted);margin-top:6px">${esc(p.description||'')}</p></div></div>${actions}</div>`;
     }).join('');
   }
   window.urovoV39ApproveProduct=async function(id){
@@ -4576,7 +4512,7 @@ window.addEventListener('load',normalizeHelpSurface);
     const codeResult=await db().rpc('urovo_get_product_codes',{p_product_ids:(listing.data||[]).map(p=>p.id)});
     if(codeResult.error){rows.textContent=codeResult.error.message+' — run UROVO-V40-PRODUCT-CODE-ORDER-SNAPSHOTS.sql first.';return}
     const codes=new Map((codeResult.data||[]).map(x=>[String(x.product_id),x.product_code]));
-    rows.innerHTML=(listing.data||[]).length?(listing.data||[]).map(p=>`<div class="order-card" style="display:flex;gap:11px;align-items:flex-start;margin:10px 0"><img src="${esc(p.image_url||'')}" alt="" style="width:68px;height:68px;object-fit:cover;border-radius:10px;background:var(--surface2)"><div style="flex:1;min-width:0"><b>${esc(p.name)}</b><p style="font-size:12px;color:var(--muted);margin-top:4px">${esc(p.seller_name||p.seller_email||'UROVO Official Store')} · ${esc(p.approval_status||'approved')}</p><p style="margin-top:5px">Code: <strong>${esc(codes.get(String(p.id))||'Not assigned')}</strong></p></div><button class="secondary" onclick="urovoV40EditCEOCode('${esc(p.id)}','${esc(codes.get(String(p.id))||'')}')">Edit code</button></div>`).join(''):'<p>No products yet.</p>';
+    rows.innerHTML=(listing.data||[]).length?(listing.data||[]).map(p=>`<div class="order-card" style="display:flex;gap:11px;align-items:flex-start;margin:10px 0"><img src="${esc(p.image_url||'')}" alt="" style="width:68px;height:68px;object-fit:cover;border-radius:10px;background:var(--surface2)" onerror="this.style.display='none'"><div style="flex:1;min-width:0"><b>${esc(p.name)}</b><p style="font-size:12px;color:var(--muted);margin-top:4px">${esc(p.seller_name||p.seller_email||'UROVO Official Store')} · ${esc(p.approval_status||'approved')}</p><p style="margin-top:5px">Code: <strong>${esc(codes.get(String(p.id))||'Not assigned')}</strong></p></div><button class="secondary" onclick="urovoV40EditCEOCode('${esc(p.id)}','${esc(codes.get(String(p.id))||'')}')">Edit code</button></div>`).join(''):'<p>No products yet.</p>';
   };
   window.urovoV40EditCEOCode=async function(id,oldCode){if(!isCEO())return;const code=prompt('Unique private product code',oldCode||'');if(code===null)return;if(!/^[A-Za-z0-9][A-Za-z0-9_-]{1,59}$/.test(code.trim()))return say('Use 2–60 letters/numbers, dash or underscore');const r=await db().rpc('urovo_save_product_code',{p_product_id:id,p_code:code.trim()});if(r.error)return say(r.error.message);say('Product code saved');await window.urovoV40ProductCodes()};
 
@@ -4622,7 +4558,7 @@ window.addEventListener('load',normalizeHelpSurface);
     const orders=data||[];const snaps=orders.length?await db().from('urovo_order_item_private').select('*').in('order_id',orders.map(o=>o.id)).order('created_at',{ascending:true}):{data:[],error:null};if(snaps.error){el('adminOrderList').textContent=snaps.error.message;return}
     const grouped={};(snaps.data||[]).forEach(it=>{(grouped[String(it.order_id)]||(grouped[String(it.order_id)]=[])).push(it)});
     const delivered=orders.filter(o=>o.status==='Delivered').reduce((n,o)=>n+Number(o.total||0),0),pending=orders.filter(o=>o.status!=='Delivered').length,done=orders.filter(o=>o.status==='Delivered').length;
-    el('adminOrderList').innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${orders.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${done}</b></div><div class="stat"><small>Sales</small><b>${moneySafe(delivered)}</b></div></div>${orders.length?orders.map(o=>`<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>Order ${esc(o.order_number||o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${moneySafe(o.total)}</strong></div><p style="margin-top:10px"><b>Customer:</b> ${esc(o.customer_name||'Unknown')}</p><p><b>Email:</b> ${esc(o.user_email||'Guest')}</p><p><b>Phone:</b> ${esc(o.phone||'Not provided')}</p><p><b>Address:</b><br>${esc(o.address||'Not provided')}</p><div style="margin-top:12px"><b>Ordered products</b>${(grouped[String(o.id)]||[]).map(it=>`<div class="order-card" style="display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px"><img src="${esc(it.image_url||'')}" alt="${esc(it.product_name||'Product')}" style="width:72px;height:72px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0"><div style="min-width:0;flex:1"><b>${esc(it.product_name||'Product')}</b><p style="font-size:12px;color:var(--muted);margin-top:4px">Product Code: <strong>${esc(it.product_code||'Not assigned')}</strong> · Seller: ${esc(it.seller_name||it.seller_email||'UROVO')}</p><p style="font-size:12px;color:var(--muted)">Qty ${Number(it.quantity||1)} × ${moneySafe(it.unit_price)} = <strong>${moneySafe(it.item_total)}</strong></p>${it.snapshot_source==='legacy_backfill'?'<p style="font-size:11px;color:var(--muted);margin-top:4px">Legacy order: code was added during migration.</p>':''}</div></div>`).join('')||'<p style="color:var(--muted);font-size:12px">No item snapshot has been saved for this legacy order.</p>'}</div><p style="margin-top:12px"><b>Total:</b> ${moneySafe(o.total)} · <b>Payment:</b> ${esc(o.payment_method||'Unknown')} · <b>Cash:</b> ${o.status==='Delivered'?'Collected':'Pending until Delivered'}</p><select class="input" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${['Placed','Processing','Shipped','Out for Delivery','Delivered'].map(st=>`<option ${o.status===st?'selected':''}>${st}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${esc(o.id)}" value="${esc(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${esc(o.id)}" value="${esc(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${esc(o.id)}" value="${esc(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${esc(o.id)}" value="${esc(o.estimated_delivery||'')}" placeholder="Estimated delivery"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${esc(o.id)}')">🚚 Save Tracking Update</button></div>`).join(''):'<div class="order-card"><p>No orders yet.</p></div>'}`;
+    el('adminOrderList').innerHTML=`<div class="admin-stats"><div class="stat"><small>Total Orders</small><b>${orders.length}</b></div><div class="stat"><small>Pending</small><b>${pending}</b></div><div class="stat"><small>Delivered</small><b>${done}</b></div><div class="stat"><small>Sales</small><b>${moneySafe(delivered)}</b></div></div>${orders.length?orders.map(o=>`<div class="order-card"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>Order ${esc(o.order_number||o.id)}</h3><p>📅 ${o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'Unknown'}</p></div><strong style="color:var(--lime)">${moneySafe(o.total)}</strong></div><p style="margin-top:10px"><b>Customer:</b> ${esc(o.customer_name||'Unknown')}</p><p><b>Email:</b> ${esc(o.user_email||'Guest')}</p><p><b>Phone:</b> ${esc(o.phone||'Not provided')}</p><p><b>Address:</b><br>${esc(o.address||'Not provided')}</p><div style="margin-top:12px"><b>Ordered products</b>${(grouped[String(o.id)]||[]).map(it=>`<div class="order-card" style="display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px"><img src="${esc(it.image_url||'')}" alt="${esc(it.product_name||'Product')}" style="width:72px;height:72px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'"><div style="min-width:0;flex:1"><b>${esc(it.product_name||'Product')}</b><p style="font-size:12px;color:var(--muted);margin-top:4px">Product Code: <strong>${esc(it.product_code||'Not assigned')}</strong> · Seller: ${esc(it.seller_name||it.seller_email||'UROVO')}</p><p style="font-size:12px;color:var(--muted)">Qty ${Number(it.quantity||1)} × ${moneySafe(it.unit_price)} = <strong>${moneySafe(it.item_total)}</strong></p>${it.snapshot_source==='legacy_backfill'?'<p style="font-size:11px;color:var(--muted);margin-top:4px">Legacy order: code was added during migration.</p>':''}</div></div>`).join('')||'<p style="color:var(--muted);font-size:12px">No item snapshot has been saved for this legacy order.</p>'}</div><p style="margin-top:12px"><b>Total:</b> ${moneySafe(o.total)} · <b>Payment:</b> ${esc(o.payment_method||'Unknown')} · <b>Cash:</b> ${o.status==='Delivered'?'Collected':'Pending until Delivered'}</p><select class="input" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${['Placed','Processing','Shipped','Out for Delivery','Delivered'].map(st=>`<option ${o.status===st?'selected':''}>${st}</option>`).join('')}</select><div class="tracking-grid"><input class="input" id="trackNo_${esc(o.id)}" value="${esc(o.tracking_number||'')}" placeholder="Tracking number"><input class="input" id="courier_${esc(o.id)}" value="${esc(o.courier||'')}" placeholder="Courier name"><input class="input full" id="trackUrl_${esc(o.id)}" value="${esc(o.tracking_url||'')}" placeholder="Tracking URL (optional)"><input class="input full" id="eta_${esc(o.id)}" value="${esc(o.estimated_delivery||'')}" placeholder="Estimated delivery"></div><button class="primary" style="width:100%;margin-top:10px" onclick="saveOrderTracking('${esc(o.id)}')">🚚 Save Tracking Update</button></div>`).join(''):'<div class="order-card"><p>No orders yet.</p></div>'}`;
   };
   // Existing CEO navigation calls the global renderer; override only this target section.
   window.renderAdminOrders=window.renderAdminOrdersV40;
@@ -4916,7 +4852,7 @@ window.addEventListener('load',normalizeHelpSurface);
     const sold=orders.reduce((s,o)=>s+Number(o.my_total||0),0);
     const statusCounts={Placed:0,Processing:0,Shipped:0,'Out for Delivery':0,Delivered:0,Cancelled:0};orders.forEach(o=>{const st=String(o.status||'Placed');if(statusCounts[st]!==undefined)statusCounts[st]++});
     const panel=document.createElement('div');panel.id='urovoSellerInventoryV37';panel.className='urovo-v43-seller-panel';
-    panel.innerHTML=`<div class="urovo-v43-seller-hero"><div><span class="urovo-v43-kicker">SELLER WORKSPACE</span><h2>${esc(access.data.name||em.split('@')[0])}</h2><p>${esc(em)} · Active seller</p></div><span class="urovo-v43-seller-mark">🏪</span></div><div class="urovo-v43-seller-stats"><div><small>My products</small><b>${myProducts.length}</b></div><div><small>Published</small><b>${active}</b></div><div><small>Pending approval</small><b>${pending}</b></div><div><small>My item sales</small><b>${cash(sold)}</b></div></div><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">CATALOGUE</span><h3>Manage my products</h3><p class="urovo-v43-muted">Only products owned by your seller account appear here.</p></div></div><div class="urovo-v43-add-product"><input id="svName" class="input" placeholder="Product name"><input id="svCategory" class="input" list="urovoV43CategoryOptions" placeholder="Category"><div class="coupon-row"><input id="svPrice" class="input" type="number" min="0.01" placeholder="Price ₹"><input id="svOld" class="input" type="number" min="0" placeholder="Old price ₹"></div><div class="coupon-row"><input id="svStock" class="input" type="number" min="0" value="1" placeholder="Stock"><input id="svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets #phone"></div><div class="coupon-row"><input id="svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping charge ₹"><label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:11px;color:var(--muted)"><input id="svFreeShipping" type="checkbox" checked> Free Shipping</label></div><small style="color:var(--muted);display:block;margin:-2px 0 7px">Use #tags here. Product details will suggest only products sharing at least one matching #tag.</small><small style="color:var(--muted);display:block;margin:-2px 0 7px">Leave shipping at ₹0 or keep Free Shipping enabled to show “Free Shipping” to customers.</small><textarea id="svDesc" class="input" rows="3" placeholder="Product description"></textarea><input id="svImages" class="input" type="file" accept="image/*" multiple><button type="button" class="primary" onclick="urovoSellerCreateProductV37()">＋ Add My Product</button></div><div class="urovo-v43-product-list">${myProducts.length?myProducts.map(p=>`<article class="urovo-v43-owned-product"><img src="${esc(p.image_url||'')}" alt="${esc(p.name||'Product')}" loading="lazy"><div class="urovo-v43-owned-product-copy"><b>${esc(p.name||'Product')}</b><p>${esc(p.category||'All')} · ${cash(p.price)} · Stock ${Number(p.stock||0)}</p><small>Code: ${esc(productCodes.get(String(p.id))||'Auto-assigned')} · <strong>${String(p.approval_status||'pending').toLowerCase()==='approved'?'✓ Approved':String(p.approval_status||'pending').toLowerCase()==='rejected'?'✕ Rejected':'⏳ Pending Approval'}</strong>${p.approval_status==='rejected'&&p.approval_notes?`<br>Reason: ${esc(p.approval_notes)}`:''}</small></div><div class="urovo-v43-owned-actions"><button class="secondary" type="button" onclick="urovoSellerEditProductV40('${esc(p.id)}')">Edit</button><button class="secondary" type="button" onclick="urovoSellerSetActiveV37('${esc(p.id)}',${p.active===false?'true':'false'})">${p.active===false?'Publish':'Hide'}</button><button class="urovo-v43-delete" type="button" onclick="urovoV43DeleteOwnProduct('${esc(p.id)}')">🗑 Delete</button></div></article>`).join(''):'<div class="urovo-v43-empty"><div>🛍️</div><h3>No products yet</h3><p>Add a product above. Seller products remain hidden until CEO approval.</p></div>'}</div></section><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">FULFILMENT</span><h3>My product orders</h3><p class="urovo-v43-muted">Only your products are shown inside each order. Other sellers’ item details are not displayed.</p></div><span class="urovo-v43-count">${orders.length} ORDERS</span></div><div class="urovo-v43-order-tools"><input id="urovoV43SellerOrderSearch" class="input" placeholder="Search my orders or customer…" oninput="urovoV43FilterSellerOrders()"><select id="urovoV43SellerOrderStatus" class="input" onchange="urovoV43FilterSellerOrders()"><option value="all">All statuses</option>${STATUS_OPTIONS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div><div id="urovoV43SellerOrderCards">${orders.length?orders.map(o=>{
+    panel.innerHTML=`<div class="urovo-v43-seller-hero"><div><span class="urovo-v43-kicker">SELLER WORKSPACE</span><h2>${esc(access.data.name||em.split('@')[0])}</h2><p>${esc(em)} · Active seller</p></div><span class="urovo-v43-seller-mark">🏪</span></div><div class="urovo-v43-seller-stats"><div><small>My products</small><b>${myProducts.length}</b></div><div><small>Published</small><b>${active}</b></div><div><small>Pending approval</small><b>${pending}</b></div><div><small>My item sales</small><b>${cash(sold)}</b></div></div><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">CATALOGUE</span><h3>Manage my products</h3><p class="urovo-v43-muted">Only products owned by your seller account appear here.</p></div></div><div class="urovo-v43-add-product"><input id="svName" class="input" placeholder="Product name"><input id="svCategory" class="input" list="urovoV43CategoryOptions" placeholder="Category"><div class="coupon-row"><input id="svPrice" class="input" type="number" min="0.01" placeholder="Price ₹"><input id="svOld" class="input" type="number" min="0" placeholder="Old price ₹"></div><div class="coupon-row"><input id="svStock" class="input" type="number" min="0" value="1" placeholder="Stock"><input id="svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets #phone"></div><div class="coupon-row"><input id="svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping charge ₹"><label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:11px;color:var(--muted)"><input id="svFreeShipping" type="checkbox" checked> Free Shipping</label></div><small style="color:var(--muted);display:block;margin:-2px 0 7px">Use #tags here. Product details will suggest only products sharing at least one matching #tag.</small><small style="color:var(--muted);display:block;margin:-2px 0 7px">Leave shipping at ₹0 or keep Free Shipping enabled to show “Free Shipping” to customers.</small><textarea id="svDesc" class="input" rows="3" placeholder="Product description"></textarea><input id="svImages" class="input" type="file" accept="image/*" multiple><button type="button" class="primary" onclick="urovoSellerCreateProductV37()">＋ Add My Product</button></div><div class="urovo-v43-product-list">${myProducts.length?myProducts.map(p=>`<article class="urovo-v43-owned-product"><img src="${esc(p.image_url||'')}" alt="${esc(p.name||'Product')}" loading="lazy" onerror="this.style.display='none'"><div class="urovo-v43-owned-product-copy"><b>${esc(p.name||'Product')}</b><p>${esc(p.category||'All')} · ${cash(p.price)} · Stock ${Number(p.stock||0)}</p><small>Code: ${esc(productCodes.get(String(p.id))||'Auto-assigned')} · <strong>${String(p.approval_status||'pending').toLowerCase()==='approved'?'✓ Approved':String(p.approval_status||'pending').toLowerCase()==='rejected'?'✕ Rejected':'⏳ Pending Approval'}</strong>${p.approval_status==='rejected'&&p.approval_notes?`<br>Reason: ${esc(p.approval_notes)}`:''}</small></div><div class="urovo-v43-owned-actions"><button class="secondary" type="button" onclick="urovoSellerEditProductV40('${esc(p.id)}')">Edit</button><button class="secondary" type="button" onclick="urovoSellerSetActiveV37('${esc(p.id)}',${p.active===false?'true':'false'})">${p.active===false?'Publish':'Hide'}</button><button class="urovo-v43-delete" type="button" onclick="urovoV43DeleteOwnProduct('${esc(p.id)}')">🗑 Delete</button></div></article>`).join(''):'<div class="urovo-v43-empty"><div>🛍️</div><h3>No products yet</h3><p>Add a product above. Seller products remain hidden until CEO approval.</p></div>'}</div></section><section class="urovo-v43-panel"><div class="urovo-v43-section-head"><div><span class="urovo-v43-kicker">FULFILMENT</span><h3>My product orders</h3><p class="urovo-v43-muted">Only your products are shown inside each order. Other sellers’ item details are not displayed.</p></div><span class="urovo-v43-count">${orders.length} ORDERS</span></div><div class="urovo-v43-order-tools"><input id="urovoV43SellerOrderSearch" class="input" placeholder="Search my orders or customer…" oninput="urovoV43FilterSellerOrders()"><select id="urovoV43SellerOrderStatus" class="input" onchange="urovoV43FilterSellerOrders()"><option value="all">All statuses</option>${STATUS_OPTIONS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div><div id="urovoV43SellerOrderCards">${orders.length?orders.map(o=>{
       const myLines=Array.isArray(o.my_items)?o.my_items:(Array.isArray(o.items)?o.items:[]);
       if(!myLines.length)return '';
       const total=Number(o.my_total||myLines.reduce((s,i)=>s+Number(i.item_total||0),0));
@@ -5690,7 +5626,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     if(type==='payments')return inlinePayments();
     if(type==='notifications')return inlineNotifications();
     if(type==='recent'){
-      const items=getRecent();accountShell('Recently Viewed',items.length?`<div class="full-search-results">${items.map(p=>`<div class="full-search-result" onclick="openProduct('${esc2(p.id)}')"><img src="${esc2(p.image||'')}"><div class="rs-info"><h4>${esc2(p.name)}</h4><p>${money2(p.price)}</p></div></div>`).join('')}</div>`:'<div class="search-empty"><h3>No recently viewed products</h3><p>Products you open will appear here.</p></div>');return;}
+      const items=getRecent();accountShell('Recently Viewed',items.length?`<div class="full-search-results">${items.map(p=>`<div class="full-search-result" onclick="openProduct('${esc2(p.id)}')"><img src="${esc2(p.image||'')}" onerror="this.style.display='none'"><div class="rs-info"><h4>${esc2(p.name)}</h4><p>${money2(p.price)}</p></div></div>`).join('')}</div>`:'<div class="search-empty"><h3>No recently viewed products</h3><p>Products you open will appear here.</p></div>');return;}
     if(type==='profile'){accountShell('Profile',`<div class="order-card"><h3>${esc2(user?.name||'UROVO Customer')}</h3><p style="color:var(--muted);margin-top:6px">${esc2(user?.email||'')}</p></div>`);return;}
     if(type==='security'){accountShell('Security','<div class="order-card"><h3>Account Security</h3><p>Use Forgot Password / password reset from Login. Keep your password private.</p><button class="secondary" style="width:100%;margin-top:12px" onclick="logout()">Logout</button></div>');return;}
     if(type==='help'){accountShell('Help & Support','<div class="order-card"><h3>UROVO Support</h3><p>Start with the UROVO Assistant for help with orders, delivery, payments and products.</p><button class="primary" style="width:100%;margin-top:12px" onclick="openUrovoDedicatedChat(\'ai\')">Chat with UROVO Assistant</button></div>');return;}
@@ -5775,10 +5711,10 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
      const found=await client.from('products').select('*').eq('id',id).eq('seller_email',email).single();if(found.error)throw found.error;const p=found.data;
      const name=prompt('Product name',p.name||'');if(name===null)return;const category=prompt('Category',p.category||'All');if(category===null)return;
      const price=Number(prompt('Selling price (₹)',String(p.price||0)));if(!Number.isFinite(price)||price<=0){say('Enter a valid positive price');return}
-     const old_price=Number(prompt('Old price (₹)',String(p.old_price||0))||0);const stock=Number(prompt('Stock quantity',String(p.stock||0)));if(!Number.isInteger(stock)||stock<0){say('Stock must be zero or more');return}
+     const old_price=Number(prompt('Old price (₹)',String(p.old_price||0))||0);if(!Number.isFinite(old_price)||old_price<0){say('Old price must be zero or more');return}const stock=Number(prompt('Stock quantity',String(p.stock||0)));if(!Number.isInteger(stock)||stock<0){say('Stock must be zero or more');return}
      const shipping_charge=Number(prompt('Shipping charge (₹)',String(p.shipping_charge||0))||0);if(!Number.isFinite(shipping_charge)||shipping_charge<0){say('Shipping charge must be zero or more');return}
-     const tagInput=prompt('Suggestion #tag(s), e.g. #gadgets #phone (optional)',p.tag||'');if(tagInput===null)return;const tag=(tagInput.match(/#[A-Za-z0-9_-]+/g)||[]).join(' ');const description=prompt('Description',p.description||'');if(description===null)return;
-     const update={name:name.trim(),category:category.trim()||'All',price,old_price,stock,shipping_charge,free_shipping:shipping_charge<=0,tag:tag.trim(),description:description.trim()};
+     const tagInput=prompt('Suggestion #tag(s), e.g. #gadgets #phone (optional)',p.tag||'');if(tagInput===null)return;const tag=(tagInput.match(/#[A-Za-z0-9_-]+/g)||[]).join(' ');const description=prompt('Description',p.description||'');if(description===null)return;if(!description.trim()){say('Description is required');return}
+     const update={name:name.trim(),category:category.trim()||'All',price,old_price,stock,shipping_charge,free_shipping:shipping_charge<=0,tag:tag.trim(),description:description.trim(),approval_status:'pending',approval_notes:null,approved_at:null,approved_by:null,active:false};
      if(confirm('Replace product images? Choose OK to select images, then crop each one. Cancel keeps existing images.')){
        const input=document.createElement('input');input.type='file';input.accept='image/*';input.multiple=true;
        const chosen=await new Promise(resolve=>{let settled=false;const done=v=>{if(settled)return;settled=true;if(window.__urovoCropResolveV52===done)window.__urovoCropResolveV52=null;resolve(v)};input.addEventListener('change',()=>{if(!input.files?.length){done(null);return}window.__urovoCropResolveV52=done;window.urovoPrepareProductImages(input)},{once:true});input.addEventListener('cancel',()=>done(null),{once:true});window.addEventListener('focus',()=>setTimeout(()=>{if(!settled&&!input.files?.length)done(null)},500),{once:true});input.click()});
@@ -5795,7 +5731,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
  if(typeof originalSave==='function')window.saveEditedProduct=async function(id,...args){const code=String($id('editProductCode')?.value||'').trim(),isNew=$id('editIsNewBadge')?.checked===true;if(!codePattern.test(code)){say('Enter a valid Product Code (2–60 letters, numbers, dash or underscore).');return}try{if(await duplicateCode(code,id)){say('This Product Code belongs to another product. Choose a unique code.');return}}catch(e){say('Could not verify Product Code uniqueness: '+(e?.message||'try again'));return}await originalSave.apply(this,[id,...args]);try{const client=db();const up=await client.from('products').update({is_new:isNew}).eq('id',id);if(up.error)throw up.error;const cr=await client.rpc('urovo_save_product_code',{p_product_id:id,p_code:code});if(cr.error)throw cr.error;await window.loadStoreProducts?.();say('Product details, Product Code and NEW Badge saved')}catch(e){console.error('Edit Product metadata:',e);say('Product details may be saved, but Product Code/NEW Badge failed: '+(e?.message||'check database migration'))}};
 
  // Dedicated CEO New Badge page with live search, manual enable/disable and Product Code display.
- window.renderCEONewBadgeProducts=async function(){if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;const host=$id('adminContent');if(!host)return;host.innerHTML=`<div class="order-card"><h3>✨ New Badge Products</h3><p style="color:var(--muted);font-size:12px;line-height:1.5">Turn NEW on or off manually. Home → Trending Products shows only enabled products.</p><input id="urovoNewProductCodeSearch" class="input" style="margin-top:10px" placeholder="Search by Product Code or product name" autocomplete="off"><div id="urovoNewProductRows" style="margin-top:10px"><p style="color:var(--muted)">Loading products...</p></div></div>`;const client=db();try{const list=await client.from('products').select('id,name,category,price,stock,image_url,tag,active,created_at,is_new').order('created_at',{ascending:false}).limit(1000);if(list.error)throw list.error;const all=list.data||[];const cc=all.length?await client.rpc('urovo_get_product_codes',{p_product_ids:all.map(p=>p.id)}):{data:[],error:null};if(cc.error)throw cc.error;const codes=new Map((cc.data||[]).map(x=>[String(x.product_id),String(x.product_code||'')]));const render=()=>{const q=String($id('urovoNewProductCodeSearch')?.value||'').trim().toLowerCase();const filtered=all.filter(p=>!q?p.is_new===true:(String(codes.get(String(p.id))||'').toLowerCase().includes(q)||String(p.name||'').toLowerCase().includes(q)||String(p.category||'').toLowerCase().includes(q)));const rows=$id('urovoNewProductRows');if(!rows)return;rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:10px;align-items:center;margin:9px 0;padding:11px"><img src="${safeText(p.image_url||'')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0"><div style="flex:1;min-width:0"><b>${safeText(p.name||'Product')}</b><p style="font-size:11px;color:var(--muted);margin-top:3px">${safeText(p.category||'All')} · ${typeof money==='function'?money(p.price||0):'₹'+Number(p.price||0)}</p><p style="font-size:12px;margin-top:4px">Code: <strong>${safeText(codes.get(String(p.id))||'Not assigned')}</strong></p><span class="order-status-pill">${p.is_new===true?'NEW ENABLED':'NEW DISABLED'}</span></div><div style="display:grid;gap:6px"><button class="secondary urovo-v52-new-toggle" onclick="urovoV52ToggleNewBadge('${safeText(p.id)}',${p.is_new===true?'false':'true'})">${p.is_new===true?'Disable NEW':'Enable NEW'}</button><button class="secondary" onclick="openProduct('${safeText(p.id)}')">Open</button></div></div>`).join(''):'<p style="color:var(--muted);padding:14px 0">No matching products found.</p>'};$id('urovoNewProductCodeSearch').addEventListener('input',render);render()}catch(e){const rows=$id('urovoNewProductRows');if(rows)rows.innerHTML=`<p style="color:var(--red)">${safeText(e?.message||'Could not load products. Run the V52 migration if is_new is missing.')}</p>`}};
+ window.renderCEONewBadgeProducts=async function(){if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;const host=$id('adminContent');if(!host)return;host.innerHTML=`<div class="order-card"><h3>✨ New Badge Products</h3><p style="color:var(--muted);font-size:12px;line-height:1.5">Turn NEW on or off manually. Home → Trending Products shows only enabled products.</p><input id="urovoNewProductCodeSearch" class="input" style="margin-top:10px" placeholder="Search by Product Code or product name" autocomplete="off"><div id="urovoNewProductRows" style="margin-top:10px"><p style="color:var(--muted)">Loading products...</p></div></div>`;const client=db();try{const list=await client.from('products').select('id,name,category,price,stock,image_url,tag,active,created_at,is_new').order('created_at',{ascending:false}).limit(1000);if(list.error)throw list.error;const all=list.data||[];const cc=all.length?await client.rpc('urovo_get_product_codes',{p_product_ids:all.map(p=>p.id)}):{data:[],error:null};if(cc.error)throw cc.error;const codes=new Map((cc.data||[]).map(x=>[String(x.product_id),String(x.product_code||'')]));const render=()=>{const q=String($id('urovoNewProductCodeSearch')?.value||'').trim().toLowerCase();const filtered=all.filter(p=>!q?p.is_new===true:(String(codes.get(String(p.id))||'').toLowerCase().includes(q)||String(p.name||'').toLowerCase().includes(q)||String(p.category||'').toLowerCase().includes(q)));const rows=$id('urovoNewProductRows');if(!rows)return;rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:10px;align-items:center;margin:9px 0;padding:11px"><img src="${safeText(p.image_url||'')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'"><div style="flex:1;min-width:0"><b>${safeText(p.name||'Product')}</b><p style="font-size:11px;color:var(--muted);margin-top:3px">${safeText(p.category||'All')} · ${typeof money==='function'?money(p.price||0):'₹'+Number(p.price||0)}</p><p style="font-size:12px;margin-top:4px">Code: <strong>${safeText(codes.get(String(p.id))||'Not assigned')}</strong></p><span class="order-status-pill">${p.is_new===true?'NEW ENABLED':'NEW DISABLED'}</span></div><div style="display:grid;gap:6px"><button class="secondary urovo-v52-new-toggle" onclick="urovoV52ToggleNewBadge('${safeText(p.id)}',${p.is_new===true?'false':'true'})">${p.is_new===true?'Disable NEW':'Enable NEW'}</button><button class="secondary" onclick="openProduct('${safeText(p.id)}')">Open</button></div></div>`).join(''):'<p style="color:var(--muted);padding:14px 0">No matching products found.</p>'};$id('urovoNewProductCodeSearch').addEventListener('input',render);render()}catch(e){const rows=$id('urovoNewProductRows');if(rows)rows.innerHTML=`<p style="color:var(--red)">${safeText(e?.message||'Could not load products. Run the V52 migration if is_new is missing.')}</p>`}};
  window.urovoV52ToggleNewBadge=async function(id,enabled){if(typeof window.requireAdmin==='function'&&!window.requireAdmin())return;const client=db();const r=await client.from('products').update({is_new:enabled===true}).eq('id',id);if(r.error){say(r.error.message);return}const arr=Array.isArray(window.products)?window.products:[];const p=arr.find(x=>String(x.id)===String(id));if(p)p.is_new=enabled===true;if(typeof window.loadStoreProducts==='function')await window.loadStoreProducts();await window.renderCEONewBadgeProducts();say(enabled?'NEW badge enabled':'NEW badge disabled')};
 
  // Keep account Orders inside Account when tracking; show Cancel only for Placed, never Processing.
@@ -6007,7 +5943,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
             String(p.name||'').toLowerCase().includes(term) ||
             String(p.category||'').toLowerCase().includes(term));
           rows.innerHTML=filtered.length?filtered.map(p=>`<div class="order-card" style="display:flex;gap:10px;align-items:center;margin:9px 0;padding:11px">
-            <img src="${String(p.image_url||'').replace(/"/g,'&quot;')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0">
+            <img src="${String(p.image_url||'').replace(/"/g,'&quot;')}" alt="" style="width:58px;height:58px;object-fit:cover;border-radius:10px;background:var(--surface2);flex-shrink:0" onerror="this.style.display='none'">
             <div style="flex:1;min-width:0"><b>${String(p.name||'Product').replace(/</g,'&lt;')}</b>
             <p style="font-size:11px;color:var(--muted);margin-top:3px">${String(p.category||'All').replace(/</g,'&lt;')}</p>
             <p style="font-size:12px;margin-top:4px">Code: <strong>${String(p.product_code||'Not assigned').replace(/</g,'&lt;')}</strong></p>
@@ -6219,7 +6155,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     else list.sort((a,b)=>(a.is_new===b.is_new?0:a.is_new?-1:1)||Number(b.sales||0)-Number(a.sales||0));
     return list;
   }
-  function searchProductCard(p){const img=safeUrl(p.image||p.image_url||'');const name=String(p.name||'Product');const id=String(p.id||'');return `<div class="full-search-result" onclick="closeSearchPage();openProduct(${esc(jsq(id))})">${img?`<img src="${esc(img)}" alt="${esc(name)}" loading="lazy">`:`<div style="height:170px;display:grid;place-items:center;font-size:58px;background:var(--surface2)">${esc(p.icon||'📦')}</div>`}<div class="rs-info"><h4>${esc(name)}</h4><p>${cash(p.price)}</p><small style="color:var(--muted)">${esc(p.category||'')}</small></div></div>`}
+  function searchProductCard(p){const img=safeUrl(p.image||p.image_url||'');const name=String(p.name||'Product');const id=String(p.id||'');return `<div class="full-search-result" onclick="closeSearchPage();openProduct(${esc(jsq(id))})">${img?`<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'">`:`<div style="height:170px;display:grid;place-items:center;font-size:58px;background:var(--surface2)">${esc(p.icon||'📦')}</div>`}<div class="rs-info"><h4>${esc(name)}</h4><p>${cash(p.price)}</p><small style="color:var(--muted)">${esc(p.category||'')}</small></div></div>`}
 
   window.urovoCategoryBrowseByName=async function(name,updateUrl=true){
     await fetchCatalog(false);const row=categoriesForSearch().find(c=>norm(c.name)===norm(name));
@@ -6271,7 +6207,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   function directProductCount(name){return productRows().filter(p=>norm(p.category)===norm(name)).length}
   function managerCategoryCard(c,i){
     const isDefault=DEFAULTS.some(x=>norm(x)===norm(c.name));const children=visibleChildren(c);const count=productCount(c);const direct=directProductCount(c.name);const art=safeUrl(c.image_url||'');
-    return `<article class="urovo-v53-admin-category ${c.active===false?'is-disabled':''}"><div class="urovo-v53-admin-category-art">${art?`<img src="${esc(art)}" alt="${esc(c.name)}">`:'🏷️'}</div><div class="urovo-v53-admin-category-copy"><div class="urovo-v53-admin-category-title"><h4>${esc(c.name)}</h4>${c.featured?'<span class="urovo-v53-featured-pill">★ Featured</span>':''}<span class="urovo-v43-status ${c.active===false?'is-off':'is-on'}">${c.active===false?'Hidden':'Active'}</span>${isDefault?'<span class="urovo-v53-default-pill">Default</span>':''}</div><p>${esc(c.description||'No description added')}</p><small>${c.parent_id?`Parent: ${esc(categories.find(x=>String(x.id)===String(c.parent_id))?.name||'—')} · `:''}${direct} direct products · ${count} including subcategories · Order ${Number(c.sort_order||0)}</small><div class="urovo-v53-admin-actions"><button class="secondary" onclick="urovoV53EditCategory('${esc(c.id)}')">✏️ Edit</button><button class="secondary" onclick="urovoV53ToggleFeatured('${esc(c.id)}',${c.featured?'false':'true'})">${c.featured?'★ Unfeature':'☆ Feature'}</button><button class="secondary" onclick="urovoV53MoveCategory('${esc(c.id)}',-1)" ${i===0?'disabled':''}>↑</button><button class="secondary" onclick="urovoV53MoveCategory('${esc(c.id)}',1)" ${i===categories.length-1?'disabled':''}>↓</button><button class="secondary" onclick="urovoV53ShareCategory('${esc(c.id)}')">↗ Share</button>${isDefault?'':`<button class="secondary" onclick="urovoV53ToggleCategory('${esc(c.id)}',${c.active===false?'true':'false'})">${c.active===false?'Enable':'Disable'}</button><button class="urovo-v53-danger" onclick="urovoV53DeleteCategory('${esc(c.id)}')">Delete</button>`}</div></div></article>`;
+    return `<article class="urovo-v53-admin-category ${c.active===false?'is-disabled':''}"><div class="urovo-v53-admin-category-art">${art?`<img src="${esc(art)}" alt="${esc(c.name)}" onerror="this.style.display='none'">`:'🏷️'}</div><div class="urovo-v53-admin-category-copy"><div class="urovo-v53-admin-category-title"><h4>${esc(c.name)}</h4>${c.featured?'<span class="urovo-v53-featured-pill">★ Featured</span>':''}<span class="urovo-v43-status ${c.active===false?'is-off':'is-on'}">${c.active===false?'Hidden':'Active'}</span>${isDefault?'<span class="urovo-v53-default-pill">Default</span>':''}</div><p>${esc(c.description||'No description added')}</p><small>${c.parent_id?`Parent: ${esc(categories.find(x=>String(x.id)===String(c.parent_id))?.name||'—')} · `:''}${direct} direct products · ${count} including subcategories · Order ${Number(c.sort_order||0)}</small><div class="urovo-v53-admin-actions"><button class="secondary" onclick="urovoV53EditCategory('${esc(c.id)}')">✏️ Edit</button><button class="secondary" onclick="urovoV53ToggleFeatured('${esc(c.id)}',${c.featured?'false':'true'})">${c.featured?'★ Unfeature':'☆ Feature'}</button><button class="secondary" onclick="urovoV53MoveCategory('${esc(c.id)}',-1)" ${i===0?'disabled':''}>↑</button><button class="secondary" onclick="urovoV53MoveCategory('${esc(c.id)}',1)" ${i===categories.length-1?'disabled':''}>↓</button><button class="secondary" onclick="urovoV53ShareCategory('${esc(c.id)}')">↗ Share</button>${isDefault?'':`<button class="secondary" onclick="urovoV53ToggleCategory('${esc(c.id)}',${c.active===false?'true':'false'})">${c.active===false?'Enable':'Disable'}</button><button class="urovo-v53-danger" onclick="urovoV53DeleteCategory('${esc(c.id)}')">Delete</button>`}</div></div></article>`;
   }
   function managerFormHtml(edit=null){
     const r=edit||{};
@@ -6541,7 +6477,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
       if (!rows.length) { wall.style.display = 'none'; wall.innerHTML = ''; return; }
       wall.innerHTML = `<div class="urovo-v59-promotions-head"><div><span class="urovo-v59-eyebrow">CURATED OFFERS</span><h2>Campaigns & Highlights</h2><p>Limited-time picks from UROVO.</p></div><span class="urovo-v59-live-pill">LIVE</span></div><div class="urovo-v59-promo-grid">${rows.map(p => {
         const url = safeCampaignUrl(p.cta_url);
-        const image = p.image_url ? `<img class="urovo-v59-promo-image" src="${h(p.image_url)}" alt="${h(p.title)}" loading="lazy">` : '';
+        const image = p.image_url ? `<img class="urovo-v59-promo-image" src="${h(p.image_url)}" alt="${h(p.title)}" loading="lazy" onerror="this.style.display='none'">` : '';
         return `<article class="urovo-v59-promo-card" data-promotion-id="${h(p.id)}"><div class="urovo-v59-promo-art">${image}<span class="urovo-v59-promo-label">UROVO SELECT</span></div><div class="urovo-v59-promo-copy"><h3>${h(p.title)}</h3>${p.subtitle ? `<p>${h(p.subtitle)}</p>` : ''}<button type="button" class="primary urovo-v59-promo-cta" onclick="urovoV59OpenPromotion('${h(p.id)}','${h(url)}')">${h(p.cta_text || 'Explore')} <span>↗</span></button></div></article>`;
       }).join('')}</div>`;
       wall.style.display = 'block';
@@ -6589,7 +6525,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     const button = (el('urovoV59PromoCta')?.value || '').trim() || 'Explore';
     const rawImage = campaignPreviewFileUrl || (el('urovoV59PromoImage')?.value || '').trim();
     const image = /^(https?:\/\/|blob:)/i.test(rawImage) ? rawImage : '';
-    const img = image ? `<img class="urovo-v59-promo-image" src="${h(image)}" alt="${h(title)}">` : '';
+    const img = image ? `<img class="urovo-v59-promo-image" src="${h(image)}" alt="${h(title)}" onerror="this.style.display='none'">` : '';
     host.innerHTML = `<div class="urovo-v59-promo-card"><div class="urovo-v59-promo-art">${img}<span class="urovo-v59-promo-label">UROVO SELECT</span></div><div class="urovo-v59-promo-copy"><h3>${h(title)}</h3><p>${h(subtitle)}</p><button type="button" class="primary urovo-v59-promo-cta">${h(button)} <span>↗</span></button></div></div>`;
   };
   window.urovoV59PreviewCampaign = function () {
@@ -6628,7 +6564,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
       const ctr = Number(p.impressions) ? (Number(p.clicks) / Number(p.impressions) * 100).toFixed(2) + '%' : '0.00%';
       const nowMs = Date.now(); const started = !p.starts_at || new Date(p.starts_at).getTime() <= nowMs; const notEnded = !p.ends_at || new Date(p.ends_at).getTime() > nowMs;
       const state = p.active && started && notEnded ? 'LIVE' : (!p.active ? 'PAUSED' : (!started ? 'SCHEDULED' : 'ENDED'));
-      return `<article class="urovo-v59-campaign-row"><div class="urovo-v59-campaign-main">${p.image_url ? `<img src="${h(p.image_url)}" alt="">` : `<div class="urovo-v59-promo-placeholder">U</div>`}<div><div class="urovo-v59-campaign-top"><h4>${h(p.title || 'Untitled campaign')}</h4><span class="urovo-v59-state ${state==='LIVE'?'live':''}">${state}</span></div><p>${h(p.subtitle || 'No subtitle')}</p><small>${h(String(p.campaign_type || 'both').toUpperCase())} · Audience: ${h(p.audience || 'all')} · Start: ${p.starts_at ? h(new Date(p.starts_at).toLocaleString('en-IN')) : 'Now'}${p.ends_at ? ' · End: ' + h(new Date(p.ends_at).toLocaleString('en-IN')) : ''}</small><div class="urovo-v59-campaign-metrics"><span>👁 ${Number(p.impressions || 0).toLocaleString('en-IN')} impressions</span><span>↗ ${Number(p.clicks || 0).toLocaleString('en-IN')} clicks</span><span>CTR ${ctr}</span></div><small class="urovo-v59-muted">${h(sent)}${p.push_last_error ? ' · Last push error: ' + h(p.push_last_error) : ''}</small></div></div><div class="urovo-v59-campaign-actions"><button class="secondary" onclick="urovoV59PreviewSavedCampaign('${h(p.id)}')">👁️ Preview</button><button class="secondary" onclick="urovoV59EditPromotion('${h(p.id)}')">✏️ Edit</button><button class="secondary" onclick="urovoV59DuplicatePromotion('${h(p.id)}')">⧉ Duplicate</button><button class="secondary" onclick="urovoV59TogglePromotion('${h(p.id)}',${p.active===false?'true':'false'})">${p.active===false?'▶ Enable':'⏸ Pause'}</button>${['push','both'].includes(p.campaign_type) ? `<button class="primary" onclick="urovoV59SendPromotion('${h(p.id)}')">🔔 Send Push Now</button>` : ''}<button class="secondary" onclick="urovoV59DeletePromotion('${h(p.id)}')">🗑️ Delete</button></div></article>`;
+      return `<article class="urovo-v59-campaign-row"><div class="urovo-v59-campaign-main">${p.image_url ? `<img src="${h(p.image_url)}" alt="" onerror="this.style.display='none'">` : `<div class="urovo-v59-promo-placeholder">U</div>`}<div><div class="urovo-v59-campaign-top"><h4>${h(p.title || 'Untitled campaign')}</h4><span class="urovo-v59-state ${state==='LIVE'?'live':''}">${state}</span></div><p>${h(p.subtitle || 'No subtitle')}</p><small>${h(String(p.campaign_type || 'both').toUpperCase())} · Audience: ${h(p.audience || 'all')} · Start: ${p.starts_at ? h(new Date(p.starts_at).toLocaleString('en-IN')) : 'Now'}${p.ends_at ? ' · End: ' + h(new Date(p.ends_at).toLocaleString('en-IN')) : ''}</small><div class="urovo-v59-campaign-metrics"><span>👁 ${Number(p.impressions || 0).toLocaleString('en-IN')} impressions</span><span>↗ ${Number(p.clicks || 0).toLocaleString('en-IN')} clicks</span><span>CTR ${ctr}</span></div><small class="urovo-v59-muted">${h(sent)}${p.push_last_error ? ' · Last push error: ' + h(p.push_last_error) : ''}</small></div></div><div class="urovo-v59-campaign-actions"><button class="secondary" onclick="urovoV59PreviewSavedCampaign('${h(p.id)}')">👁️ Preview</button><button class="secondary" onclick="urovoV59EditPromotion('${h(p.id)}')">✏️ Edit</button><button class="secondary" onclick="urovoV59DuplicatePromotion('${h(p.id)}')">⧉ Duplicate</button><button class="secondary" onclick="urovoV59TogglePromotion('${h(p.id)}',${p.active===false?'true':'false'})">${p.active===false?'▶ Enable':'⏸ Pause'}</button>${['push','both'].includes(p.campaign_type) ? `<button class="primary" onclick="urovoV59SendPromotion('${h(p.id)}')">🔔 Send Push Now</button>` : ''}<button class="secondary" onclick="urovoV59DeletePromotion('${h(p.id)}')">🗑️ Delete</button></div></article>`;
     }).join('') : '<div class="urovo-v59-empty">No campaigns yet. Create your first campaign above.</div>';
   };
   window.urovoV59SavePromotion = async function () {
@@ -6699,7 +6635,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   window.urovoV59PreviewSavedCampaign = function (id) {
     const p = promotionRows.find(x => String(x.id) === String(id)); if (!p) return;
     const host = document.getElementById('urovoV59CampaignPreview'); if (!host) return;
-    const image = p.image_url && /^(https?:\/\/)/i.test(String(p.image_url)) ? `<img class="urovo-v59-promo-image" src="${h(p.image_url)}" alt="${h(p.title||'Campaign')}">` : '';
+    const image = p.image_url && /^(https?:\/\/)/i.test(String(p.image_url)) ? `<img class="urovo-v59-promo-image" src="${h(p.image_url)}" alt="${h(p.title||'Campaign')}" onerror="this.style.display='none'">` : '';
     host.innerHTML = `<div class="urovo-v59-promo-card"><div class="urovo-v59-promo-art">${image}<span class="urovo-v59-promo-label">UROVO SELECT</span></div><div class="urovo-v59-promo-copy"><h3>${h(p.title||'Untitled campaign')}</h3><p>${h(p.subtitle||'')}</p><button type="button" class="primary urovo-v59-promo-cta">${h(p.cta_text||'Explore')} <span>↗</span></button></div></div>`;
     document.getElementById('urovoV59CampaignPreviewWrap')?.scrollIntoView({behavior:'smooth',block:'center'});
   };
@@ -6968,6 +6904,11 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 </script>
 
 
+
+
+
+
+
 <style id="urovo-v67-ceo-final-fix">
 /* UROVO V67 — CEO navigation + compact premium UI */
 #adminModal .ceo-shell{width:min(1100px,calc(100% - 20px))!important;height:min(88vh,820px)!important;border-radius:20px!important;background:#080a08!important}
@@ -7046,6 +6987,11 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   },true);
 })();
 </script>
+
+
+
+
+
 
 <!-- UROVO V72: definitive CEO function back button fix -->
 <style id="urovo-v72-ceo-back-style">
@@ -7460,6 +7406,9 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 })();
 </script>
 
+
+
+
 <style id="urovo-v86-product-image-size">
 /* Flipkart/Amazon-style larger product image area */
 .detail-image{height:360px!important;min-height:360px!important;width:100%!important;background:#fff!important;border:1px solid #e8e8e8!important;border-radius:18px!important;padding:14px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:none!important;}
@@ -7467,6 +7416,13 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 @media (min-width:700px){.detail-image{height:440px!important;min-height:440px!important;padding:18px!important;border-radius:20px!important;}}
 </style>
 
+
+
+
+
+<style id="urovo-v87-image-size">
+@media(max-width:600px){.product-detail-image,.product-gallery-main,.product-main-image,.pd-main-image{height:300px!important;max-height:300px!important}}
+</style>
 
 <style id="urovo-v88-bigger-product-image">
 @media (max-width: 700px){
@@ -7717,7 +7673,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   // Make the Update gate build version consistent and the UI explicit; the existing gate owns its update flow.
   try{
     const buildHint=document.getElementById('urovoUpdateGateHint');
-    if(buildHint&&!/^Build\s/i.test(buildHint.textContent||''))buildHint.textContent='UROVO build 102';
+    if(buildHint&&!/^Build\s/i.test(buildHint.textContent||''))buildHint.textContent='UROVO build 99';
   }catch(e){}
 
   // Wrap Account renderers to style/reorder immediately, then observe future modal/page content rebuilds.
@@ -7798,6 +7754,82 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 
 
 <!-- UROVO PWA INSTALL FINAL OVERRIDE v101 -->
+
+
+
+
+<script id="urovo-v102-seller-approval-status-fix">
+(function(){
+  'use strict';
+  const esc=s=>typeof window.escapeHtml==='function'?window.escapeHtml(String(s??'')):String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const say=s=>{try{window.toast(s)}catch{console.log(s)}};
+  const db=()=>window.supabaseClient;
+  const email=()=>String(window.user?.email||'').trim().toLowerCase();
+
+  function statusUI(status,note){
+    const st=String(status||'pending').trim().toLowerCase();
+    if(st==='approved') return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(55,190,90,.12);border:1px solid rgba(85,212,122,.28);color:#55d47a;font-weight:900;font-size:11px">✓ Approved</span>';
+    if(st==='rejected') return '<span title="'+esc(note||'')+'" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,54,85,.10);border:1px solid rgba(255,54,85,.25);color:#ff5870;font-weight:900;font-size:11px">✕ Rejected</span>';
+    return '<span style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:rgba(255,190,60,.10);border:1px solid rgba(255,190,60,.22);color:#ffc44d;font-weight:900;font-size:11px">⏳ Pending Approval</span>';
+  }
+
+  // Make seller product cards show a clear approval state after every dashboard refresh.
+  const originalRender=window.urovoV43RenderSellerPanel;
+  if(typeof originalRender==='function'){
+    window.urovoV43RenderSellerPanel=async function(){
+      const result=await originalRender.apply(this,arguments);
+      try{
+        const em=email(); if(!em)return result;
+        const r=await db().from('products').select('id,approval_status,approval_notes').eq('seller_email',em).order('created_at',{ascending:false}).limit(500);
+        if(r.error)return result;
+        const map=new Map((r.data||[]).map(p=>[String(p.id),p]));
+        document.querySelectorAll('#urovoSellerInventoryV37 .urovo-v43-owned-product').forEach(card=>{
+          const edit=card.querySelector('button[onclick*="urovoSellerEditProductV40"]');
+          const m=edit?.getAttribute('onclick')?.match(/urovoSellerEditProductV40\('([^']+)'\)/); if(!m)return;
+          const p=map.get(String(m[1])); if(!p)return;
+          let row=card.querySelector('.urovo-v102-approval');
+          if(!row){row=document.createElement('div');row.className='urovo-v102-approval';row.style.cssText='margin-top:7px';card.querySelector('.urovo-v43-owned-product-copy')?.appendChild(row);}
+          row.innerHTML=statusUI(p.approval_status,p.approval_notes)+(String(p.approval_status||'').toLowerCase()==='rejected'&&p.approval_notes?'<div style="font-size:11px;color:var(--muted);margin-top:5px">Reason: '+esc(p.approval_notes)+'</div>':'');
+        });
+      }catch(e){console.warn('Seller approval UI:',e)}
+      return result;
+    };
+  }
+
+  // Seller submission: saving the product must not fail just because the optional product-code RPC is unavailable.
+  const oldCreate=window.urovoSellerCreateProductV37;
+  if(typeof oldCreate==='function'){
+    window.urovoSellerCreateProductV37=async function(){
+      try{
+        const em=email();
+        if(!em)throw new Error('Please sign in first');
+        const seller=await db().from('urovo_sellers').select('email,active').eq('email',em).maybeSingle();
+        if(seller.error)throw seller.error;
+        if(!seller.data||seller.data.active===false)throw new Error('Your Seller badge is not active');
+        const val=id=>document.getElementById(id)?.value?.trim()||'';
+        const name=val('svName'),category=val('svCategory')||'All',price=Number(val('svPrice')),old_price=Number(val('svOld')||0),stock=Math.max(0,Math.floor(Number(val('svStock')||0))),tag=(val('svTag').match(/#[A-Za-z0-9_-]+/g)||[]).join(' '),description=val('svDesc'),files=Array.from(document.getElementById('svImages')?.files||[]);
+        if(!name||!Number.isFinite(price)||price<=0||!description)throw new Error('Enter product name, positive price and description');
+        if(!files.length)throw new Error('Add at least one product image');
+        const uploader=window.uploadSellerImages;
+        if(typeof uploader!=='function')throw new Error('Product image uploader is unavailable');
+        const urls=await uploader(files,em);
+        const payload={name,category,price,old_price,stock,tag,description,icon:'📦',seller_email:em,active:true,approval_status:'pending',image_url:urls[0],image_urls:urls};
+        if(document.getElementById('svShipping')) payload.shipping_charge=Math.max(0,Number(val('svShipping')||0));
+        if(document.getElementById('svFreeShipping')) payload.free_shipping=document.getElementById('svFreeShipping').checked;
+        const created=await db().from('products').insert(payload).select('id').single();
+        if(created.error)throw created.error;
+        let code='';
+        try{const cr=await db().rpc('urovo_get_product_codes',{p_product_ids:[created.data.id]});if(!cr.error)code=(cr.data||[]).find(x=>String(x.product_id)===String(created.data.id))?.product_code||''}catch(e){console.warn('Optional product code:',e)}
+        say(code?'Product submitted for CEO approval · Code: '+code:'Product submitted for CEO approval');
+        await window.openSellerDashboard();
+      }catch(e){say(e?.message||'Could not add product')}
+    };
+  }
+
+  // If CEO approval/rejection happens while the seller dashboard is open, refresh its status on focus.
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&typeof window.urovoV43RenderSellerPanel==='function'&&window.user)window.urovoV43RenderSellerPanel().catch(()=>{})});
+})();
+</script>
 <style id="urovo-v105-install-fix-css">
 #installAppBtn.urovo-v105-installed-hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 #urovoInstallOverlay.urovo-v105-overlay-hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
@@ -7850,7 +7882,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     try { return localStorage.getItem(key) === '1'; } catch (_) { return false; }
   }
   function confirmedInstalled() {
-    return standalone() || storageHas(INSTALLED_KEY) || storageHas('urovo_pwa_installed_permanent_v112') || TRUSTED_LEGACY_KEYS.some(storageHas);
+    return standalone() || storageHas(INSTALLED_KEY) || TRUSTED_LEGACY_KEYS.some(storageHas);
   }
   function setDisplayNone(el) {
     if (!el) return;
@@ -8010,9 +8042,6 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
       window.__urovoV97Prompt = null;
       window.deferredInstallPrompt = null;
       if (choice && choice.outcome === 'accepted') {
-        // Persist the browser's accepted install choice. Some mobile Chrome builds do not
-        // dispatch appinstalled reliably, so this marker prevents the button returning on refresh.
-        try { localStorage.setItem('urovo_pwa_installed_permanent_v112', '1'); } catch (_) {}
         await runTenSecondAnimation();
       } else {
         hideOverlay();
@@ -8031,9 +8060,9 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     // Never trust old-version install markers. Only standalone mode or a real V105
     // appinstalled marker may hide the Install button.
     try {
-      // Preserve install-confirmation markers across refreshes. The older versions
-      // removed markers on every page load, which made the UI state inconsistent.
-      if (standalone()) localStorage.setItem(INSTALLED_KEY, '1');
+      localStorage.removeItem('urovo_pwa_installed_v101');
+      localStorage.removeItem('urovo_pwa_installed_v104');
+      localStorage.removeItem(LEGACY_FALSE_POSITIVE_KEY);
     } catch (_) {}
     if (confirmedInstalled()) hideInstallButtons();
     else showInstallButton();
@@ -8089,7 +8118,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 </script>
 
 
-<!-- UROVO V108: seller product approval reliability patch. Existing full UI and features preserved. -->
+<!-- UROVO V110: full HTML static recheck; seller approval/navigation/install and duplicate-node fixes. -->
 <style id="urovo-v108-approval-style">
 #adminSellerProductApprovalsTab{display:flex;align-items:center;gap:8px;text-align:left}
 #urovoV108ApprovalBadge{display:none;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 6px;border-radius:999px;background:#c8ff00;color:#070707;font-size:11px;font-weight:1000;margin-left:auto}
@@ -8150,8 +8179,8 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   async function renderQueue(){
     if(!isCEO()) {toast('CEO access only');return}
     const host=$('adminContent');if(!host)return;
-    host.innerHTML=`<div class="ceo-page-head"><div><h3>🏪 Seller Product Approvals</h3><p>Review seller-submitted products before they appear in the store.</p></div><button type="button" class="secondary" id="urovoV108Refresh">↻ Refresh</button></div><div class="urovo-v108-approval-metrics"><div class="urovo-v108-approval-metric"><b id="urovoV108PendingCount">—</b><small>Pending review</small></div><div class="urovo-v108-approval-metric"><b id="urovoV108ApprovedCount">—</b><small>Approved</small></div><div class="urovo-v108-approval-metric"><b id="urovoV108RejectedCount">—</b><small>Rejected</small></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><select id="urovoV108Filter" class="input" style="max-width:210px"><option value="pending">Pending only</option><option value="all">All submissions</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select><input id="urovoV108Search" class="input" style="max-width:280px" placeholder="Search product or seller" aria-label="Search products or sellers"></div><div id="urovoV108ApprovalRows"><div class="order-card">Loading seller submissions…</div></div>`;
-    $('urovoV108Refresh')?.addEventListener('click',()=>renderQueue());
+    host.innerHTML=`<div class="ceo-page-head"><div><h3>🏪 Seller Product Approvals</h3><p>Review seller-submitted products before they appear in the store.</p><button type="button" class="secondary" id="urovoV110BackToPending" style="margin-top:9px">← Back to Pending Center</button></div><button type="button" class="secondary" id="urovoV108Refresh">↻ Refresh</button></div><div class="urovo-v108-approval-metrics"><div class="urovo-v108-approval-metric"><b id="urovoV108PendingCount">—</b><small>Pending review</small></div><div class="urovo-v108-approval-metric"><b id="urovoV108ApprovedCount">—</b><small>Approved</small></div><div class="urovo-v108-approval-metric"><b id="urovoV108RejectedCount">—</b><small>Rejected</small></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><select id="urovoV108Filter" class="input" style="max-width:210px"><option value="pending">Pending only</option><option value="all">All submissions</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select><input id="urovoV108Search" class="input" style="max-width:280px" placeholder="Search product or seller" aria-label="Search products or sellers"></div><div id="urovoV108ApprovalRows"><div class="order-card">Loading seller submissions…</div></div>`;
+    $('urovoV108Refresh')?.addEventListener('click',()=>renderQueue());$('urovoV110BackToPending')?.addEventListener('click',()=>{if(typeof window.adminTab==='function')window.adminTab('pending')});
     const reload=async()=>{
       const rows=$('urovoV108ApprovalRows');if(!rows)return;
       rows.innerHTML='<div class="order-card">Loading seller submissions…</div>';
@@ -8175,7 +8204,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
             const image=String(p.image_url||'').trim();
             const actions=st==='pending'?`<div class="urovo-v108-approval-actions"><button type="button" class="primary" data-v108-approve="${escapeHtml(p.id)}">✓ Approve & Publish</button><button type="button" class="secondary" data-v108-reject="${escapeHtml(p.id)}">✕ Reject with reason</button></div>`:'';
             const rejection=st==='rejected'?`<div class="urovo-v108-reason"><b>Rejection reason:</b> ${escapeHtml(reason||'No reason was saved.')}</div>`:'';
-            return `<article class="urovo-v108-approval-card"><div style="display:flex;gap:12px;align-items:flex-start"><img src="${escapeHtml(image)}" alt="" loading="lazy" style="width:78px;height:78px;flex:0 0 78px;object-fit:cover;border-radius:12px;background:var(--surface2,#171717)"><div style="min-width:0;flex:1"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between"><b>${escapeHtml(p.name||'Untitled product')}</b>${statusPill(st)}</div><p style="font-size:12px;color:var(--muted,#aaa);margin:6px 0">Seller: ${escapeHtml(p.seller_name||p.seller_email||'Unknown')}</p><p style="font-size:12px;color:var(--muted,#aaa);margin:4px 0">${escapeHtml(p.category||'All')} · ₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)}</p><p style="font-size:12px;line-height:1.5;margin:6px 0">${escapeHtml(p.description||'No description provided')}</p>${rejection}</div></div>${actions}</article>`;
+            return `<article class="urovo-v108-approval-card"><div style="display:flex;gap:12px;align-items:flex-start"><img src="${escapeHtml(image)}" alt="" loading="lazy" style="width:78px;height:78px;flex:0 0 78px;object-fit:cover;border-radius:12px;background:var(--surface2,#171717)" onerror="this.style.display='none'"><div style="min-width:0;flex:1"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between"><b>${escapeHtml(p.name||'Untitled product')}</b>${statusPill(st)}</div><p style="font-size:12px;color:var(--muted,#aaa);margin:6px 0">Seller: ${escapeHtml(p.seller_name||p.seller_email||'Unknown')}</p><p style="font-size:12px;color:var(--muted,#aaa);margin:4px 0">${escapeHtml(p.category||'All')} · ₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)}</p><p style="font-size:12px;line-height:1.5;margin:6px 0">${escapeHtml(p.description||'No description provided')}</p>${rejection}</div></div>${actions}</article>`;
           }).join('');
           rows.querySelectorAll('[data-v108-approve]').forEach(b=>b.addEventListener('click',()=>reviewProduct(b.dataset.v108Approve,'approved')));
           rows.querySelectorAll('[data-v108-reject]').forEach(b=>b.addEventListener('click',()=>reviewProduct(b.dataset.v108Reject,'rejected')));
@@ -8187,32 +8216,6 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     };
     await reload();
   }
-
-  // V117: CEO dashboard top shortcuts for approval actions and overall product status.
-  window.urovoV117OpenSellerApprovals=function(){
-    if(!isCEO()){toast('CEO access only');return}
-    renderQueue();
-  };
-  window.urovoV117OpenSellerStatus=async function(){
-    if(!isCEO()){toast('CEO access only');return}
-    const host=$('adminContent');if(!host)return;
-    host.innerHTML='<div class="ceo-page-head"><div><h3>📋 Seller Product Status</h3><p>All seller-submitted products and their current approval state.</p></div><button type="button" class="secondary" id="urovoV117StatusRefresh">↻ Refresh</button></div><div id="urovoV117StatusRows"><div class="order-card">Loading product statuses…</div></div>';
-    const load=async()=>{
-      const rows=$('urovoV117StatusRows');if(!rows)return;
-      rows.innerHTML='<div class="order-card">Loading product statuses…</div>';
-      try{
-        const products=await getSellerProducts();
-        const counts={pending:0,approved:0,rejected:0};products.forEach(p=>{const st=statusOf(p);counts[st]=(counts[st]||0)+1});
-        const summary='<div class="urovo-v108-approval-metrics"><div class="urovo-v108-approval-metric"><b>'+counts.pending+'</b><small>Pending</small></div><div class="urovo-v108-approval-metric"><b>'+counts.approved+'</b><small>Approved</small></div><div class="urovo-v108-approval-metric"><b>'+counts.rejected+'</b><small>Rejected</small></div></div>';
-        if(!products.length){rows.innerHTML=summary+'<div class="order-card"><h3>No seller products found</h3></div>';return}
-        rows.innerHTML=summary+products.map(p=>{
-          const st=statusOf(p),reason=String(p.approval_notes||'').trim();
-          return '<article class="urovo-v108-approval-card" style="margin-top:10px"><div style="display:flex;gap:12px;align-items:flex-start"><img src="'+escapeHtml(p.image_url||'')+'" alt="" loading="lazy" style="width:62px;height:62px;object-fit:cover;border-radius:10px"><div style="min-width:0;flex:1"><div style="display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap"><b>'+escapeHtml(p.name||'Untitled product')+'</b>'+statusPill(st)+'</div><p style="font-size:12px;color:var(--muted,#aaa);margin:6px 0">Seller: '+escapeHtml(p.seller_name||p.seller_email||'Unknown')+'</p>'+(st==='rejected'?'<p class="urovo-v108-reason"><b>Rejection reason:</b> '+escapeHtml(reason||'No reason was saved.')+'</p>':'')+'</div></div></article>';
-        }).join('');
-      }catch(e){rows.innerHTML='<div class="order-card"><h3>Could not load product statuses</h3><p>'+escapeHtml(e?.message||'Unknown error')+'</p></div>'}
-    };
-    $('urovoV117StatusRefresh')?.addEventListener('click',load);await load();
-  };
 
   async function reviewProduct(id,decision){
     if(!isCEO()){toast('CEO access only');return}
@@ -8263,28 +8266,6 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
         return `<div class="urovo-v108-seller-status-row"><div style="display:flex;gap:8px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap"><div style="min-width:0;flex:1"><b>${escapeHtml(p.name||'Untitled product')}</b><div style="font-size:12px;color:var(--muted,#aaa);margin-top:4px">${escapeHtml(p.category||'All')} · ₹${Number(p.price||0).toLocaleString('en-IN')}</div></div>${statusPill(st)}</div>${st==='rejected'?`<div class="urovo-v108-reason"><b>Reason from CEO:</b> ${escapeHtml(reason||'No reason was recorded. Contact support if you need clarification.')}</div>`:st==='pending'?'<p style="font-size:12px;color:var(--muted,#aaa);margin:7px 0 0">Waiting for CEO review.</p>':'<p style="font-size:12px;color:#55d47a;margin:7px 0 0">Approved and published on the store.</p>'}</div>`;
       }).join('');
     }catch(e){panel.innerHTML=`<h3 style="margin:0 0 8px">📋 Product approval status</h3><p style="color:var(--red,#ff3655);font-size:12px">Could not load approval status: ${escapeHtml(e?.message||'Unknown error')}</p>`}
-    await renderSellerNotifications();
-  }
-
-  async function renderSellerNotifications(){
-    const em=await signedEmail();
-    if(!em||em===CEO_EMAIL)return;
-    const host=$('sellerDashboardContent');if(!host)return;
-    const client=db();if(!client)return;
-    let panel=$('urovoV113SellerApprovalNotifications');
-    if(!panel){panel=document.createElement('section');panel.id='urovoV113SellerApprovalNotifications';panel.className='order-card';panel.style.marginTop='14px';host.appendChild(panel)}
-    panel.innerHTML='<h3>🔔 Product Approval Notifications</h3><p style="color:var(--muted,#aaa);font-size:12px">These private updates are visible only in your seller dashboard.</p><div>Loading your notifications…</div>';
-    try{
-      const r=await client.from('products').select('id,name,approval_status,approval_notes,created_at,approved_at').eq('seller_email',em).order('created_at',{ascending:false}).limit(500);
-      if(r.error)throw r.error;
-      const items=(r.data||[]).filter(p=>['approved','rejected'].includes(statusOf(p)));
-      if(!items.length){panel.innerHTML='<h3>🔔 Product Approval Notifications</h3><p style="color:var(--muted,#aaa);font-size:12px">No approval or rejection notifications yet. Your submitted products are waiting for review.</p>';return}
-      panel.innerHTML='<h3>🔔 Product Approval Notifications <span class="order-new-badge">'+items.length+'</span></h3><p style="color:var(--muted,#aaa);font-size:12px">Only you can see updates for products submitted from this seller account.</p>'+items.map(p=>{
-        const st=statusOf(p),reason=String(p.approval_notes||'').trim();
-        const date=p.approved_at||p.created_at;const dateText=date?new Date(date).toLocaleString():'';
-        return `<article style="padding:12px 0;border-top:1px solid var(--line,rgba(255,255,255,.1))"><div style="display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap"><b>${escapeHtml(p.name||'Product')}</b><span class="urovo-v108-approval-pill ${st==='approved'?'urovo-v108-approved':'urovo-v108-rejected'}">${st==='approved'?'✓ Approved':'✕ Rejected'}</span></div>${st==='rejected'?`<div class="urovo-v108-reason" style="margin-top:8px"><b>Reason from CEO:</b> ${escapeHtml(reason||'No rejection reason was recorded. Please contact support for clarification.')}</div>`:'<p style="color:#55d47a;font-size:12px;margin:7px 0 0">Your product has been approved.</p>'}<small style="display:block;color:var(--muted,#aaa);margin-top:7px">${escapeHtml(dateText)}</small></article>`;
-      }).join('');
-    }catch(e){panel.innerHTML='<h3>🔔 Product Approval Notifications</h3><p style="color:var(--red,#ff3655);font-size:12px">Could not load notifications. Please refresh the seller dashboard.</p>';console.warn('Seller approval notifications:',e?.message||e)}
   }
 
   function activateTab(){document.querySelectorAll('.ceo-sidebar button').forEach(b=>b.classList.toggle('active',b.id==='adminSellerProductApprovalsTab'))}
@@ -8294,7 +8275,7 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
     if(!button){
       button=document.createElement('button');button.id='adminSellerProductApprovalsTab';button.type='button';button.innerHTML='<span>🏪</span><em>Seller Product Approvals</em><b id="urovoV108ApprovalBadge"></b>';
       button.addEventListener('click',()=>{if(!isCEO()){toast('CEO access only');return}activateTab();renderQueue()});
-      const sellers=$('adminSellersTab');if(sellers)sellers.insertAdjacentElement('afterend',button);else nav.appendChild(button);
+      const pending=$('adminPendingTab');if(pending)pending.insertAdjacentElement('afterend',button);else nav.appendChild(button);
     }
     refreshBadge();
   }
@@ -8322,7 +8303,6 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){ensureTab();renderSellerStatus().catch(()=>{});refreshBadge()}});
   window.urovoV108RenderSellerApprovals=renderQueue;
   window.urovoV108RenderSellerStatus=renderSellerStatus;
-  window.urovoV113RenderSellerNotifications=renderSellerNotifications;
   window.urovoV108ReviewProduct=reviewProduct;
   window.urovoV39ApproveProduct=id=>reviewProduct(id,'approved');
   window.urovoV39RejectProduct=id=>reviewProduct(id,'rejected');
@@ -8335,377 +8315,400 @@ html:not(.urovo-installed-pwa-v47) .urovo-account-card[onclick*="enableUrovoPush
 
 <!-- UROVO V109: make Seller Product Approvals visible inside CEO Pending Center -->
 <style id="urovo-v109-ceo-approval-entry-style">
-#urovoV109SellerApprovalEntry{margin:0 0 14px;padding:14px;border:1px solid rgba(200,255,0,.28);border-radius:16px;background:linear-gradient(135deg,rgba(200,255,0,.09),rgba(255,255,255,.025));display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
-#urovoV109SellerApprovalEntry:hover{border-color:rgba(200,255,0,.5)}
+#urovoV109SellerApprovalEntry{width:100%;box-sizing:border-box;margin:0 0 14px;padding:14px;border:1px solid rgba(200,255,0,.28);border-radius:16px;background:linear-gradient(135deg,rgba(200,255,0,.09),rgba(255,255,255,.025));display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;color:inherit;text-align:left;font:inherit}
+#urovoV109SellerApprovalEntry:hover,#urovoV109SellerApprovalEntry:focus-visible{border-color:rgba(200,255,0,.6);outline:2px solid rgba(200,255,0,.18);outline-offset:2px}
 #urovoV109SellerApprovalEntry .v109-left{display:flex;align-items:flex-start;gap:11px;min-width:0}
 #urovoV109SellerApprovalEntry .v109-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#c8ff00;color:#070707;font-size:21px;flex:0 0 auto}
-#urovoV109SellerApprovalEntry h3{margin:0 0 3px;font-size:14px}.urovo-v109-muted{color:var(--muted,#aaa);font-size:12px;line-height:1.4}
+#urovoV109SellerApprovalEntry .v109-title{display:block;margin:0 0 3px;font-size:14px;font-weight:900;line-height:1.3}
+.urovo-v109-muted{display:block;color:var(--muted,#aaa);font-size:12px;line-height:1.4}
 #urovoV109SellerApprovalEntry .v109-count{min-width:28px;height:28px;padding:0 9px;border-radius:999px;background:#c8ff00;color:#070707;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:1000;flex:0 0 auto}
 </style>
-<script id="urovo-v109-ceo-approval-entry">
+<script id="urovo-v110-full-recheck-approval-entry">
 (function(){
   'use strict';
-  if(window.__urovoV109CEOApprovalEntry)return;
-  window.__urovoV109CEOApprovalEntry=true;
+  if(window.__urovoV110CEOApprovalEntry)return;
+  window.__urovoV110CEOApprovalEntry=true;
+  const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
   const $=id=>document.getElementById(id);
   const db=()=>window.supabaseClient||window.supabase||null;
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const pendingCount=async()=>{
+  const email=()=>String(window.user?.email||window.currentUser?.email||window.session?.user?.email||'').trim().toLowerCase();
+  let countBusy=false, countQueued=false;
+  function isCEO(){return email()===CEO_EMAIL}
+  async function pendingCount(){
+    const client=db();if(!client)return null;
     try{
-      const c=db(); if(!c)return 0;
-      const r=await c.from('products').select('id,approval_status,seller_email').limit(2000);
-      if(r.error)throw r.error;
-      return (r.data||[]).filter(p=>String(p.seller_email||'').trim() && String(p.approval_status||'pending').toLowerCase()==='pending').length;
-    }catch(e){console.warn('UROVO V109 approval count:',e?.message||e);return 0}
-  };
-  async function inject(){ $('urovoV109SellerApprovalEntry')?.remove(); return; }
+      let offset=0,total=0,loops=0;
+      while(loops++<10){
+        const r=await client.from('products').select('id,approval_status,seller_email').range(offset,offset+999);
+        if(r.error)throw r.error;
+        const rows=r.data||[];
+        total+=rows.filter(p=>String(p.seller_email||'').trim()&&String(p.approval_status||'pending').trim().toLowerCase()==='pending').length;
+        if(rows.length<1000)break;
+        offset+=1000;
+      }
+      return total;
+    }catch(e){console.warn('UROVO V110 approval count:',e?.message||e);return null}
+  }
+  function isRelevantCEOPage(host){
+    if(!host)return false;
+    const modal=$('adminModal');if(!modal||!modal.classList.contains('show'))return false;
+    const home=!!host.querySelector('.urovo-ceo-home');
+    const pending=!!host.querySelector('#ceoPendingRows')||/pending center/i.test(host.querySelector('.ceo-page-head h3')?.textContent||'');
+    return home||pending;
+  }
+  async function inject(){
+    const host=$('adminContent');if(!isCEO()||!isRelevantCEOPage(host))return;
+    let box=$('urovoV109SellerApprovalEntry');
+    if(!box){
+      box=document.createElement('button');
+      box.type='button';box.id='urovoV109SellerApprovalEntry';box.setAttribute('aria-label','Open seller product approvals');
+      box.innerHTML='<span class="v109-left"><span class="v109-icon" aria-hidden="true">🏪</span><span class="v109-copy"><span class="v109-title">Seller Product Approvals</span><span class="urovo-v109-muted">Review seller-submitted products before they appear in the store.</span></span></span><span class="v109-count" id="urovoV109SellerApprovalCount" aria-live="polite">…</span>';
+      box.addEventListener('click',()=>{
+        if(!isCEO())return;
+        if(typeof window.adminTab==='function')window.adminTab('sellerapprovals');
+        else if(typeof window.urovoV108RenderSellerApprovals==='function')window.urovoV108RenderSellerApprovals();
+      });
+    }
+    // Keep the shortcut directly under the page heading on both the Control Center and Pending Center.
+    const header=host.querySelector(':scope > .ceo-page-head');
+    if(header&&header.parentElement===host){if(box.parentElement!==host||box.previousElementSibling!==header)header.insertAdjacentElement('afterend',box)}
+    else if(box.parentElement!==host||host.firstElementChild!==box)host.prepend(box);
+    if(countBusy){countQueued=true;return}
+    countBusy=true;
+    try{
+      const n=await pendingCount();
+      const badge=$('urovoV109SellerApprovalCount');
+      if(badge){badge.textContent=n===null?'—':String(n);badge.title=n===null?'Could not load count; open approvals and refresh.':n+' pending seller products';}
+      const navBadge=$('urovoV108ApprovalBadge');
+      if(navBadge&&n!==null){navBadge.textContent=String(n);navBadge.style.display=n?'inline-flex':'none'}
+    }finally{
+      countBusy=false;
+      if(countQueued){countQueued=false;setTimeout(inject,120)}
+    }
+  }
+  function schedule(){setTimeout(()=>inject().catch(e=>console.warn('UROVO approval entry:',e)),120)}
   const oldAdminTab=window.adminTab;
-  if(typeof oldAdminTab==='function'&&!oldAdminTab.__urovoV109Wrapped){
+  if(typeof oldAdminTab==='function'&&!oldAdminTab.__urovoV110ApprovalWrapped){
     const wrapped=function(tab,...args){
       const result=oldAdminTab.apply(this,[tab,...args]);
-      if(String(tab||'').toLowerCase()==='pending'){
-        setTimeout(inject,80);setTimeout(inject,400);setTimeout(inject,1000);
-      }
+      if(['pending','homehub'].includes(String(tab||'').toLowerCase()))[120,380,850].forEach(ms=>setTimeout(()=>inject().catch(e=>console.warn(e)),ms));
       return result;
     };
-    wrapped.__urovoV109Wrapped=true;window.adminTab=wrapped;
+    wrapped.__urovoV110ApprovalWrapped=true;window.adminTab=wrapped;
   }
   const oldOpen=window.openAdmin;
-  if(typeof oldOpen==='function'&&!oldOpen.__urovoV109Wrapped){
-    const wrapped=function(...args){const r=oldOpen.apply(this,args);setTimeout(inject,250);setTimeout(inject,800);return r};
-    wrapped.__urovoV109Wrapped=true;window.openAdmin=wrapped;
+  if(typeof oldOpen==='function'&&!oldOpen.__urovoV110ApprovalWrapped){
+    const wrapped=function(...args){const r=oldOpen.apply(this,args);[200,500,1000].forEach(ms=>setTimeout(()=>inject().catch(e=>console.warn(e)),ms));return r};
+    wrapped.__urovoV110ApprovalWrapped=true;window.openAdmin=wrapped;
   }
-  document.addEventListener('DOMContentLoaded',()=>{setTimeout(inject,700);setTimeout(inject,1500)});
-  window.urovoV109InjectSellerApprovalEntry=inject;
+  document.addEventListener('DOMContentLoaded',()=>[500,1200].forEach(ms=>setTimeout(()=>inject().catch(e=>console.warn(e)),ms)),{once:true});
+  window.urovoV110InjectSellerApprovalEntry=inject;
 })();
 </script>
 
 
-<!-- UROVO V112: persistent installed state and resilient CEO approval navigation -->
-<style id="urovo-v112-final-fix-style">
-#installAppBtn.urovo-v112-installed-hidden,[data-install-app].urovo-v112-installed-hidden,.install-app-btn.urovo-v112-installed-hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
-#adminSellerProductApprovalsTab.urovo-v112-approval-tab{display:flex!important;align-items:center;gap:8px;text-align:left}
+<!-- UROVO V111 FINAL SELLER + WISHLIST FIX -->
+<style id="urovo-v111-final-fix-css">
+.wish.active,
+.wish[aria-pressed="true"]{
+  color:#ff3655!important;
+  border-color:rgba(255,54,85,.58)!important;
+  background:rgba(255,54,85,.13)!important;
+}
+.wish.active svg,
+.wish[aria-pressed="true"] svg{
+  fill:#ff3655!important;
+  stroke:#ff3655!important;
+}
+#detailWish.active{
+  color:#ff3655!important;
+  border-color:rgba(255,54,85,.58)!important;
+  background:rgba(255,54,85,.10)!important;
+}
+#detailWish.active svg{fill:#ff3655!important;stroke:#ff3655!important}
+.urovo-v111-fallback{margin-top:12px}
+.urovo-v111-fallback .input{margin-bottom:9px}
 </style>
-<script id="urovo-v112-final-fix-js">
+<script id="urovo-v111-final-fix-js">
 (function(){
   'use strict';
-  if(window.__urovoV112FinalFix)return;window.__urovoV112FinalFix=true;
-  const INSTALLED='urovo_pwa_installed_permanent_v112';
-  const $=id=>document.getElementById(id);
-  function installed(){
+  if(window.__urovoV111FinalFix)return;
+  window.__urovoV111FinalFix=true;
+
+  const db=()=>window.supabaseClient||window.supabaseClient;
+  const esc=s=>typeof window.escapeHtml==='function'
+    ? window.escapeHtml(String(s??''))
+    : String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const say=m=>{try{window.toast(m)}catch(e){console.log(m)}};
+  const getEmail=()=>String(window.user?.email||window.currentUser?.email||window.authUser?.email||'').trim().toLowerCase();
+
+  /* ---------- WISHLIST: immediate red-heart sync ---------- */
+  function getWishList(){
     try{
-      if(localStorage.getItem(INSTALLED)==='1'||localStorage.getItem('urovo_pwa_install_confirmed_v105')==='1'||localStorage.getItem('urovo_pwa_installed_permanent_v112')==='1')return true;
-      const standalone=window.navigator.standalone===true||!!(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||String(document.referrer||'').startsWith('android-app://');
-      if(standalone){localStorage.setItem(INSTALLED,'1');return true}
-      return false;
-    }catch(e){return false}
+      if(Array.isArray(window.wishlist)) return window.wishlist;
+      if(typeof wishlist!=='undefined' && Array.isArray(wishlist)) return wishlist;
+    }catch(e){}
+    return [];
   }
-  function hideInstallUI(){
-    if(!installed())return;
-    document.querySelectorAll('#installAppBtn,[data-install-app],.install-app-btn').forEach(el=>{
-      el.classList.add('urovo-v112-installed-hidden');el.hidden=true;el.setAttribute('aria-hidden','true');
-      el.style.setProperty('display','none','important');el.style.setProperty('visibility','hidden','important');el.style.setProperty('pointer-events','none','important');
+  function syncAllHearts(id){
+    const key=String(id??'');
+    const list=getWishList();
+    const active=!!key && list.some(x=>String(x)===key);
+    document.querySelectorAll('.wish').forEach(btn=>{
+      const bid=btn.dataset.productId || btn.getAttribute('data-product-id') || '';
+      if(bid && String(bid)!==key)return;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',active?'true':'false');
+      btn.setAttribute('aria-label',active?'Remove from wishlist':'Add to wishlist');
+      const svg=btn.querySelector('svg');
+      if(svg){
+        svg.style.setProperty('fill',active?'#ff3655':'none','important');
+        svg.style.setProperty('stroke',active?'#ff3655':'currentColor','important');
+      }
     });
-    const overlay=$('urovoInstallOverlay');if(overlay){overlay.classList.remove('show');overlay.style.setProperty('display','none','important');overlay.setAttribute('aria-hidden','true')}
-  }
-  window.addEventListener('appinstalled',()=>{try{localStorage.setItem(INSTALLED,'1');localStorage.setItem('urovo_pwa_install_confirmed_v105','1')}catch(e){};hideInstallUI()});
-  if(installed())hideInstallUI();
-  ['DOMContentLoaded','load','pageshow','focus'].forEach(ev=>window.addEventListener(ev,hideInstallUI,{passive:true}));
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)hideInstallUI()});
-  if('MutationObserver'in window){new MutationObserver(()=>{if(installed())hideInstallUI();ensureApprovalNav();removeApprovalShortcut()}).observe(document.documentElement,{subtree:true,childList:true})}
-
-  function removeApprovalShortcut(){document.getElementById('urovoV112ApprovalShortcut')?.remove();document.getElementById('urovoV109SellerApprovalEntry')?.remove()}
-  function ensureApprovalNav(){
-    const nav=document.querySelector('.ceo-sidebar');if(!nav)return;
-    let btn=$('adminSellerProductApprovalsTab');
-    if(!btn){
-      btn=document.createElement('button');btn.id='adminSellerProductApprovalsTab';btn.type='button';btn.innerHTML='<span>🏪</span><em>Seller Product Approvals</em><b id="urovoV108ApprovalBadge"></b>';
-      btn.addEventListener('click',()=>{if(typeof window.adminTab==='function')window.adminTab('sellerapprovals');else if(typeof window.urovoV108RenderSellerApprovals==='function')window.urovoV108RenderSellerApprovals();else if(typeof window.toast==='function')window.toast('Seller approvals are loading. Please reopen the CEO dashboard.')});
+    const detail=document.getElementById('detailWish');
+    if(detail && String(window.__urovoCurrentProductId||window.currentProductId||detail.dataset.productId||'')===key){
+      detail.classList.toggle('active',active);
+      detail.setAttribute('aria-pressed',active?'true':'false');
     }
-    btn.classList.add('urovo-v112-approval-tab');
-    const sellers=$('adminSellersTab');
-    if(sellers&&btn.previousElementSibling!==sellers)sellers.insertAdjacentElement('afterend',btn);else if(!btn.isConnected)nav.appendChild(btn);
   }
-  function refresh(){hideInstallUI();ensureApprovalNav();removeApprovalShortcut()}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
-  setTimeout(refresh,250);setTimeout(refresh,800);setTimeout(refresh,1800);
-  setInterval(()=>{ensureApprovalNav();removeApprovalShortcut();hideInstallUI()},2500);
-})();
-</script>
+  function syncVisibleHearts(){
+    document.querySelectorAll('.wish').forEach(btn=>{
+      const onclick=btn.getAttribute('onclick')||'';
+      const m=onclick.match(/toggleWish\(['"]([^'"]+)/);
+      if(m)btn.dataset.productId=String(m[1]);
+    });
+    document.querySelectorAll('.wish').forEach(btn=>{
+      const id=btn.dataset.productId;
+      if(!id)return;
+      const active=getWishList().some(x=>String(x)===String(id));
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',active?'true':'false');
+      const svg=btn.querySelector('svg');
+      if(svg){
+        svg.style.setProperty('fill',active?'#ff3655':'none','important');
+        svg.style.setProperty('stroke',active?'#ff3655':'currentColor','important');
+      }
+    });
+  }
 
+  const originalWish=window.toggleWish;
+  if(typeof originalWish==='function'&&!originalWish.__urovoV111){
+    const wrappedWish=function(id,btn){
+      const result=originalWish.apply(this,arguments);
+      const key=String(id);
+      if(btn)btn.dataset.productId=key;
+      setTimeout(()=>syncAllHearts(key),0);
+      setTimeout(syncVisibleHearts,80);
+      setTimeout(syncVisibleHearts,250);
+      return result;
+    };
+    wrappedWish.__urovoV111=true;
+    window.toggleWish=wrappedWish;
+  }
+  document.addEventListener('click',function(e){
+    const b=e.target?.closest?.('.wish');
+    if(!b)return;
+    const m=(b.getAttribute('onclick')||'').match(/toggleWish\(['"]([^'"]+)/);
+    if(m)b.dataset.productId=String(m[1]);
+    setTimeout(syncVisibleHearts,0);
+    setTimeout(syncVisibleHearts,80);
+  },true);
 
-<style id="urovo-v113-seller-notifications-style">
-#urovoV113SellerApprovalNotifications{border:1px solid var(--line,rgba(255,255,255,.12));border-radius:16px;padding:14px;background:var(--surface2,#151515);color:var(--text,#fff)}
-#urovoV113SellerApprovalNotifications h3{margin:0 0 8px}#urovoV113SellerApprovalNotifications .urovo-v108-reason{overflow-wrap:anywhere}
-</style>
+  /* ---------- SELLER: product insert must not depend on Product Code RPC ---------- */
+  async function ensureSeller(){
+    const em=getEmail();
+    if(!em)throw new Error('Please sign in first');
+    const client=db();
+    if(!client)throw new Error('Supabase connection is unavailable');
+    const r=await client.from('urovo_sellers').select('email,active').eq('email',em).maybeSingle();
+    if(r.error)throw r.error;
+    if(!r.data||r.data.active===false)throw new Error('Your Seller badge is not active');
+    return em;
+  }
+  async function uploadImages(files,em){
+    if(typeof window.uploadSellerImages==='function')return window.uploadSellerImages(files,em);
+    const client=db(),urls=[];
+    for(const file of files){
+      const path=`seller/${em}/${Date.now()}-${Math.random().toString(36).slice(2)}-${String(file.name||'image').replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+      const up=await client.storage.from('product-images').upload(path,file,{upsert:false});
+      if(up.error)throw up.error;
+      urls.push(client.storage.from('product-images').getPublicUrl(path).data.publicUrl);
+    }
+    return urls;
+  }
 
+  async function finalSellerCreate(){
+    try{
+      const em=await ensureSeller();
+      const val=id=>document.getElementById(id)?.value?.trim()||'';
+      const files=Array.from(document.getElementById('svImages')?.files||[]);
+      const name=val('svName');
+      const category=val('svCategory')||'All';
+      const price=Number(val('svPrice'));
+      const old_price=Number(val('svOld')||0);
+      const stock=Math.max(0,Math.floor(Number(val('svStock')||0)));
+      const shipping_charge=Math.max(0,Number(val('svShipping')||0));
+      const free_shipping=document.getElementById('svFreeShipping')?.checked===true;
+      const tag=(val('svTag').match(/#[A-Za-z0-9_-]+/g)||[]).join(' ');
+      const description=val('svDesc');
 
-<!-- UROVO V114: final integration fixes for install state, CEO approval navigation and seller-only status -->
-<style id="urovo-v114-integration-style">
-#installAppBtn.urovo-v114-installed-hidden,[data-install-app].urovo-v114-installed-hidden,.install-app-btn.urovo-v114-installed-hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
-#adminSellerProductApprovalsTab{order:7;position:relative}
-#urovoV108SellerStatus,#urovoV113SellerApprovalNotifications{display:block;width:100%;box-sizing:border-box}
-</style>
-<script id="urovo-v114-integration-js">
-(function(){
- 'use strict';
- if(window.__urovoV114Integration)return;window.__urovoV114Integration=true;
- const $=id=>document.getElementById(id);
- const CEO='ujjwalkrishna0555@gmail.com';
- const email=()=>String(window.user?.email||window.currentUser?.email||window.supabaseUser?.email||'').trim().toLowerCase();
- const isCEO=()=>email()===CEO;
- function installed(){
-   try{
-     if(localStorage.getItem('urovo_pwa_install_confirmed_v105')==='1'||localStorage.getItem('urovo_pwa_installed_permanent_v112')==='1')return true;
-     return navigator.standalone===true||!!window.matchMedia?.('(display-mode: standalone)').matches||!!window.matchMedia?.('(display-mode: fullscreen)').matches||String(document.referrer||'').startsWith('android-app://');
-   }catch(_){return false}
- }
- function hideInstall(){
-   if(!installed())return;
-   document.querySelectorAll('#installAppBtn,[data-install-app],.install-app-btn').forEach(el=>{el.classList.add('urovo-v114-installed-hidden');el.hidden=true;el.setAttribute('aria-hidden','true');el.style.setProperty('display','none','important');el.style.setProperty('visibility','hidden','important');el.style.setProperty('pointer-events','none','important')});
-   const overlay=$('urovoInstallOverlay');if(overlay){overlay.classList.remove('show');overlay.hidden=true;overlay.style.setProperty('display','none','important');overlay.setAttribute('aria-hidden','true')}
- }
- window.addEventListener('appinstalled',()=>{try{localStorage.setItem('urovo_pwa_install_confirmed_v105','1');localStorage.setItem('urovo_pwa_installed_permanent_v112','1')}catch(_){}hideInstall()});
- // Optional browser API: when the web manifest is configured with related_applications,
- // ask the browser whether the corresponding app is installed.
- async function checkRelatedInstalled(){try{if(navigator.getInstalledRelatedApps){const apps=await navigator.getInstalledRelatedApps();if(Array.isArray(apps)&&apps.length){localStorage.setItem('urovo_pwa_installed_permanent_v112','1');hideInstall()}}}catch(_){}}
- function placeApproval(){
-   const nav=document.querySelector('.ceo-sidebar');if(!nav)return;
-   let btn=$('adminSellerProductApprovalsTab');
-   if(!btn){btn=document.createElement('button');btn.id='adminSellerProductApprovalsTab';btn.type='button';btn.innerHTML='<span>🏪</span><em>Seller Product Approvals</em><b id="urovoV108ApprovalBadge"></b>';btn.addEventListener('click',()=>{if(!isCEO()){const msg='CEO access only';if(typeof window.toast==='function')window.toast(msg);else alert(msg);return}document.querySelectorAll('.ceo-sidebar button').forEach(b=>b.classList.toggle('active',b===btn));if(typeof window.urovoV108RenderSellerApprovals==='function')window.urovoV108RenderSellerApprovals();else if(typeof window.adminTab==='function')window.adminTab('sellerapprovals')});}
-   // Keep it with the dashboard's normal function tabs, after Sellers—not as a top banner/card.
-   const sellers=$('adminSellersTab');if(sellers&&btn.previousElementSibling!==sellers)sellers.insertAdjacentElement('afterend',btn);else if(!btn.isConnected)nav.appendChild(btn);
-   $('urovoV109SellerApprovalEntry')?.remove();$('urovoV112ApprovalShortcut')?.remove();
- }
- let sellerRenderTimer=0;
- function scheduleSellerStatus(){
-   clearTimeout(sellerRenderTimer);sellerRenderTimer=setTimeout(()=>{
-     const host=$('sellerDashboardContent');if(!host||!host.isConnected||!host.offsetParent)return;
-     if(typeof window.urovoV108RenderSellerStatus==='function')window.urovoV108RenderSellerStatus().catch(e=>console.warn('Seller approval status:',e?.message||e));
-     else if(typeof window.urovoV113RenderSellerNotifications==='function')window.urovoV113RenderSellerNotifications().catch(e=>console.warn('Seller notifications:',e?.message||e));
-   },250);
- }
- // Ensure the sidebar button is added after dynamically-created CEO dashboard markup.
- function sync(){hideInstall();placeApproval();scheduleSellerStatus()}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});else sync();
- [250,800,1600,3000].forEach(ms=>setTimeout(sync,ms));
- const mo=new MutationObserver(()=>{hideInstall();const nav=document.querySelector('.ceo-sidebar');if(nav&&!$('adminSellerProductApprovalsTab'))placeApproval();const host=$('sellerDashboardContent');if(host&&host.isConnected&&!$('urovoV108SellerStatus')&&!$('urovoV113SellerApprovalNotifications'))scheduleSellerStatus()});
- if(document.documentElement)mo.observe(document.documentElement,{childList:true,subtree:true});
- ['pageshow','focus'].forEach(ev=>window.addEventListener(ev,()=>{hideInstall();placeApproval();scheduleSellerStatus()}));
- document.addEventListener('visibilitychange',()=>{if(!document.hidden){hideInstall();placeApproval();scheduleSellerStatus()}});
- checkRelatedInstalled();
-})();
-</script>
+      if(!name||!Number.isFinite(price)||price<=0||!description){
+        say('Enter product name, positive price and description'); return;
+      }
+      if(!files.length){say('Add at least one product image');return}
 
-<style id="urovo-v116-approval-reliability-style">
-#adminSellerProductApprovalsTab.urovo-v116-approval-tab{display:flex!important;align-items:center;gap:8px;width:100%;text-align:left;order:7}
-#adminSellerProductApprovalsTab.urovo-v116-approval-tab em{font-style:normal;flex:1}
-#urovoV116ApprovalBadge{display:none;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 6px;border-radius:999px;background:#c8ff00;color:#080808;font-size:11px;font-weight:1000;margin-left:auto}
-#adminApprovalsTab{display:none!important}
-#urovoV116SellerApprovalNotifications{display:block;width:100%;box-sizing:border-box;margin-top:14px;padding:14px;border:1px solid var(--line,rgba(0,0,0,.12));border-radius:16px;background:var(--surface2,#f5f5f5);color:var(--text,#111)}
-#urovoV116SellerApprovalNotifications .v116-notification-row{padding:12px 0;border-top:1px solid var(--line,rgba(0,0,0,.12))}
-#urovoV116SellerApprovalNotifications .v116-status{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}
-#urovoV116SellerApprovalNotifications .v116-approved{background:rgba(55,190,90,.13);color:#18833a}
-#urovoV116SellerApprovalNotifications .v116-rejected{background:rgba(255,54,85,.12);color:#c92142}
-#urovoV116SellerApprovalNotifications .v116-pending{background:rgba(255,178,0,.15);color:#9a6500}
-#urovoV116ApprovalRows .urovo-v108-approval-actions button{min-width:140px}
-</style>
-<script id="urovo-v116-approval-reliability-js">
-(function(){
- 'use strict';
- if(window.__urovoV116ApprovalReliability)return;
- window.__urovoV116ApprovalReliability=true;
- const CEO_EMAIL='ujjwalkrishna0555@gmail.com';
- const $=id=>document.getElementById(id);
- const client=()=>window.supabaseClient||window.supabase||null;
- const localEmail=()=>String(window.user?.email||window.currentUser?.email||window.supabaseUser?.email||'').trim().toLowerCase();
- const esc=v=>typeof window.escapeHtml==='function'?window.escapeHtml(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const note=m=>{try{if(typeof window.toast==='function')window.toast(m);else console.log('[UROVO approval]',m)}catch(_){console.log('[UROVO approval]',m)}};
- const statusOf=p=>{const v=String(p?.approval_status||'pending').trim().toLowerCase();return ['pending','approved','rejected'].includes(v)?v:'pending'};
- const pill=s=>`<span class="urovo-v108-approval-pill ${s==='approved'?'urovo-v108-approved':s==='rejected'?'urovo-v108-rejected':'urovo-v108-pending'}">${s==='approved'?'✓ Approved':s==='rejected'?'✕ Rejected':'⏳ Pending Approval'}</span>`;
- async function currentEmail(){
-   const c=client();
-   if(c?.auth?.getUser){
-     try{const r=await c.auth.getUser();if(!r?.error)return String(r?.data?.user?.email||'').trim().toLowerCase();}catch(_){}
-   }
-   return localEmail();
- }
- async function isCEO(){return (await currentEmail())===CEO_EMAIL;}
- function isMissingRpcError(message){return /PGRST202|schema cache|could not find the function|function .* does not exist|unknown function/i.test(String(message||''));}
- async function listSellerProducts(){
-   const c=client();if(!c)throw new Error('Supabase connection is not ready.');
-   const r=await c.from('products').select('*').order('created_at',{ascending:false}).limit(1000);
-   if(r.error)throw r.error;
-   return (r.data||[]).filter(p=>String(p.seller_email||'').trim());
- }
- async function refreshBadge(){
-   try{
-     const rows=await listSellerProducts();const n=rows.filter(p=>statusOf(p)==='pending').length;
-     const b=$('urovoV116ApprovalBadge');if(b){if(b.textContent!==String(n))b.textContent=String(n);b.style.display=n?'inline-flex':'none';b.title=n+' pending seller approvals';}
-   }catch(e){console.warn('Seller approval badge:',e?.message||e)}
- }
- function activateButton(btn){
-   const nav=document.querySelector('#adminModal .ceo-sidebar');if(!nav)return;
-   nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b===btn));
- }
- async function renderQueue(){
-   if(!(await isCEO())){note('CEO access only');return;}
-   const host=$('adminContent');if(!host)return;
-   host.innerHTML=`<div class="ceo-page-head"><div><h3>🏪 Seller Product Approvals</h3><p>Approve seller products or reject them with a reason. Sellers receive a private dashboard and account notification.</p></div><button type="button" class="secondary" id="urovoV116Refresh">↻ Refresh</button></div>
-    <div class="urovo-v108-approval-metrics"><div class="urovo-v108-approval-metric"><b id="urovoV116PendingCount">—</b><small>Pending review</small></div><div class="urovo-v108-approval-metric"><b id="urovoV116ApprovedCount">—</b><small>Approved</small></div><div class="urovo-v108-approval-metric"><b id="urovoV116RejectedCount">—</b><small>Rejected</small></div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><select id="urovoV116Filter" class="input" style="max-width:210px"><option value="pending">Pending only</option><option value="all">All submissions</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select><input id="urovoV116Search" class="input" style="max-width:300px" placeholder="Search product or seller" aria-label="Search seller products"></div>
-    <div id="urovoV116ApprovalRows"><div class="order-card">Loading seller submissions…</div></div>`;
-   $('urovoV116Refresh')?.addEventListener('click',()=>renderQueue());
-   const rows=$('urovoV116ApprovalRows');
-   try{
-     const products=await listSellerProducts();
-     const counts={pending:0,approved:0,rejected:0};products.forEach(p=>counts[statusOf(p)]++);
-     $('urovoV116PendingCount').textContent=String(counts.pending);$('urovoV116ApprovedCount').textContent=String(counts.approved);$('urovoV116RejectedCount').textContent=String(counts.rejected);
-     const render=()=>{
-       if(!rows?.isConnected)return;
-       const filter=$('urovoV116Filter')?.value||'pending';const q=String($('urovoV116Search')?.value||'').trim().toLowerCase();
-       const found=products.filter(p=>{const st=statusOf(p);if(filter!=='all'&&filter!==st)return false;return !q||[p.name,p.seller_name,p.seller_email,p.category,p.description].some(v=>String(v||'').toLowerCase().includes(q))});
-       if(!found.length){rows.innerHTML=`<div class="order-card"><h3>${filter==='pending'?'No pending seller products':'No matching submissions'}</h3><p style="color:var(--muted)">${filter==='pending'?'Seller submissions will appear here when they are received.':'Try another filter or search.'}</p></div>`;return;}
-       rows.innerHTML=found.map(p=>{
-         const st=statusOf(p),reason=String(p.approval_notes||'').trim(),img=String(p.image_url||'').trim();
-         const actions=st==='pending'?`<div class="urovo-v108-approval-actions"><button type="button" class="primary" data-v116-approve="${esc(p.id)}">✓ Approve & Publish</button><button type="button" class="secondary" data-v116-reject="${esc(p.id)}">✕ Reject with reason</button></div>`:'';
-         const rejected=st==='rejected'?`<div class="urovo-v108-reason"><b>Rejection reason:</b> ${esc(reason||'No reason was saved.')}</div>`:'';
-         return `<article class="urovo-v108-approval-card"><div style="display:flex;gap:12px;align-items:flex-start"><img src="${esc(img)}" alt="" loading="lazy" style="width:78px;height:78px;flex:0 0 78px;object-fit:cover;border-radius:12px;background:var(--surface2)"><div style="min-width:0;flex:1"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between"><b>${esc(p.name||'Untitled product')}</b>${pill(st)}</div><p style="font-size:12px;color:var(--muted);margin:6px 0">Seller: ${esc(p.seller_name||p.seller_email||'Unknown')}</p><p style="font-size:12px;color:var(--muted);margin:4px 0">${esc(p.category||'All')} · ₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)}</p><p style="font-size:12px;line-height:1.5;margin:6px 0">${esc(p.description||'No description provided')}</p>${rejected}</div></div>${actions}</article>`;
-       }).join('');
-       rows.querySelectorAll('[data-v116-approve]').forEach(b=>b.addEventListener('click',()=>reviewProduct(b.dataset.v116Approve,'approved',b)));
-       rows.querySelectorAll('[data-v116-reject]').forEach(b=>b.addEventListener('click',()=>reviewProduct(b.dataset.v116Reject,'rejected',b)));
-     };
-     $('urovoV116Filter')?.addEventListener('change',render);$('urovoV116Search')?.addEventListener('input',render);render();await refreshBadge();
-   }catch(e){rows.innerHTML=`<div class="order-card"><h3>Could not load seller approvals</h3><p style="color:var(--red)">${esc(e?.message||'Unknown error')}</p><p style="font-size:12px;color:var(--muted);margin-top:8px">If this is a Supabase permission error, the CEO read policy for <code>products</code> needs to allow seller product review.</p></div>`;console.warn('Seller approvals queue:',e?.message||e)}
- }
- async function fetchProduct(id){
-   const c=client();const r=await c.from('products').select('id,name,seller_email,approval_status,approval_notes,created_at,approved_at,active').eq('id',id).maybeSingle();
-   if(r.error)throw r.error;if(!r.data)throw new Error('Product could not be loaded. Refresh the queue and try again.');return r.data;
- }
- async function notifySeller(product,decision,reason){
-   const recipient=String(product?.seller_email||'').trim().toLowerCase();if(!recipient)return {saved:false,reason:'Product has no seller email.'};
-   const title=decision==='approved'?'✅ Your UROVO product was approved':'❌ Your UROVO product was rejected';
-   const message=decision==='approved'?`Good news! “${product.name||'Your product'}” has been approved by UROVO and is now eligible to appear in the store.`:`“${product.name||'Your product'}” was rejected by UROVO. Reason: ${reason||'No reason provided.'}`;
-   try{
-     if(typeof window.urovoNotifyAndPush==='function'){
-       const ok=await window.urovoNotifyAndPush(recipient,title,message,'seller-product-approval');
-       if(ok)return {saved:true};
-     }
-   }catch(e){console.warn('Seller approval notification helper:',e?.message||e)}
-   try{
-     const c=client();const r=await c.from('urovo_notifications').insert({recipient_email:recipient,title,message,sent_by:CEO_EMAIL,created_at:new Date().toISOString()});
-     if(!r.error)return {saved:true};console.warn('Seller approval notification insert:',r.error.message);return {saved:false,reason:r.error.message};
-   }catch(e){console.warn('Seller approval notification insert:',e?.message||e);return {saved:false,reason:e?.message||'Notification insert failed'};}
- }
- async function reviewProduct(id,decision,button){
-   if(!(await isCEO())){note('CEO access only');return;}
-   if(!['approved','rejected'].includes(decision))return;
-   let reason='';
-   if(decision==='rejected'){
-     const entered=window.prompt('Enter the rejection reason. This will be sent privately to the seller:','');
-     if(entered===null)return;reason=String(entered).trim();if(!reason){note('A rejection reason is required so the seller knows what to fix.');return;}
-   }
-   const c=client();if(!c){note('Supabase connection is not ready.');return;}
-   if(button){button.disabled=true;button.textContent='Saving…';}
-   try{
-     let product=await fetchProduct(id);
-     if(!product.seller_email)throw new Error('This submission has no seller email and cannot be sent to a seller.');
-     // Use the server-side CEO review RPC first, preserving any existing product-code and authorization rules.
-     const rpc=await c.rpc('urovo_review_product',{p_product_id:id,p_status:decision,p_notes:decision==='rejected'?reason:null});
-     if(rpc.error){
-       if(!isMissingRpcError(rpc.error.message))throw new Error('Supabase rejected the review: '+rpc.error.message);
-       // Compatibility fallback only when the RPC is genuinely missing; database RLS must still authorize CEO writes.
-       const patch=decision==='approved'?{approval_status:'approved',approval_notes:null,approved_at:new Date().toISOString(),approved_by:CEO_EMAIL,active:true}:{approval_status:'rejected',approval_notes:reason,approved_at:null,approved_by:null,active:false};
-       const direct=await c.from('products').update(patch).eq('id',id).select('id').maybeSingle();
-       if(direct.error)throw new Error('Review function is missing and direct update was denied: '+direct.error.message+' · Deploy the UROVO review RPC and CEO RLS policy.');
-       if(!direct.data)throw new Error('No product row was updated. Check the CEO update policy for products.');
-     }
-     let savedProduct=product;
-     try{const refreshed=await fetchProduct(id);if(statusOf(refreshed)!==decision)throw new Error('The database did not confirm the requested status.');savedProduct=refreshed;}
-     catch(verifyError){if(!rpc.error)throw new Error('Review request returned successfully, but status could not be verified: '+(verifyError?.message||'unknown error'));throw verifyError;}
-     const noticeResult=await notifySeller({...product,...savedProduct},decision,reason);
-     try{await c.rpc('urovo_write_audit',{p_action:decision==='approved'?'seller_product_approved':'seller_product_rejected',p_details:{product_id:id,seller_email:product.seller_email,reason:decision==='rejected'?reason:null}})}catch(_){ }
-     note(decision==='approved'?(noticeResult.saved?'Approved. Seller notification sent.':'Approved, but the seller notification could not be saved; status is visible in Seller Dashboard.'):(noticeResult.saved?'Rejected. Reason saved and seller notified.':'Rejected and reason saved, but notification table insert failed; seller can see the reason in Seller Dashboard.'));
-     try{await window.loadStoreProducts?.()}catch(e){console.warn('Store reload:',e?.message||e)}
-     await renderQueue();await refreshBadge();
-     try{await renderSellerNotifications()}catch(_){ }
-   }catch(e){note(e?.message||'Could not save the seller product decision.');console.error('Seller approval action:',e)}
-   finally{if(button?.isConnected){button.disabled=false;button.textContent=decision==='approved'?'✓ Approve & Publish':'✕ Reject with reason';}}
- }
- async function renderSellerNotifications(){
-   const em=String(await currentEmail()||'').trim().toLowerCase();const host=$('sellerDashboardContent');
-   if(!em||em===CEO_EMAIL||!host||!host.isConnected)return;
-   const c=client();if(!c)return;
-   // The dashboard itself is seller-only; verify the active seller record before showing this panel.
-   try{
-     const seller=await c.from('urovo_sellers').select('email,active').eq('email',em).maybeSingle();
-     if(seller.error)throw seller.error;
-     if(!seller.data||seller.data.active===false){$('urovoV116SellerApprovalNotifications')?.remove();return;}
-   }catch(e){console.warn('Seller role check for approval notifications:',e?.message||e);return;}
-   let panel=$('urovoV116SellerApprovalNotifications');if(!panel){panel=document.createElement('section');panel.id='urovoV116SellerApprovalNotifications';panel.className='order-card';host.appendChild(panel);}
-   panel.innerHTML='<h3 style="margin:0 0 7px">🔔 Product Approval Notifications</h3><p style="font-size:12px;color:var(--muted)">Private updates about your own products. Customers cannot see this seller-dashboard section.</p><div style="padding:12px 0">Loading your product decisions…</div>';
-   try{
-     const r=await c.from('products').select('id,name,category,price,approval_status,approval_notes,created_at,approved_at').eq('seller_email',em).order('created_at',{ascending:false}).limit(500);
-     if(r.error)throw r.error;
-     const items=r.data||[];
-     if(!items.length){panel.innerHTML='<h3 style="margin:0 0 7px">🔔 Product Approval Notifications</h3><p style="font-size:12px;color:var(--muted)">No seller products submitted yet.</p>';return;}
-     const decisions=items.filter(p=>['approved','rejected'].includes(statusOf(p))).length;
-     panel.innerHTML=`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap"><h3>🔔 Product Approval Notifications</h3><span class="order-new-badge">${decisions} decision${decisions===1?'':'s'}</span></div><p style="font-size:12px;color:var(--muted);margin:6px 0 9px">Only products submitted from this seller account are shown below.</p>`+items.map(p=>{
-       const st=statusOf(p),reason=String(p.approval_notes||'').trim(),dt=p.approved_at||p.created_at,date=dt?new Date(dt).toLocaleString('en-IN'):'';
-       const cls=st==='approved'?'v116-approved':st==='rejected'?'v116-rejected':'v116-pending';
-       const text=st==='approved'?'✓ Approved':st==='rejected'?'✕ Rejected':'⏳ Pending CEO approval';
-       const detail=st==='rejected'?`<div class="urovo-v108-reason" style="margin-top:8px"><b>Reason from CEO:</b> ${esc(reason||'No rejection reason was recorded. Contact UROVO support for clarification.')}</div>`:st==='approved'?'<p style="color:#16843a;font-size:12px;margin:7px 0 0">Your product was approved and can appear in the store.</p>':'<p style="font-size:12px;color:var(--muted);margin:7px 0 0">Your submission is waiting for review.</p>';
-       return `<article class="v116-notification-row"><div style="display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap"><div style="min-width:0;flex:1"><b>${esc(p.name||'Product')}</b><div style="font-size:12px;color:var(--muted);margin-top:4px">${esc(p.category||'All')} · ₹${Number(p.price||0).toLocaleString('en-IN')}</div></div><span class="v116-status ${cls}">${text}</span></div>${detail}<small style="display:block;color:var(--muted);margin-top:7px">${esc(date)}</small></article>`;
-     }).join('');
-   }catch(e){panel.innerHTML=`<h3>🔔 Product Approval Notifications</h3><p style="color:var(--red);font-size:12px">Could not load product decisions: ${esc(e?.message||'Unknown error')}. Check the seller read policy in Supabase.</p>`;console.warn('Seller approval notifications:',e?.message||e);}
- }
- function ensureButton(){
-   const nav=document.querySelector('#adminModal .ceo-sidebar');if(!nav)return;
-   // Hide the older generic approval entry; leave a single clearly named seller-approval item in the normal sidebar.
-   const oldGeneric=$('adminApprovalsTab');if(oldGeneric){if(oldGeneric.textContent.trim()!=='🏪 Seller Product Approvals')oldGeneric.textContent='🏪 Seller Product Approvals';oldGeneric.style.display='none';}
-   let btn=$('adminSellerProductApprovalsTab');
-   if(!btn){btn=document.createElement('button');btn.id='adminSellerProductApprovalsTab';btn.type='button';btn.innerHTML='<span>🏪</span><em>Seller Product Approvals</em><b id="urovoV116ApprovalBadge"></b>';nav.appendChild(btn);}
-   // Replace once to discard click listeners that call older/conflicting approval implementations.
-   if(btn.dataset.urovoV116Bound!=='1'){
-     const clean=btn.cloneNode(false);clean.id='adminSellerProductApprovalsTab';clean.type='button';clean.className='urovo-v112-approval-tab urovo-v116-approval-tab';clean.dataset.urovoV116Bound='1';clean.innerHTML='<span>🏪</span><em>Seller Product Approvals</em><b id="urovoV116ApprovalBadge"></b>';
-     btn.replaceWith(clean);btn=clean;
-     btn.addEventListener('click',async ev=>{ev.preventDefault();ev.stopPropagation();activateButton(btn);await renderQueue();});
-   }
-   btn.classList.add('urovo-v116-approval-tab');
-   const sellers=$('adminSellersTab');if(sellers&&btn.previousElementSibling!==sellers)sellers.insertAdjacentElement('afterend',btn);else if(!btn.isConnected)nav.appendChild(btn);
-   refreshBadge();
- }
- const previousAdminTab=window.adminTab;
- if(typeof previousAdminTab==='function'&&!previousAdminTab.__urovoV116Wrapped){
-   const wrapped=function(tab,...args){if(['sellerapprovals','productapprovals','approvals'].includes(String(tab||'').toLowerCase())){ensureButton();const b=$('adminSellerProductApprovalsTab');if(b)activateButton(b);return renderQueue();}return previousAdminTab.apply(this,[tab,...args]);};
-   wrapped.__urovoV116Wrapped=true;window.adminTab=wrapped;
- }
- const previousOpenAdmin=window.openAdmin;
- if(typeof previousOpenAdmin==='function'&&!previousOpenAdmin.__urovoV116Wrapped){
-   const wrapped=async function(...args){const result=await previousOpenAdmin.apply(this,args);[80,300,800].forEach(ms=>setTimeout(ensureButton,ms));return result;};wrapped.__urovoV116Wrapped=true;window.openAdmin=wrapped;
- }
- const previousOpenSeller=window.openSellerDashboard;
- if(typeof previousOpenSeller==='function'&&!previousOpenSeller.__urovoV116Wrapped){
-   const wrapped=async function(...args){const result=await previousOpenSeller.apply(this,args);setTimeout(()=>renderSellerNotifications().catch(()=>{}),350);setTimeout(()=>renderSellerNotifications().catch(()=>{}),900);return result;};wrapped.__urovoV116Wrapped=true;window.openSellerDashboard=wrapped;
- }
- const observer=new MutationObserver(()=>{
-   if($('#adminModal')?.classList.contains('show'))ensureButton();
-   const host=$('sellerDashboardContent');if(host&&host.isConnected&&$('#sellerDashboardModal')?.classList.contains('show')&&!$('urovoV116SellerApprovalNotifications'))setTimeout(()=>renderSellerNotifications().catch(()=>{}),120);
- });
- if(document.documentElement)observer.observe(document.documentElement,{childList:true,subtree:true});
- document.addEventListener('DOMContentLoaded',()=>{ensureButton();setTimeout(()=>renderSellerNotifications().catch(()=>{}),400);});
- document.addEventListener('visibilitychange',()=>{if(!document.hidden){ensureButton();if($('#sellerDashboardModal')?.classList.contains('show'))renderSellerNotifications().catch(()=>{});}});
- window.addEventListener('focus',()=>{ensureButton();if($('#sellerDashboardModal')?.classList.contains('show'))renderSellerNotifications().catch(()=>{});});
- setTimeout(ensureButton,250);setTimeout(ensureButton,900);setTimeout(ensureButton,1900);
- setInterval(()=>{if($('#sellerDashboardModal')?.classList.contains('show'))renderSellerNotifications().catch(()=>{});if($('#adminModal')?.classList.contains('show'))refreshBadge();},20000);
- window.urovoV116RenderSellerApprovals=renderQueue;
- window.urovoV116ReviewSellerProduct=reviewProduct;
- window.urovoV116RenderSellerApprovalNotifications=renderSellerNotifications;
- // Route legacy action names to the final verified handler so old approval cards cannot call a stale implementation.
- window.urovoV108RenderSellerApprovals=renderQueue;
- window.urovoV108ReviewProduct=reviewProduct;
- window.urovoV39ApproveProduct=id=>reviewProduct(id,'approved');
- window.urovoV39RejectProduct=id=>reviewProduct(id,'rejected');
+      say('Uploading product…');
+      const urls=await uploadImages(files,em);
+      if(!urls?.length)throw new Error('Product image upload failed');
+
+      const payload={
+        name,category,price,old_price,stock,
+        shipping_charge:free_shipping?0:shipping_charge,
+        free_shipping,
+        tag,description,icon:'📦',
+        seller_email:em,active:true,approval_status:'pending',
+        image_url:urls[0],image_urls:urls
+      };
+      const created=await db().from('products').insert(payload).select('id').single();
+      if(created.error)throw created.error;
+
+      /* Product-code RPC is optional. Never block the actual product save. */
+      let code='';
+      try{
+        const cr=await db().rpc('urovo_get_product_codes',{p_product_ids:[created.data.id]});
+        if(!cr.error)code=(cr.data||[]).find(x=>String(x.product_id)===String(created.data.id))?.product_code||'';
+      }catch(e){console.warn('Optional product code:',e)}
+
+      say(code?'Product submitted for CEO approval · Code: '+code:'Product submitted for CEO approval');
+      try{await window.openSellerDashboard()}catch(e){console.warn('Seller dashboard refresh:',e)}
+      setTimeout(()=>window.urovoV111RenderSellerFallback?.(),500);
+    }catch(e){
+      say(e?.message||'Could not add product');
+    }
+  }
+  window.urovoSellerCreateProductV37=finalSellerCreate;
+
+  /* ---------- SELLER FALLBACK: works even if old dashboard RPCs are unavailable ---------- */
+  async function renderSellerFallback(){
+    const box=document.getElementById('sellerDashboardContent');
+    if(!box)return;
+    const em=getEmail();
+    if(!em)return;
+    const client=db();
+    if(!client)return;
+
+    const access=await client.from('urovo_sellers').select('email,active,name').eq('email',em).maybeSingle();
+    if(access.error||!access.data||access.data.active===false)return;
+
+    const productsRes=await client.from('products').select('id,name,category,price,old_price,stock,image_url,approval_status,approval_notes,active,created_at').eq('seller_email',em).order('created_at',{ascending:false});
+    if(productsRes.error)throw productsRes.error;
+    const products=productsRes.data||[];
+
+    let panel=document.getElementById('urovoV111SellerPanel');
+    if(!panel){
+      panel=document.createElement('section');
+      panel.id='urovoV111SellerPanel';
+      panel.className='urovo-v43-panel urovo-v111-fallback';
+      box.appendChild(panel);
+    }
+    const status=p=>String(p.approval_status||'pending').toLowerCase();
+    panel.innerHTML=`
+      <div class="urovo-v43-section-head">
+        <div><span class="urovo-v43-kicker">SELLER CATALOGUE</span>
+        <h3>Manage my products</h3>
+        <p class="urovo-v43-muted">Add products here. Every new seller product goes to the CEO for approval.</p></div>
+        <span class="urovo-v43-count">${products.length} PRODUCTS</span>
+      </div>
+      <div class="urovo-v43-add-product">
+        <input id="v111svName" class="input" placeholder="Product name">
+        <input id="v111svCategory" class="input" list="urovoV43CategoryOptions" placeholder="Category">
+        <div class="coupon-row">
+          <input id="v111svPrice" class="input" type="number" min="0.01" placeholder="Price ₹">
+          <input id="v111svOld" class="input" type="number" min="0" placeholder="Old price ₹">
+        </div>
+        <div class="coupon-row">
+          <input id="v111svStock" class="input" type="number" min="0" value="1" placeholder="Stock">
+          <input id="v111svShipping" class="input" type="number" min="0" step="0.01" value="0" placeholder="Shipping ₹">
+        </div>
+        <input id="v111svTag" class="input" placeholder="Suggestion #tag e.g. #gadgets">
+        <textarea id="v111svDesc" class="input" rows="3" placeholder="Product description"></textarea>
+        <input id="v111svImages" class="input" type="file" accept="image/*" multiple>
+        <button type="button" class="primary" id="v111AddProductBtn">＋ Add My Product</button>
+      </div>
+      <div class="urovo-v43-product-list">
+        ${products.length?products.map(p=>`
+          <article class="urovo-v43-owned-product">
+            <img src="${esc(p.image_url||'')}" alt="" loading="lazy" onerror="this.style.display='none'">
+            <div class="urovo-v43-owned-product-copy">
+              <b>${esc(p.name||'Product')}</b>
+              <p>${esc(p.category||'All')} · ₹${Number(p.price||0).toLocaleString('en-IN')} · Stock ${Number(p.stock||0)}</p>
+              <small>${status(p)==='approved'?'✓ Approved':status(p)==='rejected'?'✕ Rejected':'⏳ Pending Approval'}${status(p)==='rejected'&&p.approval_notes?`<br>Reason: ${esc(p.approval_notes)}`:''}</small>
+            </div>
+          </article>`).join(''):`<div class="urovo-v43-empty"><div>🛍️</div><h3>No products yet</h3><p>Add your first product above.</p></div>`}
+      </div>`;
+
+    panel.querySelector('#v111AddProductBtn').onclick=async()=>{
+      const copy=id=>{const el=document.getElementById(id);return el?.value?.trim()||''};
+      const old={};
+      ['svName','svCategory','svPrice','svOld','svStock','svShipping','svTag','svDesc','svImages'].forEach((id,i)=>{
+        const src=document.getElementById(id);
+        if(src)old[id]=src;
+      });
+      /* Use a temporary bridge so the stable final create routine can use the existing IDs. */
+      const bridge=[
+        ['svName','v111svName'],['svCategory','v111svCategory'],['svPrice','v111svPrice'],['svOld','v111svOld'],
+        ['svStock','v111svStock'],['svShipping','v111svShipping'],['svTag','v111svTag'],['svDesc','v111svDesc'],['svImages','v111svImages']
+      ];
+      const temp=[];
+      try{
+        bridge.forEach(([id,source])=>{
+          const src=document.getElementById(source); if(!src)return;
+          const h=document.createElement(src.tagName);
+          h.id=id; h.className='hidden';
+          if(src.tagName==='INPUT'&&src.type==='file'){/* file inputs cannot be cloned with files; use source directly below */}
+          else h.value=src.value;
+          document.body.appendChild(h);temp.push(h);
+        });
+        const originalImages=document.getElementById('svImages');
+        if(originalImages)originalImages.remove();
+        const imageSource=document.getElementById('v111svImages');
+        if(imageSource)imageSource.id='svImages';
+        const free=document.createElement('input');free.id='svFreeShipping';free.type='checkbox';free.checked=false;free.className='hidden';document.body.appendChild(free);temp.push(free);
+        await finalSellerCreate();
+        if(document.getElementById('svImages'))document.getElementById('svImages').id='v111svImages';
+      }finally{
+        temp.forEach(x=>{if(x.parentNode)x.remove()});
+        if(document.getElementById('svImages'))document.getElementById('svImages').id='v111svImages';
+        setTimeout(()=>renderSellerFallback().catch(()=>{}),700);
+      }
+    };
+  }
+  window.urovoV111RenderSellerFallback=renderSellerFallback;
+
+  const oldSellerRender=window.urovoV43RenderSellerPanel;
+  if(typeof oldSellerRender==='function'&&!oldSellerRender.__urovoV111){
+    const wrappedSellerRender=async function(...args){
+      try{
+        const result=await oldSellerRender.apply(this,args);
+        return result;
+      }catch(e){
+        console.warn('UROVO seller panel fallback:',e);
+        await renderSellerFallback();
+      }
+    };
+    wrappedSellerRender.__urovoV111=true;
+    window.urovoV43RenderSellerPanel=wrappedSellerRender;
+  }
+
+  function finalSync(){
+    syncVisibleHearts();
+    const id=String(window.__urovoCurrentProductId||window.currentProductId||document.getElementById('detailWish')?.dataset.productId||'');
+    if(id)syncAllHearts(id);
+  }
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(finalSync,300));
+  window.addEventListener('load',()=>setTimeout(finalSync,500));
+  setInterval(finalSync,1000);
 })();
 </script>
 
