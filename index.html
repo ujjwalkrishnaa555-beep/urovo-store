@@ -7,7 +7,7 @@
 <meta name="description" content="Shop curated gadgets, home essentials and lifestyle picks at UROVO. Upgrade your everyday.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="application-name" content="UROVO Store">
-<meta name="urovo-build" content="UROVO V139 Install + Stability Fix">
+<meta name="urovo-build" content="UROVO V148 Performance + Mood Fix">
 <meta property="og:type" content="website">
 <meta property="og:title" content="UROVO — Upgrade Your Everyday">
 <meta property="og:description" content="Premium picks for your everyday. Discover gadgets, home essentials and lifestyle products at UROVO.">
@@ -20,10 +20,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>UROVO — Upgrade Your Everyday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
 <script>/* Always initialize a fresh page load in Essentials Mood. */try{localStorage.setItem('urovoMood','essentials')}catch(e){}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+/* Fonts load asynchronously below to avoid blocking first paint. */
 :root{--bg:#ffffff;--surface:#ffffff;--surface2:#f3f7f3;--surface3:#e7f1e7;--text:#111111;--muted:#667066;--line:rgba(35,140,55,.16);--lime:#c8ff00;--green:#21a33a;--red:#ff3655;--gold:#b8e600;--saffron:#21a33a;--deepred:#176b2a;--shadow:0 20px 70px rgba(20,80,30,.12)}
 .dark{--bg:#090909;--surface:#111;--surface2:#181818;--surface3:#222;--text:#fff;--muted:#aaa;--line:rgba(200,255,0,.16);--shadow:0 20px 70px rgba(0,0,0,.5)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -132,9 +136,14 @@ body{overflow-x:hidden}
     var sp=document.getElementById('searchPage'); if(sp) sp.classList.remove('show');
     var am=document.getElementById('accountMenu'); if(am) am.classList.remove('show');
   }
-  function bootHome(){startHome();loadHomeAds();}
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bootHome); else bootHome();
-  window.addEventListener('pageshow',bootHome);
+  let homeBooted=false;
+  function bootHome(){
+    startHome();
+    if(!homeBooted){homeBooted=true;loadHomeAds();}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bootHome,{once:true}); else bootHome();
+  /* pageshow also fires on a normal first load; only refresh after a BFCache restore. */
+  window.addEventListener('pageshow',function(event){if(event.persisted){homeBooted=false;bootHome();}});
 })();
 </script>
 
@@ -5205,7 +5214,9 @@ async function placeSecureOrderV37(){
     try{if(typeof appliedCoupon!=='undefined')appliedCoupon=null}catch(e){}
     try{if(typeof urovoAppliedCoupon!=='undefined')urovoAppliedCoupon=null}catch(e){}
     try{localStorage.removeItem('urovo_coupon');save()}catch(e){}
-    try{renderCart();updateBadges()}catch(e){}
+      
+
+         try{renderCart();updateBadges()}catch(e){}
     try{await db().rpc('urovo_write_audit',{p_action:'order_created',p_details:{order_id:requestedOrder.id,order_number:requestedOrder.order_number,total:requestedOrder.total,payment_method:paymentMethod,online_amount:onlineAmount}})}catch(e){}
     if(onlineAmount>0.009){
       if(!gateway)throw new Error('Server calculated an online amount but no gateway is configured. Contact UROVO support before retrying to avoid duplicate orders.');
@@ -10347,7 +10358,9 @@ window.addProduct=async function(){
     applyVisual(initial);
     bindSwitch();
     window.__urovoV128Initialised=true;
-    refreshForMood(initial).catch(e=>console.warn('V128 startup mood refresh:',e));
+    /* Startup performance: the base app already loads products and other modules refresh
+       their own categories/banners. Do not issue another chain of 5 network refreshes here. */
+    try{if(typeof window.renderProducts==='function')window.renderProducts();}catch(e){}
     setTimeout(bindSwitch,100);
     setTimeout(bindSwitch,700);
   }
@@ -10794,5 +10807,60 @@ body.urovo-installed-pwa-v137 #installAppBtn{display:none!important;visibility:h
  window.addEventListener('load',releaseStartupLoader,{once:true});
 })();
 </script>
+
+<!-- UROVO V149: Seller Dashboard auth/startup recovery -->
+<script id="urovo-v149-seller-dashboard-recovery">
+(function(){
+  'use strict';
+  if(window.__urovoV149SellerRecovery)return;
+  window.__urovoV149SellerRecovery=true;
+  const prior=window.openSellerDashboard;
+  function currentUser(){try{return (typeof user!=='undefined'&&user)||window.user||null}catch(e){return window.user||null}}
+  function showMessage(message){
+    let modal=document.getElementById('sellerDashboardModal');
+    if(!modal){
+      modal=document.createElement('div'); modal.id='sellerDashboardModal'; modal.className='modal';
+      modal.innerHTML='<div class="box" style="max-width:1000px;max-height:92vh;overflow:auto"><button class="close" type="button" onclick="document.getElementById(\'sellerDashboardModal\')?.classList.remove(\'show\')">✕</button><h2 style="margin:15px 0">🏪 Seller Dashboard</h2><div id="sellerDashboardContent"></div></div>';
+      document.body.appendChild(modal);
+    }
+    const c=document.getElementById('sellerDashboardContent');
+    if(c)c.innerHTML='<div class="order-card"><p>'+String(message).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))+'</p><button class="primary" type="button" style="margin-top:12px" onclick="window.openSellerDashboard()">Try Again</button></div>';
+    modal.classList.add('show');
+  }
+  async function resolveUser(){
+    let u=currentUser(); if(u&&u.email)return u;
+    try{
+      const client=window.supabaseClient;
+      if(client&&client.auth&&typeof client.auth.getUser==='function'){
+        const result=await client.auth.getUser();
+        if(result&&result.data&&result.data.user){window.user=result.data.user;return result.data.user;}
+      }
+    }catch(e){console.warn('UROVO V149 seller auth recovery:',e)}
+    return currentUser();
+  }
+  window.openSellerDashboard=async function(...args){
+    try{
+      const u=await resolveUser();
+      if(!u||!u.email){if(typeof window.showAccount==='function')window.showAccount();else showMessage('Please sign in to open Seller Dashboard.');return;}
+      if(typeof prior!=='function'){showMessage('Seller Dashboard could not start because its main function is unavailable.');return;}
+      const result=await prior.apply(this,args);
+      const modal=document.getElementById('sellerDashboardModal');
+      if(modal)modal.classList.add('show');
+      setTimeout(()=>{
+        const c=document.getElementById('sellerDashboardContent');
+        if(c&&/Checking seller access|Loading seller dashboard|Opening seller dashboard/i.test(c.textContent||'')){
+          c.innerHTML='<div class="order-card"><p>Seller Dashboard is taking too long to respond. Check your connection and try again.</p><button class="primary" type="button" style="margin-top:12px" onclick="window.openSellerDashboard()">Try Again</button></div>';
+        }
+      },12000);
+      return result;
+    }catch(e){
+      console.error('UROVO V149 Seller Dashboard recovery:',e);
+      showMessage('Could not open Seller Dashboard: '+String(e&&e.message||e));
+    }
+  };
+  window.openSellerDashboard.__urovoV149=true;
+})();
+</script>
+
 </body>
 </html>
