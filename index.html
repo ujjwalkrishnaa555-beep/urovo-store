@@ -5181,4 +5181,4 @@ async function placeSecureOrderV37(){
     const deposit=Number(saved.cod_deposit_amount??0);
     const onlineAmount=Number(saved.payment_amount??saved.payment_online_amount??(selected==='cod'?deposit+delivery:Number(saved.total??productPayable+delivery)));
     const dueOnDelivery=Number(saved.cod_remaining_amount??saved.payment_amount_due??(selected==='cod'?Math.max(0,productPayable-deposit):0));
-    const paymentStatus=String(saved.payment_status||(onlineAmount>0?(selected==='cod'?'Pending Deposit':'Pending Payment'):'COD — Pay on Delivery'));
+    const paymentStatus=String(saved.payment_status||(onlineAmount>0?(selected==='cod'?'Pending Deposit':'Pe
