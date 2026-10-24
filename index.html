@@ -660,6 +660,23 @@ body.essentials-mood header{background:rgba(7,7,7,.84)}
     <div class="urovo-v136-loader-message">Getting your store ready<span class="urovo-v136-loader-dots"></span></div>
   </div>
 </div>
+<script id="urovo-v148-emergency-loader-release">
+(function(){
+  'use strict';
+  function release(){
+    var el=document.getElementById('urovoV136StartupLoader');
+    if(!el)return;
+    el.classList.add('urovo-v136-loader-hidden','urovo-v147-force-hidden');
+    el.setAttribute('aria-hidden','true');
+    el.style.setProperty('display','none','important');
+    if(el.parentNode)el.parentNode.removeChild(el);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(release,250);},{once:true});
+  else setTimeout(release,250);
+  setTimeout(release,1800);
+  window.addEventListener('pageshow',function(){setTimeout(release,100);});
+})();
+</script>
 
 <!-- UROVO UPDATE GATE v38 -->
 <div id="urovoUpdateGate" class="hidden" role="dialog" aria-modal="true" aria-labelledby="urovoUpdateTitle">
@@ -10754,7 +10771,11 @@ body.urovo-installed-pwa-v137 #installAppBtn{display:none!important;visibility:h
 
 <!-- UROVO V147: safely release the startup loader without interrupting other scripts -->
 <style id="urovo-v147-loader-failsafe-css">
+/* CSS fallback: the store must become visible even if startup JavaScript fails. */
 #urovoV136StartupLoader.urovo-v147-force-hidden{opacity:0!important;visibility:hidden!important;pointer-events:none!important;display:none!important}
+@keyframes urovoV148LoaderEmergencyHide{0%,75%{opacity:1;visibility:visible;pointer-events:auto}100%{opacity:0;visibility:hidden;pointer-events:none;display:none}}
+#urovoV136StartupLoader{animation:urovoV148LoaderEmergencyHide 2.4s steps(1,end) forwards!important}
+@media(prefers-reduced-motion:reduce){#urovoV136StartupLoader{animation:urovoV148LoaderEmergencyHide 2.4s steps(1,end) forwards!important}}
 </style>
 <script id="urovo-v147-loader-failsafe-js">
 (function(){
@@ -10768,8 +10789,9 @@ body.urovo-installed-pwa-v137 #installAppBtn{display:none!important;visibility:h
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(releaseStartupLoader,1200)},{once:true});
  else setTimeout(releaseStartupLoader,1200);
- setTimeout(releaseStartupLoader,4500);
- window.addEventListener('pageshow',function(){setTimeout(releaseStartupLoader,500)});
+ setTimeout(releaseStartupLoader,1800);
+ window.addEventListener('pageshow',function(){setTimeout(releaseStartupLoader,100)});
+ window.addEventListener('load',releaseStartupLoader,{once:true});
 })();
 </script>
 </body>
